@@ -12,10 +12,7 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Stateless
-public class ClientBean {
-
-    @PersistenceContext
-    EntityManager em;
+public class ClientBean extends BaseBean{
 
     public List<Client> getAllClients(){
         return (List<Client>)em.createNamedQuery("getAllClients").getResultList();
