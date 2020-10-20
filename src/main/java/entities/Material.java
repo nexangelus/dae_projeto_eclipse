@@ -6,6 +6,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllMaterials",
+                query = "SELECT m FROM Material m ORDER BY m.name" // JPQL
+        )
+})
 public class Material {
     @Version
     private int version;
