@@ -52,8 +52,8 @@ public class DesignerBean extends BaseBean {
     public void delete(String username) throws MyEntityNotFoundException {
         Designer designer = getDesigner(username);
         if (designer== null)
-            throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
-        em.remove(designer);
+            throw new MyEntityNotFoundException("Designer with username: " + username + " doesn't exist");
+        em.remove(designer );
     }
 
 
