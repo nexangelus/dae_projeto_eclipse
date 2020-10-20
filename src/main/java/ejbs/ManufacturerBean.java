@@ -13,7 +13,7 @@ import java.util.List;
 @Stateless
 public class ManufacturerBean extends BaseBean{
 
-    public List<Manufacturer> getAllManugactures(){
+    public List<Manufacturer> getAllManufactures(){
         return (List<Manufacturer>)em.createNamedQuery("getAllManufacturers").getResultList();
     }
 
@@ -25,7 +25,7 @@ public class ManufacturerBean extends BaseBean{
             throws MyEntityExistsException, MyConstraintViolationException {
 
         if (getManufacturer(username) != null)
-            throw new MyEntityExistsException("Client with username: " + username + " already exists");
+            throw new MyEntityExistsException("Manufacturer with username: " + username + " already exists");
         try {
             Manufacturer manufacturer = new Manufacturer(username, password, name, email);
             em.persist(manufacturer);
