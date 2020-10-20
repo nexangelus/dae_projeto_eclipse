@@ -1,11 +1,19 @@
 package entities;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllManufacturers",
+                query = "SELECT m FROM Manufacturer m ORDER BY m.name" // JPQL
+        )
+})
 public class Manufacturer extends User {
 
     @OneToMany
