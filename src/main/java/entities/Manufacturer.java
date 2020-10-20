@@ -13,12 +13,12 @@ public class Manufacturer extends User {
 
     public Manufacturer() {
         super();
-        this.materials = new LinkedHashSet<Material>();
+        this.materials = new LinkedHashSet<>();
     }
 
     public Manufacturer(String username, String password, String name, String email) {
         super(username, password, name, email);
-        this.materials = new LinkedHashSet<Material>();
+        this.materials = new LinkedHashSet<>();
     }
 
     public Set<Material> getMaterials() {
@@ -29,5 +29,12 @@ public class Manufacturer extends User {
         this.materials = materials;
     }
 
-    //add + remove form set
+    public void addMaterial(Material material){
+        this.materials.add(material);
+    }
+
+    public void removeMaterial(Material material){
+        this.materials.remove(material);
+    }
+
 }

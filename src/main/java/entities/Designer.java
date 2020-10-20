@@ -14,12 +14,12 @@ public class Designer extends User{
 
     public Designer() {
         super();
-        this.projects = new LinkedHashSet<Project>();
+        this.projects = new LinkedHashSet<>();
     }
 
     public Designer(String username, String password, String name, String email) {
         super(username, password, name, email);
-        this.projects = new LinkedHashSet<Project>();
+        this.projects = new LinkedHashSet<>();
     }
 
     public Set<Project> getProjects() {
@@ -30,5 +30,11 @@ public class Designer extends User{
         this.projects = projects;
     }
 
-    // add + remove from set project void or bollean
+    public void addProject(Project project){
+        this.projects.add(project);
+    }
+
+    public void removeProject(Project project){
+        this.projects.remove(project);
+    }
 }

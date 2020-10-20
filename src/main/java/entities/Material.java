@@ -1,17 +1,18 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 public class Material {
+    @Version
+    private int version;
 
     @Id
-    private int id;
+    @GeneratedValue
+    private long id;
 
     @NotNull
     private String name;
@@ -19,25 +20,26 @@ public class Material {
     @NotNull
     private String description;
 
-    @OneToMany
-    Set<Manufacturer> manufacturers;
+    @ManyToOne
+    private Manufacturer manufacturer;
 
-    public Material(int id, String name, String description) {
-        this.id = id;
+    @NotNull
+    private String family;
+
+    //TODO @ManyToMany Struct incluindo campo adicional (quantidade)
+
+    public Material(String name, String description, Manufacturer manufacturer, String family) {
         this.name = name;
         this.description = description;
-        this.manufacturers = new LinkedHashSet<Manufacturer>();
+        this.manufacturer = manufacturer;
+        this.family = family;
     }
 
     public Material() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -56,11 +58,19 @@ public class Material {
         this.description = description;
     }
 
-    public Set<Manufacturer> getManufacturers() {
-        return manufacturers;
+    public Manufacturer getManufacturer() {
+        return manufacturer;
     }
 
-    public void setManufacturers(Set<Manufacturer> manufacturers) {
-        this.manufacturers = manufacturers;
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public String getFamily() {
+        return family;
+    }
+
+    public void setFamily(String family) {
+        this.family = family;
     }
 }
