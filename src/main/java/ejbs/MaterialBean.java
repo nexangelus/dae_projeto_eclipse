@@ -21,13 +21,13 @@ public class MaterialBean extends BaseBean{
         return em.find(Material.class, id);
     }
 
-    public void create(String name, String description, long manufacturerUsername, String family)
-            throws MyEntityExistsException, MyConstraintViolationException {
+    public void create(String name, String description, String manufacturerUsername, String family)
+            throws MyConstraintViolationException, MyEntityNotFoundException {
 
         Manufacturer manufacturer = em.find(Manufacturer.class, manufacturerUsername);
 
         if (manufacturer == null)
-            throw new MyEntityExistsException("Manufacturer with username: " + manufacturerUsername + " doesn't exist"); //TODO qual é a exception
+            throw new MyEntityNotFoundException("Manufacturer with username: " + manufacturerUsername + " doesn't exist");
         try {
             Material material = new Material(name, description, manufacturer, family);
             em.persist(material);
@@ -36,7 +36,7 @@ public class MaterialBean extends BaseBean{
         }
     }
 
-    public void update(long id, String name, String description, String family, long manufacturerUsername)
+    public void update(long id, String name, String description, String family, String manufacturerUsername)
             throws MyEntityNotFoundException, MyConstraintViolationException {
 
         Material material = getMaterial(id);
