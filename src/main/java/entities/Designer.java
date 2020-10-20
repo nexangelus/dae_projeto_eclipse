@@ -1,12 +1,16 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllDesigners",
+                query = "SELECT d FROM Designer d ORDER BY d.name" // JPQL
+        )
+})
 public class Designer extends User{
 
     @OneToMany
