@@ -13,7 +13,7 @@ import java.util.List;
 @Stateless
 public class ManufacturerBean extends BaseBean{
 
-    public List<Manufacturer> getAllClients(){
+    public List<Manufacturer> getAllManugactures(){
         return (List<Manufacturer>)em.createNamedQuery("getAllManufacturers").getResultList();
     }
 
