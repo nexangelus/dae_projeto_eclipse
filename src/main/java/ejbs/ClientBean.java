@@ -12,51 +12,51 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Stateless
-public class ClientBean extends BaseBean{
+public class ClientBean extends BaseBean {
 
-    public List<Client> getAllClients(){
-        return (List<Client>)em.createNamedQuery("getAllClients").getResultList();
-    }
+	public List<Client> getAllClients() {
+		return (List<Client>) em.createNamedQuery("getAllClients").getResultList();
+	}
 
-    public Client getClient(String username) {
-        return em.find(Client.class, username);
-    }
+	public Client getClient(String username) {
+		return em.find(Client.class, username);
+	}
 
-    public void create(String username, String password, String name, String email, String contact, String address)
-            throws MyEntityExistsException, MyConstraintViolationException {
+	public void create(String username, String password, String name, String email, String contact, String address)
+			throws MyEntityExistsException, MyConstraintViolationException {
 
-        if (getClient(username) != null)
-            throw new MyEntityExistsException("Client with username: " + username + " already exists");
-        try {
-            Client client = new Client(username, password, name, email, contact, address);
-            em.persist(client);
-        } catch (ConstraintViolationException e) {
-            throw new MyConstraintViolationException(e);
-        }
-    }
+		if (getClient(username) != null)
+			throw new MyEntityExistsException("Client with username: " + username + " already exists");
+		try {
+			Client client = new Client(username, password, name, email, contact, address);
+			em.persist(client);
+		} catch (ConstraintViolationException e) {
+			throw new MyConstraintViolationException(e);
+		}
+	}
 
-    public void update(String username, String password, String name, String email, String contact, String address)
-            throws MyEntityNotFoundException, MyConstraintViolationException {
+	public void update(String username, String password, String name, String email, String contact, String address)
+			throws MyEntityNotFoundException, MyConstraintViolationException {
 
-        Client client = getClient(username);
-        if (client== null)
-            throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
-        try {
-            client.setPassword(password);
-            client.setName(name);
-            client.setEmail(email);
-            client.setContact(contact);
-            client.setAddress(address);
-        }catch (ConstraintViolationException e){
-            throw new MyConstraintViolationException(e);
-        }
-    }
+		Client client = getClient(username);
+		if (client == null)
+			throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
+		try {
+			client.setPassword(password);
+			client.setName(name);
+			client.setEmail(email);
+			client.setContact(contact);
+			client.setAddress(address);
+		} catch (ConstraintViolationException e) {
+			throw new MyConstraintViolationException(e);
+		}
+	}
 
-    public void delete(String username) throws MyEntityNotFoundException {
-        Client client = getClient(username);
-        if (client== null)
-            throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
-        em.remove(client);
-    }
+	public void delete(String username) throws MyEntityNotFoundException {
+		Client client = getClient(username);
+		if (client == null)
+			throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
+		em.remove(client);
+	}
 
 }
