@@ -11,10 +11,10 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Stateless
-public class MaterialBean extends BaseBean{
+public class MaterialBean extends BaseBean {
 
-    public List<Material> getAllMaterials(){
-        return (List<Material>)em.createNamedQuery("getAllMaterials").getResultList();
+    public List<Material> getAllMaterials() {
+        return (List<Material>) em.createNamedQuery("getAllMaterials").getResultList();
     }
 
     public Material getMaterial(long id) {
@@ -40,7 +40,7 @@ public class MaterialBean extends BaseBean{
             throws MyEntityNotFoundException, MyConstraintViolationException {
 
         Material material = getMaterial(id);
-        if (material== null)
+        if (material == null)
             throw new MyEntityNotFoundException("Material with id: " + id + " doesn't exist");
         Manufacturer manufacturer = em.find(Manufacturer.class, manufacturerUsername);
         if (manufacturer == null)
@@ -51,14 +51,14 @@ public class MaterialBean extends BaseBean{
             material.setFamily(family);
             material.setManufacturer(manufacturer);
 
-        }catch (ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
     }
 
     public void delete(long id) throws MyEntityNotFoundException {
         Material material = getMaterial(id);
-        if (material== null)
+        if (material == null)
             throw new MyEntityNotFoundException("Material with id: " + id + " doesn't exist");
         em.remove(material);
     }
