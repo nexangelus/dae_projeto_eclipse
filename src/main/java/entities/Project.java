@@ -9,6 +9,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllProjects",
+                query = "SELECT p FROM Project p ORDER BY p.id" // JPQL
+        )
+})
 public class Project {
     @Version
     private int version;
@@ -39,14 +45,14 @@ public class Project {
 
     private LocalDateTime finished;
 
-    public Project(Client client, Designer designer, String title, String description, String observations) {
+    public Project(Client client, Designer designer, String title, String description) {
         this.client = client;
         this.designer = designer;
         this.structures = new LinkedHashSet<>();
         this.uploads = new LinkedHashSet<>();
         this.title = title;
         this.description = description;
-        this.observations = observations;
+
     }
 
     public Project() {
