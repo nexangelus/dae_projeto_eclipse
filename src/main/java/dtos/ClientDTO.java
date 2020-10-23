@@ -13,6 +13,7 @@ public class ClientDTO implements Serializable {
         this.password = password;
         this.name = name;
         this.email = email;
+        //TODO acabar
     }
 
     public ClientDTO() {
