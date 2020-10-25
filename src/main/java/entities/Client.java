@@ -24,21 +24,16 @@ public class Client extends User{
     @OneToMany
     Set<Project> projects;
 
-    @OneToMany
-    Set<Upload> uploads;
-
     public Client(String username, String password, String name, String email, String contact, String address) {
         super(username, password, name, email);
         this.contact = contact;
         this.address = address;
         this.projects = new LinkedHashSet<>();
-        this.uploads = new LinkedHashSet<>();
     }
 
     public Client() {
         super();
         this.projects = new LinkedHashSet<>();
-        this.uploads = new LinkedHashSet<>();
     }
 
     public String getContact() {
@@ -73,19 +68,4 @@ public class Client extends User{
         this.projects.remove(project);
     }
 
-    public Set<Upload> getUploads() {
-        return uploads;
-    }
-
-    public void setUploads(Set<Upload> uploads) {
-        this.uploads = uploads;
-    }
-
-    public void addUpload(Upload upload){
-        this.uploads.add(upload);
-    }
-
-    public void removeUpload(Upload upload){
-        this.uploads.remove(upload);
-    }
 }

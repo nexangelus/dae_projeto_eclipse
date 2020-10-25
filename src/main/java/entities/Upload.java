@@ -22,14 +22,13 @@ public class Upload {
     private String path;
 
     @ManyToOne
-    private Client client;
-
-    @ManyToOne
+    @JoinTable(name = "PROJECT_UPLOADS",
+            joinColumns = @JoinColumn(name = "UPLOAD_ID"),
+            inverseJoinColumns =  @JoinColumn(name = "PROJECT_ID"))
     private Project project;
 
-    public Upload(String path, Client client, Project project) {
+    public Upload(String path, Project project) {
         this.path = path;
-        this.client = client;
         this.project = project;
     }
 
@@ -46,14 +45,6 @@ public class Upload {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 
     public Project getProject() {

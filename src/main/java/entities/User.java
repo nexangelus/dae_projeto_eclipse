@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries({
         @NamedQuery(
                 name = "getAllUsers",

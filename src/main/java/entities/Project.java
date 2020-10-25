@@ -32,7 +32,7 @@ public class Project {
     @OneToMany
     private Set<Structure> structures;
 
-    @OneToMany
+    @OneToMany(mappedBy = "project")
     private Set<Upload> uploads;
 
     @NotNull
