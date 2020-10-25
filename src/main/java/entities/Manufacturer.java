@@ -27,11 +27,15 @@ public class Manufacturer extends User {
         this.address = address;
         this.website = website;
         this.contact = contact;
-        this.materials = new LinkedHashSet<>();
+        this.materials = materials;
     }
 
-    public Manufacturer(String username, String password, String name, String email){
+    public Manufacturer(String username, String password, String name, String email, String address, String website, String contact) {
         super(username, password, name, email);
+        this.address = address;
+        this.website = website;
+        this.contact = contact;
+        this.materials = new LinkedHashSet<>();
     }
 
     public Manufacturer() {

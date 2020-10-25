@@ -32,6 +32,7 @@ public class ProfileBean extends BaseBean {
         try {
             Profile profile = new Profile(name,  description,  manufacturer,  family,  height,  thickness,  weight,  areaPainting,  steelGrade);
             em.persist(profile);
+            manufacturer.addMaterial(profile);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
@@ -67,6 +68,7 @@ public class ProfileBean extends BaseBean {
         Profile profile = getProfile(id);
         if (profile == null)
             throw new MyEntityNotFoundException("Profile with id: " + id + " doesn't exist");
+        profile.getManufacturer().removeMaterial(profile);
         em.remove(profile);
     }
 }

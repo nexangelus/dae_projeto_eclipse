@@ -36,13 +36,15 @@ public class ProjectBean extends BaseBean {
                     title,
                     description
             );
+
+            em.persist(project);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
     }
 
     public void update(){
-
+        // TODO
     }
 
     public void delete(long id) throws MyEntityNotFoundException {
