@@ -4,6 +4,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllStructures",
+                query = "SELECT s FROM Structure s ORDER BY s.name" // JPQL
+        )
+})
 public class Structure {
     @Version
     private int version;
@@ -22,10 +28,13 @@ public class Structure {
     private String parameters;
 
     @NotNull
+    @Column(name = "VISIBLE_TO_CLIENT")
     private boolean visibleToClient;
 
+    @Column(name = "CLIENT_ACCEPTED")
     private boolean clientAccepted;
 
+    @Column(name = "CLIENT_OBSERVATIONS")
     private String clientObservations;
     
     /*

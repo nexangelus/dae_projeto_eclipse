@@ -19,14 +19,51 @@ public class Manufacturer extends User {
     @OneToMany
     private Set<Material> materials;
 
+    private String address;
+
+    private String website;
+
+    private String contact;
+
+    public Manufacturer(String username, String password, String name, String email, Set<Material> materials, String address, String website, String contact) {
+        super(username, password, name, email);
+        this.address = address;
+        this.website = website;
+        this.contact = contact;
+        this.materials = new LinkedHashSet<>();
+    }
+
+    public Manufacturer(String username, String password, String name, String email){
+        super(username, password, name, email);
+    }
+
     public Manufacturer() {
         super();
         this.materials = new LinkedHashSet<>();
     }
 
-    public Manufacturer(String username, String password, String name, String email) {
-        super(username, password, name, email);
-        this.materials = new LinkedHashSet<>();
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public Set<Material> getMaterials() {

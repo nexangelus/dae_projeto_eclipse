@@ -4,6 +4,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllUploads",
+                query = "SELECT u FROM Upload u ORDER BY u.id" // JPQL
+        )
+})
 public class Upload {
     @Version
     private int version;

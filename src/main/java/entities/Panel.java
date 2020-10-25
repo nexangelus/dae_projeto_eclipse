@@ -1,9 +1,18 @@
 package entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllPanels",
+                query = "SELECT p FROM Panel p ORDER BY p.name" // JPQL
+        )
+})
 public class Panel extends Material{
 
     @NotNull
@@ -13,9 +22,11 @@ public class Panel extends Material{
     private double width;
 
     @NotNull
+    @Column(name = "LENGTH_MIN")
     private double lengthMin;
 
     @NotNull
+    @Column(name = "LENGTH_MAX")
     private double lengthMax;
 
     @NotNull

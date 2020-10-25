@@ -11,10 +11,10 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Stateless
-public class ManufacturerBean extends BaseBean{
+public class ManufacturerBean extends BaseBean {
 
-    public List<Manufacturer> getAllManufactures(){
-        return (List<Manufacturer>)em.createNamedQuery("getAllManufacturers").getResultList();
+    public List<Manufacturer> getAllManufactures() {
+        return (List<Manufacturer>) em.createNamedQuery("getAllManufacturers").getResultList();
     }
 
     public Manufacturer getManufacturer(String username) {
@@ -38,20 +38,20 @@ public class ManufacturerBean extends BaseBean{
             throws MyEntityNotFoundException, MyConstraintViolationException {
 
         Manufacturer manufacturer = getManufacturer(username);
-        if (manufacturer== null)
+        if (manufacturer == null)
             throw new MyEntityNotFoundException("Manufacturer with username: " + username + " doesn't exist");
         try {
             manufacturer.setPassword(password);
             manufacturer.setName(name);
             manufacturer.setEmail(email);
-        }catch (ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
     }
 
     public void delete(String username) throws MyEntityNotFoundException {
         Manufacturer manufacturer = getManufacturer(username);
-        if (manufacturer== null)
+        if (manufacturer == null)
             throw new MyEntityNotFoundException("Manufacturer with username: " + username + " doesn't exist");
         em.remove(manufacturer);
     }

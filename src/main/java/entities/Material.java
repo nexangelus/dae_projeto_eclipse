@@ -26,11 +26,14 @@ public class Material {
     @NotNull
     private String description;
 
+    @NotNull
+    private String family;
+
     @ManyToOne
     private Manufacturer manufacturer;
 
-    @NotNull
-    private String family;
+    @Column(name = "IMAGE_PATH")
+    private String imagePath;
 
     //TODO @ManyToMany Struct incluindo campo adicional (quantidade)
 
@@ -78,5 +81,13 @@ public class Material {
 
     public void setFamily(String family) {
         this.family = family;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
