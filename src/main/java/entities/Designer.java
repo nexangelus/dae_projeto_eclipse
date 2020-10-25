@@ -13,7 +13,7 @@ import java.util.Set;
 })
 public class Designer extends User{
 
-    @OneToMany
+    @OneToMany(mappedBy = "designer")
     private Set<Project> projects;
 
     public Designer() {

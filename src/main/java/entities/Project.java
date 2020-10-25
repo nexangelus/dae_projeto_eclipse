@@ -29,7 +29,7 @@ public class Project {
     @ManyToOne
     private Designer designer;
 
-    @OneToMany
+    @OneToMany(mappedBy = "project")
     private Set<Structure> structures;
 
     @OneToMany(mappedBy = "project")

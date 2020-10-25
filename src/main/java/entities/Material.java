@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Struct;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,6 +36,9 @@ public class Material {
     @Column(name = "IMAGE_PATH")
     private String imagePath;
 
+    @ManyToMany(mappedBy = "materials")
+    private Set<Structure> structures;
+
     //TODO @ManyToMany Struct incluindo campo adicional (quantidade)
 
     public Material(String name, String description, Manufacturer manufacturer, String family) {
@@ -42,9 +46,11 @@ public class Material {
         this.description = description;
         this.manufacturer = manufacturer;
         this.family = family;
+        this.structures = new LinkedHashSet<>();
     }
 
     public Material() {
+        this.structures = new LinkedHashSet<>();
     }
 
     public long getId() {
@@ -89,5 +95,21 @@ public class Material {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Set<Structure> getStructures() {
+        return structures;
+    }
+
+    public void setStructures(Set<Structure> structures) {
+        this.structures = structures;
+    }
+
+    public void addStructure(Structure structure) {
+        this.structures.add(structure);
+    }
+
+    public void removeStructure(Structure structure) {
+        this.structures.remove(structure);
     }
 }
