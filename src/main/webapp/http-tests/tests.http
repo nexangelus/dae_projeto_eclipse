@@ -59,7 +59,69 @@ DELETE
 //   / ____ \| |__| | |  | |_| |_| |\  |____) |
 //  /_/    \_\_____/|_|  |_|_____|_| \_|_____/
 
+###
+GET http://localhost:8080/dae_project/api/admins
+Accept: application/json
 
+> {%
+    client.test("GET ALL ADMINS", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+###
+GET http://localhost:8080/dae_project/api/admins/admin
+Accept: application/json
+
+> {%
+    client.test("GET ONE ADMIN", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+###
+POST http://localhost:8080/dae_project/api/admins
+Content-Type: application/json
+
+{
+  "username": "eu",
+  "password": "eu",
+  "email": "eu@eu.com",
+  "name": "Eu"
+}
+> {%
+    client.test("CREATE ADMIN", function() {
+        client.assert(response.status === 201, "Response status is " + response.status + " (EXPECTED: 201)");
+    });
+%}
+
+###
+PUT http://localhost:8080/dae_project/api/admins/eu
+Content-Type: application/json
+
+{
+  "username": "eu",
+  "password": "eu2",
+  "email": "eu@eu.com",
+  "name": "Eu"
+}
+> {%
+    client.test("UPDATE ADMIN", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+###
+DELETE http://localhost:8080/dae_project/api/admins/eu
+Content-Type: application/json
+
+> {%
+    client.test("DELETE ADMIN", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+###
 //    _____ _      _____ ______ _   _ _______ _____
 //   / ____| |    |_   _|  ____| \ | |__   __/ ____|
 //  | |    | |      | | | |__  |  \| |  | | | (___

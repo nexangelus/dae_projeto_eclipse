@@ -55,7 +55,7 @@ public class AdminService {
                 adminDTO.getPassword(),
                 adminDTO.getName(),
                 adminDTO.getEmail());
-        return Response.status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.CREATED).entity(toDTO(adminBean.getAdmin(adminDTO.getUsername()))).build();
     }
 
     @GET
