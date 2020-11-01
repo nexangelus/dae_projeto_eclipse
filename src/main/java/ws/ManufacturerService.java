@@ -1,5 +1,6 @@
 package ws;
 
+import dtos.ErrorDTO;
 import dtos.ManufacturerDTO;
 import ejbs.ManufacturerBean;
 import entities.Manufacturer;
@@ -61,7 +62,7 @@ public class ManufacturerService {
 		}
 
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity("ERROR FINDING MANUFACTURER")
+				.entity(ErrorDTO.error("ERROR FINDING MANUFACTURER"))
 				.build();
 	}
 
@@ -101,11 +102,11 @@ public class ManufacturerService {
 
 		if (manufacturerBean.getManufacturer(username) != null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity("ERROR_WHILE_DELETING")
+					.entity(ErrorDTO.error("ERROR_WHILE_DELETING"))
 					.build();
 
 		return Response.status(Response.Status.OK)
-				.entity("SUCCESS")
+				.entity(ErrorDTO.error("SUCCESS"))
 				.build();
 
 	}

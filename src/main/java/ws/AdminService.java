@@ -2,6 +2,7 @@ package ws;
 
 
 import dtos.AdminDTO;
+import dtos.ErrorDTO;
 import ejbs.AdminBean;
 import entities.Admin;
 import exceptions.MyConstraintViolationException;
@@ -68,7 +69,7 @@ public class AdminService {
                     .build();
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("ERROR_FINDING_ADMIN")
+                .entity(ErrorDTO.error("ERROR_FINDING_ADMIN"))
                 .build();
     }
 
@@ -91,7 +92,7 @@ public class AdminService {
             return Response.status(Response.Status.OK).build();
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("ERROR_DELETING_ADMIN")
+                .entity(ErrorDTO.error("ERROR_DELETING_ADMIN"))
                 .build();
     }
 

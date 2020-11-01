@@ -1,6 +1,7 @@
 package ws;
 
 import dtos.DesignerDTO;
+import dtos.ErrorDTO;
 import ejbs.DesignerBean;
 import entities.Designer;
 import exceptions.MyConstraintViolationException;
@@ -54,7 +55,7 @@ public class DesignerService {
 		}
 
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity("ERROR FINDING DESIGNER")
+				.entity(ErrorDTO.error("ERROR FINDING DESIGNER"))
 				.build();
 	}
 
@@ -91,11 +92,11 @@ public class DesignerService {
 
 		if (designerBean.getDesigner(username) != null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity("ERROR_WHILE_DELETING")
+					.entity(ErrorDTO.error("ERROR_WHILE_DELETING"))
 					.build();
 
 		return Response.status(Response.Status.OK)
-				.entity("SUCCESS")
+				.entity(ErrorDTO.error("SUCCESS"))
 				.build();
 
 	}

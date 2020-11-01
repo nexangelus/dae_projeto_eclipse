@@ -1,6 +1,7 @@
 package ws;
 
 import dtos.ClientDTO;
+import dtos.ErrorDTO;
 import ejbs.ClientBean;
 import entities.Client;
 import exceptions.MyConstraintViolationException;
@@ -75,7 +76,7 @@ public class ClientService {
                     .build();
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("ERROR_FINDING_CLIENT")
+                .entity(ErrorDTO.error("ERROR_FINDING_CLIENT"))
                 .build();
     }
 
@@ -100,7 +101,7 @@ public class ClientService {
             return Response.status(Response.Status.OK).build();
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("ERROR_DELETING_CLIENT")
+                .entity(ErrorDTO.error("ERROR_DELETING_CLIENT"))
                 .build();
     }
     //endregion
