@@ -83,7 +83,7 @@ public class ClientService {
     @PUT
     @Path("{username}")
     public Response updateClientDetails(@PathParam("username") String username, ClientDTO clientDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
-        clientBean.update(clientDTO.getUsername(),
+        clientBean.update(username,
                 clientDTO.getPassword(),
                 clientDTO.getName(),
                 clientDTO.getEmail(),

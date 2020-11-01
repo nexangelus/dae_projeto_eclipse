@@ -46,12 +46,34 @@ Content-Type: application/json
 %}
 
 ###
-PUT
+PUT http://localhost:8080/dae_project/api/manufacturers/bgoncalves
+Content-Type: application/json
+
+{
+  "address": "Largo São. Tomé, 25, Bl. 2 8035-007 Gouveiaaaa",
+  "contact": "912345678",
+  "email": "leandro21@hotmail.com",
+  "name": "Diana Rocha",
+  "password": "p0DPu0B5Z5",
+  "website": "http://diana-rocha.pt"
+}
+> {%
+    client.test("UPDATE MANUFACTURER", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
 
 ###
-DELETE
+DELETE http://localhost:8080/dae_project/api/manufacturers/bgoncalves
+Content-Type: application/json
 
+> {%
+    client.test("DELETE MANUFACTURER", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
 
+###
 //            _____  __  __ _____ _   _  _____
 //      /\   |  __ \|  \/  |_   _| \ | |/ ____|
 //     /  \  | |  | | \  / | | | |  \| | (___
@@ -100,7 +122,6 @@ PUT http://localhost:8080/dae_project/api/admins/eu
 Content-Type: application/json
 
 {
-  "username": "eu",
   "password": "eu2",
   "email": "eu@eu.com",
   "name": "Eu"
@@ -171,10 +192,11 @@ PUT http://localhost:8080/dae_project/api/clients/eu
 Content-Type: application/json
 
 {
-  "username": "eu",
   "password": "eu2",
   "email": "eu@eu.com",
-  "name": "Eu"
+  "name": "Eu",
+  "contact": "fdgdf",
+  "address": "sdfde"
 }
 > {%
     client.test("UPDATE CLIENT", function() {

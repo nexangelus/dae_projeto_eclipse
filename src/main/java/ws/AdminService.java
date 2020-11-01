@@ -76,7 +76,7 @@ public class AdminService {
     @PUT
     @Path("{username}")
     public Response updateAdminDetails(@PathParam("username") String username, AdminDTO adminDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
-        adminBean.update(adminDTO.getUsername(),
+        adminBean.update(username,
                 adminDTO.getPassword(),
                 adminDTO.getName(),
                 adminDTO.getEmail());
