@@ -1,11 +1,7 @@
 package ws;
 
-
-import dtos.AdminDTO;
 import dtos.ClientDTO;
-import ejbs.AdminBean;
 import ejbs.ClientBean;
-import entities.Admin;
 import entities.Client;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
@@ -18,9 +14,9 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Path("/clients") // relative url web path for this service
-@Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
-@Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
+@Path("/clients")
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes({MediaType.APPLICATION_JSON})
 public class ClientService {
 
     //region EJB
