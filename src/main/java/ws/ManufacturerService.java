@@ -70,7 +70,7 @@ public class ManufacturerService {
 	public Response create(ManufacturerDTO manufacturer) throws MyEntityExistsException, MyConstraintViolationException {
 		manufacturerBean.create(manufacturer.getUsername(), manufacturer.getPassword(),
 				manufacturer.getName(), manufacturer.getEmail(), manufacturer.getAddress(),
-				manufacturer.getContact(), manufacturer.getWebsite());
+				manufacturer.getWebsite(), manufacturer.getContact());
 
 		Manufacturer newManufacturer = manufacturerBean.getManufacturer(manufacturer.getUsername());
 		if (newManufacturer == null)

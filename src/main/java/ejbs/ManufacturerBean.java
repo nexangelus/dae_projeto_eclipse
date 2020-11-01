@@ -21,13 +21,13 @@ public class ManufacturerBean extends BaseBean {
         return em.find(Manufacturer.class, username);
     }
 
-    public void create(String username, String password, String name, String email, String address, String contact, String website)
+    public void create(String username, String password, String name, String email, String address, String website, String contact)
             throws MyEntityExistsException, MyConstraintViolationException {
 
         if (getManufacturer(username) != null)
             throw new MyEntityExistsException("Manufacturer with username: " + username + " already exists");
         try {
-            Manufacturer manufacturer = new Manufacturer(username, password, name, email, address, contact, website);
+            Manufacturer manufacturer = new Manufacturer(username, password, name, email, address, website, contact);
             em.persist(manufacturer);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
