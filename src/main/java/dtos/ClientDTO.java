@@ -7,13 +7,16 @@ public class ClientDTO implements Serializable {
     private String password;
     private String name;
     private String email;
+    private String contact;
+    private String address;
 
-    public ClientDTO(String username, String password, String name, String email) {
+    public ClientDTO(String username, String password, String name, String email, String contact, String address) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
-        //TODO acabar
+        this.contact = contact;
+        this.address = address;
     }
 
     public ClientDTO() {
@@ -49,5 +52,21 @@ public class ClientDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
