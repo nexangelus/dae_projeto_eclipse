@@ -1,6 +1,8 @@
 package ejbs;
 
 
+import entities.Panel;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -58,10 +60,10 @@ public class ConfigBean {
 			//endregion
 
 			//region Manufacturer
-			manufacturerBean.create("vicente03", "oJ04uCMOZ1", "Hélder Hélder Rodrigues Pinto", "bianca43@sapo.pt", "285899583", "Lg. Isabel Ferreira 8245 Alcobaça", "http://helder.pt");
-			manufacturerBean.create("fernando78", "EO8qP4ATEA", "Alice Tatiana Leite de Henriques", "hugo89@moura.pt", "281500760", "Tv. Joaquim Soares, nº 61, 1º Dir. 7244-529 Ermesinde", "http://alice.pt");
-			manufacturerBean.create("julia.lopes", "C6O99cQofz", "Ângelo Anjos de Leite", "mendes.sara@gmail.com", "246839248", "Rua de Nogueira, 2, Bl. 9 7510-449 Rio Maior", "http://angelo.pt");
-			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "913738624", "Av. Pinho 5165 Espinho", "http://neto.pt");
+			manufacturerBean.create("vicente03", "oJ04uCMOZ1", "Hélder Hélder Rodrigues Pinto", "bianca43@sapo.pt", "Lg. Isabel Ferreira 8245 Alcobaça", "285899583", "http://helder.pt");
+			manufacturerBean.create("fernando78", "EO8qP4ATEA", "Alice Tatiana Leite de Henriques", "hugo89@moura.pt", "Tv. Joaquim Soares, nº 61, 1º Dir. 7244-529 Ermesinde", "281500760", "http://alice.pt");
+			manufacturerBean.create("julia.lopes", "C6O99cQofz", "Ângelo Anjos de Leite", "mendes.sara@gmail.com", "Rua de Nogueira, 2, Bl. 9 7510-449 Rio Maior", "246839248", "http://angelo.pt");
+			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "Av. Pinho 5165 Espinho", "913738624", "http://neto.pt");
 			//endregion
 
 			//region Materials
@@ -81,7 +83,8 @@ public class ConfigBean {
 			//endregion
 			//endregion
 
-			System.out.println(manufacturerBean.getManufacturer("fernando78").getMaterials());
+			Panel panel = panelBean.getPanel(3);
+			System.out.println(panel);
 
 
 		} catch (Exception e) {

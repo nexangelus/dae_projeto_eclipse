@@ -7,12 +7,18 @@ public class ManufacturerDTO implements Serializable {
     private String password;
     private String name;
     private String email;
+    private String address;
+    private String website;
+    private String contact;
 
-    public ManufacturerDTO(String username, String password, String name, String email) {
+    public ManufacturerDTO(String username, String password, String name, String email, String address, String website, String contact) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.address = address;
+        this.website = website;
+        this.contact = contact;
     }
 
     public ManufacturerDTO() {
@@ -48,5 +54,29 @@ public class ManufacturerDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 }
