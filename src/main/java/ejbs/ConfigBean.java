@@ -82,7 +82,7 @@ public class ConfigBean {
 					"fernando78", "Topconver® 3", 30, 1000, 4, 8, 7.7);
 			//endregion
 			//endregion
-			
+
 
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage());
