@@ -48,7 +48,7 @@ public class LoginService {
     @GET
     @Path("/claims")
     public Response demonstrateClaims(@HeaderParam("Authorization") String auth) {
-
+        // TODO Perguntar se é possível "apanhar" o pedido inválido com autorização, para podermos transformar em JSON
         if (auth != null && auth.startsWith("Bearer ")) {
             try {
                 JWT j = JWTParser.parse(auth.substring(7));

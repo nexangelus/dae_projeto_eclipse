@@ -1,4 +1,35 @@
+//  _      ____   _____ _____ _   _
+// | |    / __ \ / ____|_   _| \ | |
+// | |   | |  | | |  __  | | |  \| |
+// | |   | |  | | | |_ | | | | . ` |
+// | |___| |__| | |__| |_| |_| |\  |
+// |______\____/ \_____|_____|_| \_|
 
+### Generate Token
+POST http://localhost:8080/dae_project/api/login/token
+Content-Type: application/x-www-form-urlencoded
+
+username={{admin-username}}&password={{admin-password}}
+
+> {%
+    client.test("GENERATE TOKEN", function() {
+        client.global.set("token", response.body.token);
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+### VERIFY TOKEN
+GET http://localhost:8080/dae_project/api/login/claims
+Accept: application/json
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("VERIFY TOKEN", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+###
 //   __  __          _   _ _    _ ______      _____ _______ _    _ _____  ______ _____   _____
 //  |  \/  |   /\   | \ | | |  | |  ____/\   / ____|__   __| |  | |  __ \|  ____|  __ \ / ____|
 //  | \  / |  /  \  |  \| | |  | | |__ /  \ | |       | |  | |  | | |__) | |__  | |__) | (___
@@ -270,17 +301,3 @@ Content-Type: application/json
 //  | |  | |  ___/| |   | |  | |/ /\ \ | |  | |\___ \
 //  | |__| | |    | |___| |__| / ____ \| |__| |____) |
 //   \____/|_|    |______\____/_/    \_\_____/|_____/
-
-// LOGIN
-
-### Get JWT token
-POST http://localhost:8080/dae_project/api/login/token
-Content-Type: application/x-www-form-urlencoded
-
-username=admin&password=admin
-
-### VERIFY TOKEN
-GET http://localhost:8080/dae_project/api/login/claims
-Accept: application/json
-Authorization: Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6InF1aWNrc3RhcnQtand0LWlzc3VlciIsImF1ZCI6Imp3dC1hdWRpZW5jZSIsImdyb3VwcyI6WyJBZG1pbiJdLCJleHAiOjE2MDQ4MDU1MjB9.A7UzKAa733oQmVhZi3DP1CeJZjCAZUSeg0QudrwGJe3H2tq6chWc_pGGVRN__rrXKGxUFApe0guTUyKH_OoFT2HE4NNQiS_XPClEF00cjqW998qS7A68zczpCUdSfN6vBlPWleV_j0-NAYnjGvCOew3mHG3bTXzbCIpr4DrapmWg-f4z7l_H5BrGsW61t6xJiYpLrXY_UrDDrVTrQPqQ5TQ5Zr1r4cK3M5f158yj7B5gr7IdH9ushdl2Trj_4VsKOyFguSkApm-_Cjw5OYXdYo6Tsc5G6YpCtdg6u8u4Yd0lAzKYLhZcBqLaFD-slowemzX3qVXRZiUHkrqvYFaDQw
-
