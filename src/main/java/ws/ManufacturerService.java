@@ -10,11 +10,12 @@ import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Path("/manufacturers")
 @Produces({MediaType.APPLICATION_JSON})
@@ -24,6 +25,11 @@ public class ManufacturerService {
 	//region EJB
 	@EJB
 	private ManufacturerBean manufacturerBean;
+	//endregion
+
+	//region Security
+	@Context
+	private SecurityContext securityContext;
 	//endregion
 
 	//region DTOS

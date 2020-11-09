@@ -10,8 +10,11 @@ import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +28,13 @@ public class ClientService {
     private ClientBean clientBean;
     //endregion
 
+    //region Security
+    @Context
+    private SecurityContext securityContext;
+    //endregion
+
     //region DTOS
-    public static ClientDTO toDTO(Client client){
+    public static ClientDTO toDTO(Client client) {
         return new ClientDTO(
                 client.getUsername(),
                 client.getPassword(),
@@ -37,7 +45,7 @@ public class ClientService {
         );
     }
 
-    public static List<ClientDTO> toDTOs(List<Client> clients){
+    public static List<ClientDTO> toDTOs(List<Client> clients) {
         return clients.stream().map(ClientService::toDTO).collect(Collectors.toList());
     }
 
@@ -47,28 +55,39 @@ public class ClientService {
     //region CRUD
 
 
-    @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/") // means: the relative url path is “/api/students/”
-    public List<ClientDTO> getAllClients() {
-        return ClientService.toDTOs(clientBean.getAllClients());
+    @GET
+    @Path("/")
+    public Response getAllClients() {
+        if (!(securityContext.isUserInRole("Admin") ||
+                securityContext.isUserInRole("Designer"))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOs(clientBean.getAllClients())).build();
     }
 
     @POST
     @Path("/")
-    public Response createNewClient (ClientDTO clientDTO) throws MyEntityExistsException, MyConstraintViolationException {
+    public Response createNewClient(ClientDTO clientDTO) throws MyEntityExistsException, MyConstraintViolationException {
         clientBean.create(clientDTO.getUsername(),
                 clientDTO.getPassword(),
                 clientDTO.getName(),
                 clientDTO.getEmail(),
                 clientDTO.getContact(),
                 clientDTO.getAddress()
-                );
+        );
         return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
     @Path("{username}")
     public Response getClientDetails(@PathParam("username") String username) {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin") ||
+                securityContext.isUserInRole("Designer") ||
+                securityContext.isUserInRole("Client") &&
+                        principal.getName().equals(username))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         Client client = clientBean.getClient(username);
         if (client != null) {
             return Response.status(Response.Status.OK)
@@ -83,6 +102,13 @@ public class ClientService {
     @PUT
     @Path("{username}")
     public Response updateClientDetails(@PathParam("username") String username, ClientDTO clientDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin") ||
+                securityContext.isUserInRole("Designer") || //TODO ver
+                securityContext.isUserInRole("Client") &&
+                        principal.getName().equals(username))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         clientBean.update(username,
                 clientDTO.getPassword(),
                 clientDTO.getName(),
@@ -95,6 +121,12 @@ public class ClientService {
     @DELETE
     @Path("{username}")
     public Response deleteClient(@PathParam("username") String username) throws MyEntityNotFoundException {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin") ||
+                securityContext.isUserInRole("Client") &&
+                        principal.getName().equals(username))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         clientBean.delete(username);
         Client client = clientBean.getClient(username);
         if (client == null) {

@@ -11,8 +11,10 @@ import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,11 @@ public class AdminService {
     //region EJB
     @EJB
     private AdminBean adminBean;
+    //endregion
+
+    //region Security
+    @Context
+    private SecurityContext securityContext;
     //endregion
 
     //region DTOS
@@ -43,15 +50,21 @@ public class AdminService {
 
     //region CRUD
 
-    @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/") // means: the relative url path is “/api/students/”
-    public List<AdminDTO> getAllAdmins() {
-        return AdminService.toDTOs(adminBean.getAllAdmins());
+    @GET
+    @Path("/")
+    public Response getAllAdmins() {
+        if(!(securityContext.isUserInRole("Admin"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        return Response.status(Response.Status.ACCEPTED).entity(AdminService.toDTOs(adminBean.getAllAdmins())).build();
     }
 
     @POST
     @Path("/")
     public Response createNewAdmin (AdminDTO adminDTO) throws MyEntityExistsException, MyConstraintViolationException {
+        if(!(securityContext.isUserInRole("Admin"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         adminBean.create(adminDTO.getUsername(),
                 adminDTO.getPassword(),
                 adminDTO.getName(),
@@ -62,6 +75,9 @@ public class AdminService {
     @GET
     @Path("{username}")
     public Response getAdminDetails(@PathParam("username") String username) {
+        if(!(securityContext.isUserInRole("Admin"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         Admin admin = adminBean.getAdmin(username);
         if (admin != null) {
             return Response.status(Response.Status.OK)
@@ -76,6 +92,9 @@ public class AdminService {
     @PUT
     @Path("{username}")
     public Response updateAdminDetails(@PathParam("username") String username, AdminDTO adminDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+        if(!(securityContext.isUserInRole("Admin"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         adminBean.update(username,
                 adminDTO.getPassword(),
                 adminDTO.getName(),
@@ -86,6 +105,9 @@ public class AdminService {
     @DELETE
     @Path("{username}")
     public Response deleteAdmin(@PathParam("username") String username) throws MyEntityNotFoundException {
+        if(!(securityContext.isUserInRole("Admin"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         adminBean.delete(username);
         Admin admin = adminBean.getAdmin(username);
         if (admin == null) {
