@@ -1,86 +1,124 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(
-                name = "getAllProfiles",
-                query = "SELECT p FROM Profile p ORDER BY p.name" // JPQL
-        )
+		@NamedQuery(
+				name = "getAllProfiles",
+				query = "SELECT p FROM Profile p ORDER BY p.name"
+		)
 })
 public class Profile extends Material{
-    @NotNull
-    private double height;
 
-    @NotNull
-    private double thickness;
+	private static final double G = 78.5;
 
-    @NotNull
-    private double weight;
+	private double weff_p;
 
-    @NotNull
-    @Column(name = "AREA_PAINTING")
-    private double areaPainting;
+	private double weff_n;
 
-    @NotNull
-    @Column(name = "STEEL_GRADE")
-    private String steelGrade;
+	private double ar;
 
-    public Profile(String name, String description, Manufacturer manufacturer, String family, double height, double thickness, double weight, double areaPainting, String steelGrade) {
-        super(name, description, manufacturer, family);
-        this.height = height;
-        this.thickness = thickness;
-        this.weight = weight;
-        this.areaPainting = areaPainting;
-        this.steelGrade = steelGrade;
-    }
+	private double sigmaC;
 
-    public Profile() {
-        super();
-    }
+	private double pp;
 
-    public double getHeight() {
-        return height;
-    }
+	@Lob
+	private LinkedHashMap<Double,Double> mcr_p;
+	@Lob
+	private LinkedHashMap<Double,Double> mcr_n;
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
+	@ManyToMany(mappedBy = "profilesAllowed")
+	private Set<Simulation> simulations;
 
-    public double getThickness() {
-        return thickness;
-    }
+	public Profile(String name, Manufacturer manufacturer, Family family, double weff_p, double weff_n, double ar, double sigmaC) {
+		super(name, manufacturer, family);
+		this.weff_p = weff_p;
+		this.weff_n = weff_n;
+		this.ar = ar;
+		this.sigmaC = sigmaC;
+		this.pp = G * ar * Math.pow(10, -6);
+		this.mcr_p = new LinkedHashMap<Double,Double>();
+		this.mcr_n = new LinkedHashMap<Double,Double>();
+	}
 
-    public void setThickness(double thickness) {
-        this.thickness = thickness;
-    }
+	public Profile() {
+		super();
+		this.mcr_p = new LinkedHashMap<Double,Double>();
+		this.mcr_n = new LinkedHashMap<Double,Double>();
+	}
 
-    public double getWeight() {
-        return weight;
-    }
+	public double getWeff_p() {
+		return weff_p;
+	}
 
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
+	public void setWeff_p(double weff_p) {
+		this.weff_p = weff_p;
+	}
 
-    public double getAreaPainting() {
-        return areaPainting;
-    }
+	public double getWeff_n() {
+		return weff_n;
+	}
 
-    public void setAreaPainting(double areaPainting) {
-        this.areaPainting = areaPainting;
-    }
+	public void setWeff_n(double weff_n) {
+		this.weff_n = weff_n;
+	}
 
-    public String getSteelGrade() {
-        return steelGrade;
-    }
+	public double getAr() {
+		return ar;
+	}
 
-    public void setSteelGrade(String steelGrade) {
-        this.steelGrade = steelGrade;
-    }
+	public void setAr(double ar) {
+		this.ar = ar;
+	}
+
+	public double getSigmaC() {
+		return sigmaC;
+	}
+
+	public void setSigmaC(double sigmaC) {
+		this.sigmaC = sigmaC;
+	}
+
+	public double getPp() {
+		return pp;
+	}
+
+	public void setPp(double pp) {
+		this.pp = pp;
+	}
+
+	public LinkedHashMap<Double, Double> getMcr_p() {
+		return mcr_p;
+	}
+
+	public void setMcr_p(LinkedHashMap<Double, Double> mcr_p) {
+		this.mcr_p = mcr_p;
+	}
+
+	public void addMcr_p(Double L, Double mcr_pValue){
+		mcr_p.put(L, mcr_pValue);
+	}
+
+	public void removeMcr_p(Double LToRemove){
+		mcr_p.remove(LToRemove);
+	}
+
+	public LinkedHashMap<Double, Double> getMcr_n() {
+		return mcr_n;
+	}
+
+	public void setMcr_n(LinkedHashMap<Double, Double> mcr_n) {
+		this.mcr_n = mcr_n;
+	}
+
+	public void addMcr_n(Double L, Double mcr_nValue){
+		mcr_n.put(L, mcr_nValue);
+	}
+
+	public void removeMcr_n(Double LToRemove){
+		mcr_n.remove(LToRemove);
+	}
 }

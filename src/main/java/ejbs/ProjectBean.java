@@ -2,7 +2,6 @@ package ejbs;
 
 import entities.Client;
 import entities.Designer;
-import entities.Material;
 import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;

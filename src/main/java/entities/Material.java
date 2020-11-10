@@ -1,115 +1,86 @@
 package entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.sql.Struct;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@NamedQueries({
-        @NamedQuery(
-                name = "getAllMaterials",
-                query = "SELECT m FROM Material m ORDER BY m.name" // JPQL
-        )
-})
 public class Material {
-    @Version
-    private int version;
 
-    @Id
-    @GeneratedValue
-    private long id;
+	@Id
+	@GeneratedValue
+	private long id;
 
-    @NotNull
-    private String name;
+	private String name;
 
-    @NotNull
-    private String description;
+	@ManyToOne
+	private Manufacturer manufacturer;
 
-    @NotNull
-    private String family;
+	@ManyToOne
+	private Family family;
 
-    @ManyToOne
-    private Manufacturer manufacturer;
+	@ManyToMany(mappedBy = "materials")
+	private Set<Structure> structures;
 
-    @Column(name = "IMAGE_PATH")
-    private String imagePath;
+	public Material(String name, Manufacturer manufacturer, Family family, Set<Structure> structures) {
+		this.name = name;
+		this.manufacturer = manufacturer;
+		this.family = family;
+		this.structures = structures;
+	}
 
-    @ManyToMany(mappedBy = "materials")
-    private Set<Structure> structures;
+	public Material(String name, Manufacturer manufacturer, Family family) {
+		this.name = name;
+		this.manufacturer = manufacturer;
+		this.family = family;
+		this.structures = new LinkedHashSet<>();
+	}
 
-    //TODO @ManyToMany Struct incluindo campo adicional (quantidade)
+	public Material() {
+		this.structures = new LinkedHashSet<>();
+	}
 
-    public Material(String name, String description, Manufacturer manufacturer, String family) {
-        this.name = name;
-        this.description = description;
-        this.manufacturer = manufacturer;
-        this.family = family;
-        this.structures = new LinkedHashSet<>();
-    }
+	public long getId() {
+		return id;
+	}
 
-    public Material() {
-        this.structures = new LinkedHashSet<>();
-    }
+	public String getName() {
+		return name;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Manufacturer getManufacturer() {
+		return manufacturer;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setManufacturer(Manufacturer manufacturer) {
+		this.manufacturer = manufacturer;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public Family getFamily() {
+		return family;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setFamily(Family family) {
+		this.family = family;
+	}
 
-    public Manufacturer getManufacturer() {
-        return manufacturer;
-    }
+	public Set<Structure> getStructures() {
+		return structures;
+	}
 
-    public void setManufacturer(Manufacturer manufacturer) {
-        this.manufacturer = manufacturer;
-    }
+	public void setStructures(Set<Structure> structures) {
+		this.structures = structures;
+	}
 
-    public String getFamily() {
-        return family;
-    }
+	public void addStructure(Structure structure) {
+		this.structures.add(structure);
+	}
 
-    public void setFamily(String family) {
-        this.family = family;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public Set<Structure> getStructures() {
-        return structures;
-    }
-
-    public void setStructures(Set<Structure> structures) {
-        this.structures = structures;
-    }
-
-    public void addStructure(Structure structure) {
-        this.structures.add(structure);
-    }
-
-    public void removeStructure(Structure structure) {
-        this.structures.remove(structure);
-    }
+	public void removeStructure(Structure structure) {
+		this.structures.remove(structure);
+	}
 }

@@ -21,7 +21,7 @@ public class Client extends User{
     @NotNull
     private String address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "client")
     Set<Project> projects;
 
     public Client(String username, String password, String name, String email, String contact, String address) {

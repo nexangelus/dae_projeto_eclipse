@@ -22,9 +22,6 @@ public class Upload {
     private String path;
 
     @ManyToOne
-    @JoinTable(name = "PROJECT_UPLOADS",
-            joinColumns = @JoinColumn(name = "UPLOAD_ID"),
-            inverseJoinColumns =  @JoinColumn(name = "PROJECT_ID"))
     private Project project;
 
     public Upload(String path, Project project) {

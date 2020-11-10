@@ -7,38 +7,32 @@ import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
+import javax.persistence.Entity;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Stateless
-public class ProfileBean extends BaseBean {
+public class FamilyBean extends BaseBean {
 
-	public List<Profile> getAll() {
-		return (List<Profile>) em.createNamedQuery("getAllProfiles").getResultList();
+	public List<Family> getAll() {
+		return (List<Family>) em.createNamedQuery("getAllFamilies").getResultList();
 	}
 
-	public Profile getProfile(long id) {
-		return em.find(Profile.class, id);
+	public Family getFamily(long id) {
+		return em.find(Family.class, id);
 	}
 
-	public void create(long familyID, String manufacturerUsername, String name, double weff_p, double weff_n, double ar, double sigmaC) throws MyConstraintViolationException, MyEntityNotFoundException {
+	public void create(String name, String manufacturerUsername) throws MyConstraintViolationException, MyEntityNotFoundException {
 		// TODO Perguntar ao Carvalho return do ID auto criado
 		Manufacturer manufacturer = em.find(Manufacturer.class, manufacturerUsername);
 
 		if (manufacturer == null)
 			throw new MyEntityNotFoundException("Manufacturer with username: " + manufacturerUsername + " doesn't exist");
 
-		Family family = em.find(Family.class, familyID);
-
-		if (family == null)
-			throw new MyEntityNotFoundException("Family with ID: " + familyID + " doesn't exist");
-
-
 		try {
-			Profile profile = new Profile(name, manufacturer, family, weff_p, weff_n, ar, sigmaC);
-			em.persist(profile);
-			manufacturer.addMaterial(profile);
-			family.addMaterial(profile);
+			Family family = new Family(name, manufacturer);
+			em.persist(family);
+			manufacturer.addFamily(family);
 		} catch (ConstraintViolationException e) {
 			throw new MyConstraintViolationException(e);
 		}
@@ -71,13 +65,11 @@ public class ProfileBean extends BaseBean {
 	}*/
 
 	public void delete(long id) throws MyEntityNotFoundException {
-		Profile profile = getProfile(id);
-		if (profile == null)
-			throw new MyEntityNotFoundException("Profile with id: " + id + " doesn't exist");
+		Family family = getFamily(id);
+		if (family == null)
+			throw new MyEntityNotFoundException("Family with id: " + id + " doesn't exist");
 
-		profile.getManufacturer().removeMaterial(profile);
-		profile.getFamily().removeMaterial(profile);
-		em.remove(profile);
+		family.getManufacturer().removeFamily(family);
+		em.remove(family);
 	}
-
 }

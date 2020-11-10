@@ -44,6 +44,9 @@ public class Structure {
 			joinColumns = @JoinColumn(name = "STRUCTURE_ID", referencedColumnName = "ID"),
 			inverseJoinColumns = @JoinColumn(name = "MATERIAL_ID", referencedColumnName = "ID"))
 	private Set<Material> materials;
+
+	@OneToMany(mappedBy = "structure")
+	private Set<Simulation> simulations;
     
     /*
     TODO Rever as estruturas e os contrutores verificar se estam bem feitos

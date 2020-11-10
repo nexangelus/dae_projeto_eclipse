@@ -1,7 +1,7 @@
 package ejbs;
 
 
-import entities.Panel;
+import entities.Profile;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,15 +27,14 @@ public class ConfigBean {
 	ManufacturerBean manufacturerBean;
 
 	@EJB
+	FamilyBean familyBean;
+
+	@EJB
 	ProfileBean profileBean;
 
-	@EJB
-	SheetBean sheetBean;
-
-	@EJB
-	PanelBean panelBean;
-
 	private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
+
+	// TODO Perguntar se é muito mau aqui chamar o ExcelUtils e lá fazer materialBean.create(...)
 
 	@PostConstruct
 	public void populateDB() {
@@ -66,25 +65,46 @@ public class ConfigBean {
 			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "Av. Pinho 5165 Espinho", "http://neto.pt", "913738624");
 			//endregion
 
+
+			//region Families
+			familyBean.create("Section C 220 BF", "vicente03");
+			familyBean.create("Section Z 220 BF", "fernando78");
+			//endregion
+
+
+
+
 			//region Materials
 			//region Profiles
-			profileBean.create("Superomega® 80 x 1.0", "O Superomega ® é o resultado de 2 anos de investimento em I&D numa parceria entre O FELIZ e a Universidade de Coimbra para a conceção de uma solução inovadora em perfis de aço leve enformados a frio.",
-					"fernando78", "Ω", 80, 176, 2.39, 0.608, "S280GD");
+			profileBean.create(1, "vicente03", "C 120/50/21 x 1.5", 13846, 13846, 375, 220000);
+			profileBean.create(2, "fernando78", "C 120/60/13 x 2.0", 18738, 18738, 500, 220000);
+
+			Profile profile1 = profileBean.getProfile(3);
+			profile1.addMcr_p(3.0,243.2123113);
+			profile1.addMcr_p(4.0,145.238784);
+			profile1.addMcr_p(5.0,99.15039028);
+			profile1.addMcr_p(6.0,73.71351699);
+			profile1.addMcr_p(7.0,58.07716688);
+			profile1.addMcr_p(8.0,47.68885195);
+			profile1.addMcr_p(9.0,40.37070843);
+			profile1.addMcr_p(10.0,34.9747033);
+			profile1.addMcr_p(11.0,30.84866055);
+			profile1.addMcr_p(12.0,27.59984422);
 			//endregion
 
 			//region Sheets
-			sheetBean.create("P0-272-30", "Chapa Perfilada trapezoidal com 30 mm de altura, sem nervuras de rigidez.",
+			/*sheetBean.create("P0-272-30", "Chapa Perfilada trapezoidal com 30 mm de altura, sem nervuras de rigidez.",
 					"fernando78", "P0-272-30", 0.5, 4.15, "S280GD");
 			//endregion
 
 			//region Panel
 			panelBean.create("Topconver® 3", "Painel Isolante de 3 ondas para cobertura, composto por duas chapas metálicas perfiladas, unidas por um núcleo de espuma rígida de poliuretano (PUR) ou polisocianurato (PIR).",
-					"fernando78", "Topconver® 3", 30, 1000, 4, 8, 7.7);
+					"fernando78", "Topconver® 3", 30, 1000, 4, 8, 7.7);*/
 			//endregion
 			//endregion
-
 
 		} catch (Exception e) {
+			System.out.println("ERRO");
 			logger.log(Level.SEVERE, e.getMessage());
 		}
 

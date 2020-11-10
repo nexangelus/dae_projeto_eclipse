@@ -14,6 +14,9 @@ import java.util.Set;
 public class Manufacturer extends User {
 
     @OneToMany(mappedBy = "manufacturer")
+    private Set<Family> families;
+
+    @OneToMany(mappedBy = "manufacturer")
     private Set<Material> materials;
 
     private String address;
@@ -22,12 +25,13 @@ public class Manufacturer extends User {
 
     private String contact;
 
-    public Manufacturer(String username, String password, String name, String email, Set<Material> materials, String address, String website, String contact) {
+    public Manufacturer(String username, String password, String name, String email, Set<Material> materials, Set<Family> families, String address, String website, String contact) {
         super(username, password, name, email);
         this.address = address;
         this.website = website;
         this.contact = contact;
         this.materials = materials;
+        this.families = families;
     }
 
     public Manufacturer(String username, String password, String name, String email, String address, String website, String contact) {
@@ -36,11 +40,13 @@ public class Manufacturer extends User {
         this.website = website;
         this.contact = contact;
         this.materials = new LinkedHashSet<>();
+        this.families = new LinkedHashSet<>();
     }
 
     public Manufacturer() {
         super();
         this.materials = new LinkedHashSet<>();
+        this.families = new LinkedHashSet<>();
     }
 
     public String getAddress() {
@@ -83,4 +89,19 @@ public class Manufacturer extends User {
         this.materials.remove(material);
     }
 
+    public Set<Family> getFamilies() {
+        return families;
+    }
+
+    public void setFamilies(Set<Family> families) {
+        this.families = families;
+    }
+
+    public void addFamily(Family family) {
+        this.families.add(family);
+    }
+
+    public void removeFamily(Family family) {
+        this.families.remove(family);
+    }
 }
