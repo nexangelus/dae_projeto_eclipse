@@ -49,7 +49,6 @@ public class ClientService {
         return clients.stream().map(ClientService::toDTO).collect(Collectors.toList());
     }
 
-
     //endregion
 
     //region CRUD
