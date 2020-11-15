@@ -44,7 +44,7 @@ public class ConfigBean {
 			//endregion
 
 			//region Clients
-			clientBean.create("lourenco.abreu", "9GXJT2oQAC", "Gonçalo Diogo Martins de Amaral", "alves.frederico@hotmail.com", "219793927", "Travessa St. Vanessa Almeida, 21, Bloco 7 5381 Oliveira de Azeméis");
+			clientBean.create("client", "client", "Gonçalo Diogo Martins de Amaral", "alves.frederico@hotmail.com", "219793927", "Travessa St. Vanessa Almeida, 21, Bloco 7 5381 Oliveira de Azeméis");
 			clientBean.create("neves.nelson", "XJQAioWQjV", "António Reis", "catia74@mail.pt", "244320214", "Tv. de Freitas 4201-500 Barcelos");
 			clientBean.create("constanca.batista", "YKQXcarZta", "Igor Alexandre Araújo Monteiro", "aabreu@teixeira.eu", "292489825", "Avenida Telmo Neto, 614, Bl. 3 3929-618 Vila Nova de Gaia");
 			clientBean.create("lopes.lourenco", "JY3ORooMMp", "Jorge Neto de Miranda", "emanuel27@mail.pt", "260414958", "Lg. São. Joana 5691-408 Lisboa");
@@ -53,13 +53,13 @@ public class ConfigBean {
 			//endregion
 
 			//region Designers
-			designerBean.create("diogo55", "HX6iIkymXP", "Helena Neto", "isaac.assuncao@mota.com");
+			designerBean.create("designer", "designer", "Helena Neto", "isaac.assuncao@mota.com");
 			designerBean.create("bpinto", "icLMoqJM99", "Álvaro Pinheiro Paiva", "renato06@clix.pt");
 			designerBean.create("artur.batista", "JFB4jLOMDK", "Jéssica Sofia Carvalho Sousa", "campos.joao@anjos.pt");
 			//endregion
 
 			//region Manufacturer
-			manufacturerBean.create("vicente03", "oJ04uCMOZ1", "Hélder Hélder Rodrigues Pinto", "bianca43@sapo.pt", "Lg. Isabel Ferreira 8245 Alcobaça", "http://helder.pt", "285899583");
+			manufacturerBean.create("manufacturer", "manufacturer", "Hélder Hélder Rodrigues Pinto", "bianca43@sapo.pt", "Lg. Isabel Ferreira 8245 Alcobaça", "http://helder.pt", "285899583");
 			manufacturerBean.create("fernando78", "EO8qP4ATEA", "Alice Tatiana Leite de Henriques", "hugo89@moura.pt", "Tv. Joaquim Soares, nº 61, 1º Dir. 7244-529 Ermesinde", "http://alice.pt", "281500760");
 			manufacturerBean.create("julia.lopes", "C6O99cQofz", "Ângelo Anjos de Leite", "mendes.sara@gmail.com", "Rua de Nogueira, 2, Bl. 9 7510-449 Rio Maior", "http://angelo.pt", "246839248");
 			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "Av. Pinho 5165 Espinho", "http://neto.pt", "913738624");
@@ -67,7 +67,7 @@ public class ConfigBean {
 
 
 			//region Families
-			familyBean.create("Section C 220 BF", "vicente03");
+			familyBean.create("Section C 220 BF", "manufacturer");
 			familyBean.create("Section Z 220 BF", "fernando78");
 			//endregion
 
@@ -76,7 +76,7 @@ public class ConfigBean {
 
 			//region Materials
 			//region Profiles
-			profileBean.create(1, "vicente03", "C 120/50/21 x 1.5", 13846, 13846, 375, 220000);
+			profileBean.create(1, "manufacturer", "C 120/50/21 x 1.5", 13846, 13846, 375, 220000);
 			profileBean.create(2, "fernando78", "C 120/60/13 x 2.0", 18738, 18738, 500, 220000);
 
 			Profile profile1 = profileBean.getProfile(3);

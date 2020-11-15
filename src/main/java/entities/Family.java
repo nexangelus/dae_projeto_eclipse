@@ -11,7 +11,7 @@ import java.util.Set;
 				query = "SELECT p FROM Family p ORDER BY p.name"
 		)
 })
-public class Family {
+public class Family extends AbstractTimestampEntity {
 
 	@Id
 	@GeneratedValue

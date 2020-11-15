@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-public class Material {
+public class Material extends AbstractTimestampEntity {
 
 	@Id
 	@GeneratedValue

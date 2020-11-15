@@ -1,8 +1,9 @@
 package dtos;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-public class ClientDTO implements Serializable {
+public class ClientDTO extends TimestampDTO implements Serializable {
     private String username;
     private String password;
     private String name;
@@ -10,7 +11,8 @@ public class ClientDTO implements Serializable {
     private String contact;
     private String address;
 
-    public ClientDTO(String username, String password, String name, String email, String contact, String address) {
+    public ClientDTO(String username, String password, String name, String email, String contact, String address, LocalDateTime created, LocalDateTime updated) {
+        super(created, updated);
         this.username = username;
         this.password = password;
         this.name = name;
@@ -20,6 +22,7 @@ public class ClientDTO implements Serializable {
     }
 
     public ClientDTO() {
+        super();
     }
 
     public String getUsername() {

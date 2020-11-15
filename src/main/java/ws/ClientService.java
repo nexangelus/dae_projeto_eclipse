@@ -41,7 +41,9 @@ public class ClientService {
                 client.getName(),
                 client.getEmail(),
                 client.getContact(),
-                client.getAddress()
+                client.getAddress(),
+                client.getCreated(),
+                client.getUpdated()
         );
     }
 

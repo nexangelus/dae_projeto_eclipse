@@ -1,8 +1,9 @@
 package dtos;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-public class ManufacturerDTO implements Serializable {
+public class ManufacturerDTO extends TimestampDTO implements Serializable {
     private String username;
     private String password;
     private String name;
@@ -11,7 +12,8 @@ public class ManufacturerDTO implements Serializable {
     private String website;
     private String contact;
 
-    public ManufacturerDTO(String username, String password, String name, String email, String address, String website, String contact) {
+    public ManufacturerDTO(String username, String password, String name, String email, String address, String website, String contact, LocalDateTime created, LocalDateTime updated) {
+        super(created, updated);
         this.username = username;
         this.password = password;
         this.name = name;
@@ -22,6 +24,7 @@ public class ManufacturerDTO implements Serializable {
     }
 
     public ManufacturerDTO() {
+        super();
     }
 
     public String getUsername() {

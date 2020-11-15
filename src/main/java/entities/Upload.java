@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
                 query = "SELECT u FROM Upload u ORDER BY u.id" // JPQL
         )
 })
-public class Upload {
+public class Upload extends AbstractTimestampEntity {
     @Version
     private int version;
 

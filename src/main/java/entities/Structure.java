@@ -12,7 +12,7 @@ import java.util.Set;
 				query = "SELECT s FROM Structure s ORDER BY s.name" // JPQL
 		)
 })
-public class Structure {
+public class Structure extends AbstractTimestampEntity {
 	@Version
 	private int version;
 

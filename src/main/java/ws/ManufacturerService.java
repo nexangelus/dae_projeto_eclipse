@@ -41,7 +41,9 @@ public class ManufacturerService {
 				manufacturer.getEmail(),
 				manufacturer.getAddress(),
 				manufacturer.getWebsite(),
-				manufacturer.getContact()
+				manufacturer.getContact(),
+				manufacturer.getCreated(),
+				manufacturer.getUpdated()
 		);
 	}
 

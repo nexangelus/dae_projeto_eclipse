@@ -20,7 +20,7 @@ import java.util.logging.Logger;
                 query = "SELECT u FROM User u ORDER BY u.name" // JPQL
         )
 })
-public class User {
+public class User extends AbstractTimestampEntity {
     @Version
     private int version;
 

@@ -118,6 +118,7 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/dae_project/api/admins
 Accept: application/json
+Authorization: Bearer {{token}}
 
 > {%
     client.test("GET ALL ADMINS", function() {

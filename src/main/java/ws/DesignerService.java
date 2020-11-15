@@ -36,7 +36,7 @@ public class DesignerService {
     //region DTOS
     public static DesignerDTO toDTO(Designer designer) {
         return new DesignerDTO(
-                designer.getUsername(), designer.getPassword(), designer.getName(), designer.getEmail()
+                designer.getUsername(), designer.getPassword(), designer.getName(), designer.getEmail(), designer.getCreated(), designer.getUpdated()
         );
     }
 

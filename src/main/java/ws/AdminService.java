@@ -39,7 +39,9 @@ public class AdminService {
                 admin.getUsername(),
                 admin.getPassword(),
                 admin.getName(),
-                admin.getEmail()
+                admin.getEmail(),
+                admin.getCreated(),
+                admin.getUpdated()
         );
     }
 
