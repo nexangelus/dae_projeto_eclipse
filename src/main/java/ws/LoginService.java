@@ -27,7 +27,7 @@ public class LoginService {
     @POST
     @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response authenticateUser(AuthDTO authDTO) {
         try {
             User user = userBean.authenticate(authDTO.getUsername(), authDTO.getPassword());
