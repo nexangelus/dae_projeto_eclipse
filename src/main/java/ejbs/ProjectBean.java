@@ -21,7 +21,7 @@ public class ProjectBean extends BaseBean {
         return em.find(Project.class, id);
     }
 
-    public void create(String clientUsername, String designerUsername, String title, String description) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public long create(String clientUsername, String designerUsername, String title, String description) throws MyEntityNotFoundException, MyConstraintViolationException {
         Client client = em.find(Client.class, clientUsername);
         if (client == null)
             throw new MyEntityNotFoundException("Client with username: " + clientUsername + " doesn't exist");
@@ -35,8 +35,9 @@ public class ProjectBean extends BaseBean {
                     title,
                     description
             );
-
+            // TODO adicionar ao client e designer o projeto
             em.persist(project);
+            return project.getId();
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }

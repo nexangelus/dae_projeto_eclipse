@@ -1,6 +1,7 @@
 package ejbs;
 
 import entities.Client;
+import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -57,6 +58,10 @@ public class ClientBean extends BaseBean {
 		if (client == null)
 			throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
 		em.remove(client);
+	}
+
+	public List<Project> getAllClientProjects(String username) {
+		return (List<Project>) em.createNamedQuery("getClientProjects").setParameter("username", username).getResultList();
 	}
 
 }

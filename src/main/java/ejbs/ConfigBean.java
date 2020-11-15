@@ -2,11 +2,13 @@ package ejbs;
 
 
 import entities.Profile;
+import entities.Project;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +33,9 @@ public class ConfigBean {
 
 	@EJB
 	ProfileBean profileBean;
+
+	@EJB
+	ProjectBean projectBean;
 
 	private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
 
@@ -102,6 +107,13 @@ public class ConfigBean {
 					"fernando78", "Topconver® 3", 30, 1000, 4, 8, 7.7);*/
 			//endregion
 			//endregion
+
+			projectBean.create("client", "designer", "title", "description");
+			projectBean.create("jtavares", "designer", "title", "description");
+
+			List<Project> client = clientBean.getAllClientProjects("client");
+			 client = clientBean.getAllClientProjects("jtavares");
+			System.out.println(client.size());
 
 		} catch (Exception e) {
 			System.out.println("ERRO");

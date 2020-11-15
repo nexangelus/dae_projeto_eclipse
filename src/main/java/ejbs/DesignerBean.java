@@ -2,6 +2,7 @@ package ejbs;
 
 import entities.Client;
 import entities.Designer;
+import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -54,6 +55,10 @@ public class DesignerBean extends BaseBean {
         if (designer== null)
             throw new MyEntityNotFoundException("Designer with username: " + username + " doesn't exist");
         em.remove(designer );
+    }
+
+    public List<Project> getAllClientProjects(String username) {
+        return (List<Project>) em.createNamedQuery("getDesignerProjects").setParameter("username", username).getResultList();
     }
 
 

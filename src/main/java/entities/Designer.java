@@ -6,10 +6,8 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(
-                name = "getAllDesigners",
-                query = "SELECT d FROM Designer d ORDER BY d.name" // JPQL
-        )
+        @NamedQuery(name = "getAllDesigners", query = "SELECT d FROM Designer d ORDER BY d.name"),
+        @NamedQuery(name = "getDesignerProjects", query = "SELECT p FROM Project p JOIN Designer d ON d = p.designer WHERE d.username = :username")
 })
 public class Designer extends User{
 

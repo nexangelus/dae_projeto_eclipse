@@ -8,10 +8,8 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(
-                name = "getAllClients",
-                query = "SELECT c FROM Client c ORDER BY c.name" // JPQL
-        )
+        @NamedQuery(name = "getAllClients", query = "SELECT c FROM Client c ORDER BY c.name"),
+        @NamedQuery(name = "getClientProjects", query = "SELECT p FROM Project p JOIN Client c ON c = p.client WHERE c.username = :username")
 })
 public class Client extends User{
 

@@ -4,6 +4,7 @@ import dtos.ClientDTO;
 import dtos.ErrorDTO;
 import ejbs.ClientBean;
 import entities.Client;
+import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -138,4 +139,29 @@ public class ClientService {
                 .build();
     }
     //endregion
+
+
+
+
+    @GET
+    @Path("{username}/projects")
+    public Response getClientProjects(@PathParam("username") String username) {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin") ||
+                securityContext.isUserInRole("Designer") ||
+                securityContext.isUserInRole("Client") &&
+                        principal.getName().equals(username))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Client client = clientBean.getClient(username);
+        if (client == null) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(ErrorDTO.error("ERROR_FINDING_CLIENT"))
+                .build();
+        }
+
+        List<Project> projects = clientBean.getAllClientProjects(username);
+        return Response.status(Response.Status.ACCEPTED).entity(ProjectService.toDTOs(projects)).build();
+    }
 }

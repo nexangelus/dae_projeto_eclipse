@@ -195,7 +195,8 @@ Accept: application/json
 %}
 
 ###
-GET http://localhost:8080/dae_project/api/clients/lourenco.abreu
+GET http://localhost:8080/dae_project/api/clients/client
+Authorization: Bearer {{token}}
 Accept: application/json
 
 > {%
