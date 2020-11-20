@@ -147,5 +147,5 @@ public class DesignerService {
         return Response.status(Response.Status.ACCEPTED).entity(ProjectService.toDTOs(projects)).build();
 
     }
-    
+
 }
