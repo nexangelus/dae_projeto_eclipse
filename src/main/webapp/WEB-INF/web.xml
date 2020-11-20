@@ -5,7 +5,7 @@
          version="4.0">
     <error-page>
         <error-code>401</error-code>
-        <location>/error/401.json</location>
+        <location>/api/error/401</location>
     </error-page>
     <context-param>
         <param-name>resteasy.role.based.security</param-name>
