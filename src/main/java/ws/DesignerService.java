@@ -3,7 +3,9 @@ package ws;
 import dtos.DesignerDTO;
 import dtos.ErrorDTO;
 import ejbs.DesignerBean;
+import entities.Client;
 import entities.Designer;
+import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -40,8 +42,8 @@ public class DesignerService {
         );
     }
 
-    public static List<DesignerDTO> toDTOs(List<Designer> manufacturers) {
-        return manufacturers.stream().map(DesignerService::toDTO).collect(Collectors.toList());
+    public static List<DesignerDTO> toDTOs(List<Designer> designers) {
+        return designers.stream().map(DesignerService::toDTO).collect(Collectors.toList());
     }
     //endregion
 
@@ -124,5 +126,26 @@ public class DesignerService {
 
     //endregion
 
+    @GET
+    @Path("{username}/projects")
+    public Response getProjects(@PathParam("username") String username){
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin") ||
+                securityContext.isUserInRole("Designer") &&
+                        principal.getName().equals(username))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
 
+        Designer designer = designerBean.getDesigner(username);
+        if (designer == null) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(ErrorDTO.error("ERROR_FINDING_CLIENT"))
+                    .build();
+        }
+
+        List<Project> projects = designerBean.getDesignerProjects(username);
+        return Response.status(Response.Status.ACCEPTED).entity(ProjectService.toDTOs(projects)).build();
+
+    }
+    
 }

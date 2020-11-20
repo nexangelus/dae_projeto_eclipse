@@ -57,7 +57,7 @@ public class DesignerBean extends BaseBean {
         em.remove(designer );
     }
 
-    public List<Project> getAllClientProjects(String username) {
+    public List<Project> getDesignerProjects(String username) {
         return (List<Project>) em.createNamedQuery("getDesignerProjects").setParameter("username", username).getResultList();
     }
 
