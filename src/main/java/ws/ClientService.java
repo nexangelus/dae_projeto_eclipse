@@ -100,7 +100,7 @@ public class ClientService {
                 .entity(ErrorDTO.error("ERROR_FINDING_CLIENT"))
                 .build();
     }
-
+    //TODO put error
     @PUT
     @Path("{username}")
     public Response updateClientDetails(@PathParam("username") String username, ClientDTO clientDTO) throws MyEntityNotFoundException, MyConstraintViolationException {

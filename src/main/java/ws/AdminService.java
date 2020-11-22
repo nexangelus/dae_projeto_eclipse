@@ -48,6 +48,16 @@ public class AdminService {
     public static List<AdminDTO> toDTOs(List<Admin> admins){
         return admins.stream().map(AdminService::toDTO).collect(Collectors.toList());
     }
+
+    public static AdminDTO toDTONoPassword(Admin admin){
+        return new AdminDTO(
+                admin.getUsername(),
+                admin.getName(),
+                admin.getEmail(),
+                admin.getCreated(),
+                admin.getUpdated()
+        );
+    }
     //endregion
 
     //region CRUD
@@ -83,7 +93,7 @@ public class AdminService {
         Admin admin = adminBean.getAdmin(username);
         if (admin != null) {
             return Response.status(Response.Status.OK)
-                    .entity(toDTO(admin))
+                    .entity(toDTONoPassword(admin))
                     .build();
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

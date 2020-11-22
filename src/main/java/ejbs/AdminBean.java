@@ -41,7 +41,8 @@ public class AdminBean extends BaseBean {
 		if (admin == null)
 			throw new MyEntityNotFoundException("Admin with username: " + username + " doesn't exist");
 		try {
-			admin.setPassword(password);
+			if (password!=null)
+				admin.setPassword(password);
 			admin.setName(name);
 			admin.setEmail(email);
 		} catch (ConstraintViolationException e) {

@@ -17,6 +17,13 @@ public class AdminDTO extends TimestampDTO implements Serializable  {
         this.email = email;
     }
 
+    public AdminDTO(String username,  String name, String email, LocalDateTime created, LocalDateTime updated) {
+        super(created, updated);
+        this.username = username;
+        this.name = name;
+        this.email = email;
+    }
+
     public AdminDTO() {
         super();
     }
