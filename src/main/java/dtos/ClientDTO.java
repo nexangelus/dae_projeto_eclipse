@@ -21,6 +21,12 @@ public class ClientDTO extends TimestampDTO implements Serializable {
         this.address = address;
     }
 
+    public ClientDTO(String username, String name) {
+        super();
+        this.username = username;
+        this.name = name;
+    }
+
     public ClientDTO() {
         super();
     }

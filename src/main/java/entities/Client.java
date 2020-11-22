@@ -9,7 +9,8 @@ import java.util.Set;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getAllClients", query = "SELECT c FROM Client c ORDER BY c.name"),
-        @NamedQuery(name = "getClientProjects", query = "SELECT p FROM Project p JOIN Client c ON c = p.client WHERE c.username = :username")
+        @NamedQuery(name = "getClientProjects", query = "SELECT p FROM Project p JOIN Client c ON c = p.client WHERE c.username = :username"),
+        @NamedQuery(name = "searchClientsByName", query = "SELECT c FROM Client c WHERE lower(c.name) LIKE lower(CONCAT('%', :name, '%')) ")
 })
 public class Client extends User{
 
