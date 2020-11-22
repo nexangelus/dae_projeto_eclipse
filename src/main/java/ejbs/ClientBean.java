@@ -64,4 +64,8 @@ public class ClientBean extends BaseBean {
 		return (List<Project>) em.createNamedQuery("getClientProjects").setParameter("username", username).getResultList();
 	}
 
+	public List<Client> searchClientsByName(String name) {
+		return (List<Client>) em.createNamedQuery("searchClientsByName").setMaxResults(10).setParameter("name", name).getResultList();
+	}
+
 }

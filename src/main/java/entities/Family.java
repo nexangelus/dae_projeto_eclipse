@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 @NamedQueries({
 		@NamedQuery(
 				name = "getAllFamilies",
@@ -17,7 +18,6 @@ public class Family extends AbstractTimestampEntity {
 	@GeneratedValue
 	private long id;
 
-	// TODO Perguntar ao Carvalho para meter isto unico
 	private String name;
 
 	@ManyToOne

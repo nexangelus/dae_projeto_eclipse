@@ -48,8 +48,19 @@ public class ClientService {
         );
     }
 
+    public static ClientDTO toDTOUsernameName(Client client) {
+        return new ClientDTO(
+                client.getUsername(),
+                client.getName()
+        );
+    }
+
     public static List<ClientDTO> toDTOs(List<Client> clients) {
         return clients.stream().map(ClientService::toDTO).collect(Collectors.toList());
+    }
+
+    public static List<ClientDTO> toDTOsUsernameName(List<Client> clients) {
+        return clients.stream().map(ClientService::toDTOUsernameName).collect(Collectors.toList());
     }
 
     //endregion
@@ -164,4 +175,11 @@ public class ClientService {
         List<Project> projects = clientBean.getAllClientProjects(username);
         return Response.status(Response.Status.ACCEPTED).entity(ProjectService.toDTOs(projects)).build();
     }
+
+    @GET
+    @Path("search/{name}")
+    public Response searchClientsByName(@PathParam("name") String name) {
+        return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOsUsernameName(clientBean.searchClientsByName(name))).build();
+    }
+
 }

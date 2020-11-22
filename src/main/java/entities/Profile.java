@@ -6,10 +6,8 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(
-				name = "getAllProfiles",
-				query = "SELECT p FROM Profile p ORDER BY p.name"
-		)
+		@NamedQuery(name = "getAllProfiles", query = "SELECT p FROM Profile p ORDER BY p.name"),
+		@NamedQuery(name = "getProfileByNameAndFamily", query = "SELECT p FROM Profile p WHERE p.name = :profileName AND p.family = :family")
 })
 public class Profile extends Material{
 
