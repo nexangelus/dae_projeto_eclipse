@@ -5,6 +5,7 @@ import entities.Manufacturer;
 import entities.Profile;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.Stateless;
 import javax.validation.ConstraintViolationException;
@@ -22,7 +23,6 @@ public class ProfileBean extends BaseBean {
 	}
 
 	public void create(long familyID, String manufacturerUsername, String name, double weff_p, double weff_n, double ar, double sigmaC) throws MyConstraintViolationException, MyEntityNotFoundException {
-		// TODO Perguntar ao Carvalho return do ID auto criado
 		Manufacturer manufacturer = em.find(Manufacturer.class, manufacturerUsername);
 
 		if (manufacturer == null)
@@ -78,6 +78,21 @@ public class ProfileBean extends BaseBean {
 		profile.getManufacturer().removeMaterial(profile);
 		profile.getFamily().removeMaterial(profile);
 		em.remove(profile);
+	}
+
+	public Profile getProfileByNameAndFamily(String name, long familyID) throws MyEntityNotFoundException, MyIllegalArgumentException {
+		return getProfileByNameAndFamily(name, em.find(Family.class, familyID));
+	}
+
+	public Profile getProfileByNameAndFamily(String name, Family family) throws MyIllegalArgumentException, MyEntityNotFoundException {
+		if(family == null)
+			throw new MyIllegalArgumentException("Family can't be null");
+
+		if(!em.contains(family))
+			throw new MyEntityNotFoundException("Family doesn't exist");
+
+		return (Profile) em.createNamedQuery("getProfileByNameAndFamily").setParameter("profileName", name)
+				.setParameter("family",family).getSingleResult();
 	}
 
 }

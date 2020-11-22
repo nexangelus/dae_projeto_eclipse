@@ -22,8 +22,7 @@ public class FamilyBean extends BaseBean {
 		return em.find(Family.class, id);
 	}
 
-	public void create(String name, String manufacturerUsername) throws MyConstraintViolationException, MyEntityNotFoundException {
-		// TODO Perguntar ao Carvalho return do ID auto criado
+	public long create(String name, String manufacturerUsername) throws MyConstraintViolationException, MyEntityNotFoundException {
 		Manufacturer manufacturer = em.find(Manufacturer.class, manufacturerUsername);
 
 		if (manufacturer == null)
@@ -33,6 +32,7 @@ public class FamilyBean extends BaseBean {
 			Family family = new Family(name, manufacturer);
 			em.persist(family);
 			manufacturer.addFamily(family);
+			return family.getId();
 		} catch (ConstraintViolationException e) {
 			throw new MyConstraintViolationException(e);
 		}
