@@ -23,6 +23,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -167,8 +168,15 @@ public class ProjectService {
 	@Path("{id}/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response upload(@PathParam("id") long projectID, MultipartFormDataInput input) throws MyEntityNotFoundException, IOException {
+		Principal principal = securityContext.getUserPrincipal();
+
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		Project project = projectBean.getProject(projectID);
+		if (!(securityContext.isUserInRole("Admin") ||
+				securityContext.isUserInRole("Client") &&
+						principal.getName().equals(project.getClient().getUsername()))) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 		List<InputPart> inputParts = uploadForm.get("file");
 		for (InputPart inputPart : inputParts) {
 			try {
