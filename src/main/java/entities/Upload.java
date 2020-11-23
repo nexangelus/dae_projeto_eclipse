@@ -8,6 +8,10 @@ import javax.validation.constraints.NotNull;
         @NamedQuery(
                 name = "getAllUploads",
                 query = "SELECT u FROM Upload u ORDER BY u.id" // JPQL
+        ),
+        @NamedQuery(
+                name = "getAllProjectUploads",
+                query = "SELECT u FROM Upload u WHERE u.project.id =:idProject"
         )
 })
 public class Upload extends AbstractTimestampEntity {
@@ -19,13 +23,17 @@ public class Upload extends AbstractTimestampEntity {
     private long id;
 
     @NotNull
-    private String path;
+    private String filepath;
+
+    @NotNull
+    private String filename;
 
     @ManyToOne
     private Project project;
 
-    public Upload(String path, Project project) {
-        this.path = path;
+    public Upload(String filepath, String filename, Project project) {
+        this.filepath = filepath;
+        this.filename = filename;
         this.project = project;
     }
 
@@ -36,19 +44,27 @@ public class Upload extends AbstractTimestampEntity {
         return id;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public Project getProject() {
         return project;
     }
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
