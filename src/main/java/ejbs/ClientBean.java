@@ -43,7 +43,9 @@ public class ClientBean extends BaseBean {
 		if (client == null)
 			throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
 		try {
-			client.setPassword(password);
+			if(password != null && !password.equals(""))
+				client.setPassword(password);
+
 			client.setName(name);
 			client.setEmail(email);
 			client.setContact(contact);

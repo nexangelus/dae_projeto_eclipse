@@ -48,6 +48,10 @@ public class ClientService {
         );
     }
 
+    public static List<ClientDTO> toDTOs(List<Client> clients) {
+        return clients.stream().map(ClientService::toDTO).collect(Collectors.toList());
+    }
+
     public static ClientDTO toDTOUsernameName(Client client) {
         return new ClientDTO(
                 client.getUsername(),
@@ -55,12 +59,24 @@ public class ClientService {
         );
     }
 
-    public static List<ClientDTO> toDTOs(List<Client> clients) {
-        return clients.stream().map(ClientService::toDTO).collect(Collectors.toList());
-    }
-
     public static List<ClientDTO> toDTOsUsernameName(List<Client> clients) {
         return clients.stream().map(ClientService::toDTOUsernameName).collect(Collectors.toList());
+    }
+
+    public static ClientDTO toDTONoPassword(Client client) {
+        return new ClientDTO(
+                client.getUsername(),
+                client.getName(),
+                client.getEmail(),
+                client.getContact(),
+                client.getAddress(),
+                client.getCreated(),
+                client.getUpdated()
+        );
+    }
+
+    public static List<ClientDTO> toDTOsNoPassword(List<Client> clients) {
+        return clients.stream().map(ClientService::toDTONoPassword).collect(Collectors.toList());
     }
 
     //endregion
@@ -75,7 +91,7 @@ public class ClientService {
                 securityContext.isUserInRole("Designer"))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOs(clientBean.getAllClients())).build();
+        return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOsNoPassword(clientBean.getAllClients())).build();
     }
 
     @POST
@@ -104,7 +120,7 @@ public class ClientService {
         Client client = clientBean.getClient(username);
         if (client != null) {
             return Response.status(Response.Status.OK)
-                    .entity(toDTO(client))
+                    .entity(toDTONoPassword(client))
                     .build();
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
