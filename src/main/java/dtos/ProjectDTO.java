@@ -2,6 +2,10 @@ package dtos;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class ProjectDTO extends TimestampDTO implements Serializable {
 	private long id;
@@ -13,6 +17,7 @@ public class ProjectDTO extends TimestampDTO implements Serializable {
 	private String description;
 	private String observations;
 	private LocalDateTime finished;
+	private List<UploadDTO> uploadDTOS;
 
 	public ProjectDTO(long id, String clientUsername, String designerUsername, String title, String description, String observations, LocalDateTime finished, LocalDateTime created, LocalDateTime updated) {
 		super(created, updated);
@@ -23,10 +28,12 @@ public class ProjectDTO extends TimestampDTO implements Serializable {
 		this.description = description;
 		this.observations = observations;
 		this.finished = finished;
+		uploadDTOS = new LinkedList<>();
 	}
 
 	public ProjectDTO() {
 		super();
+		uploadDTOS = new LinkedList<>();
 	}
 
 	public long getId() {
@@ -83,5 +90,29 @@ public class ProjectDTO extends TimestampDTO implements Serializable {
 
 	public void setFinished(LocalDateTime finished) {
 		this.finished = finished;
+	}
+
+	public ClientDTO getClient() {
+		return client;
+	}
+
+	public void setClient(ClientDTO client) {
+		this.client = client;
+	}
+
+	public DesignerDTO getDesigner() {
+		return designer;
+	}
+
+	public void setDesigner(DesignerDTO designer) {
+		this.designer = designer;
+	}
+
+	public List<UploadDTO> getUploadDTOS() {
+		return uploadDTOS;
+	}
+
+	public void setUploadDTOS(List<UploadDTO> uploadDTOS) {
+		this.uploadDTOS = uploadDTOS;
 	}
 }

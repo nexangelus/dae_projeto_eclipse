@@ -3,11 +3,13 @@ package ws;
 import dtos.ErrorDTO;
 import dtos.ManufacturerDTO;
 import dtos.ProjectDTO;
+import dtos.UploadDTO;
 import ejbs.ClientBean;
 import ejbs.DesignerBean;
 import ejbs.ProjectBean;
 import ejbs.UploadBean;
 import entities.Project;
+import entities.Upload;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -24,8 +26,10 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/projects")
@@ -67,6 +71,27 @@ public class ProjectService {
 		return projects.stream().map(ProjectService::toDTO).collect(Collectors.toList());
 	}
 
+	public static UploadDTO toDTOUpload(Upload upload){
+		return new UploadDTO(
+				upload.getId(), upload.getFilepath(), upload.getFilename()
+		);
+	}
+
+	public static List<UploadDTO> toDTOsUploads(List<Upload> uploads){
+		return uploads.stream().map(ProjectService::toDTOUpload).collect(Collectors.toList());
+	}
+
+
+	public static ProjectDTO toDTOWithUpload(Project project){
+		ProjectDTO projectDTO = toDTO(project);
+		Set<Upload> uploads = project.getUploads();
+		List<UploadDTO> uploadDTO = toDTOsUploads(new ArrayList<>(uploads));
+		projectDTO.setUploadDTOS(uploadDTO);
+		return projectDTO;
+	}
+
+
+
 	private String getFilename(MultivaluedMap<String, String> header) {
 		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
 		for (String filename : contentDisposition) {
@@ -105,7 +130,7 @@ public class ProjectService {
 		Project project = projectBean.getProject(id);
 		if (project != null) {
 			return Response.status(Response.Status.OK)
-					.entity(toDTO(project))
+					.entity(toDTOWithUpload(project))
 					.build();
 		}
 
