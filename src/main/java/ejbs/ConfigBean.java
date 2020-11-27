@@ -52,7 +52,6 @@ public class ConfigBean {
 			FileUtils.cleanDirectory(file);
 			//endregion
 
-
 			//region Admins
 			adminBean.create("admin", "admin", "Administrador", "admin@email.com");
 			//endregion
@@ -79,14 +78,10 @@ public class ConfigBean {
 			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "Av. Pinho 5165 Espinho", "http://neto.pt", "913738624");
 			//endregion
 
-
 			//region Families
 			familyBean.create("Section C 220 BF", "manufacturer");
 			familyBean.create("Section Z 220 BF", "fernando78");
 			//endregion
-
-
-
 
 			//region Materials
 			//region Profiles
