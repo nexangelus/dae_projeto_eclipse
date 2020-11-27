@@ -2,9 +2,11 @@ package ejbs;
 
 import entities.Client;
 import entities.Project;
+import entities.User;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,15 +38,20 @@ public class ClientBean extends BaseBean {
 		}
 	}
 
-	public void update(String username, String password, String name, String email, String contact, String address)
-			throws MyEntityNotFoundException, MyConstraintViolationException {
+	public void update(String username, String newPassword, String oldPassword, String name, String email, String contact, String address)
+			throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
 
 		Client client = getClient(username);
 		if (client == null)
 			throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
 		try {
-			if(password != null && !password.equals(""))
-				client.setPassword(password);
+
+			if(!User.hashPassword(oldPassword).equals(client.getPassword())){
+				throw new MyIllegalArgumentException("Old Password is wrong");
+			}
+
+			if(newPassword != null && !newPassword.equals(""))
+				client.setPassword(newPassword);
 
 			client.setName(name);
 			client.setEmail(email);
@@ -52,6 +59,8 @@ public class ClientBean extends BaseBean {
 			client.setAddress(address);
 		} catch (ConstraintViolationException e) {
 			throw new MyConstraintViolationException(e);
+		} catch (MyIllegalArgumentException e) {
+			throw new MyIllegalArgumentException(e.getMessage());
 		}
 	}
 

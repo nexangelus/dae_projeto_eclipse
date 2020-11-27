@@ -8,6 +8,7 @@ import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -38,7 +39,6 @@ public class ClientService {
     public static ClientDTO toDTO(Client client) {
         return new ClientDTO(
                 client.getUsername(),
-                client.getPassword(),
                 client.getName(),
                 client.getEmail(),
                 client.getContact(),
@@ -98,7 +98,7 @@ public class ClientService {
     @Path("/")
     public Response createNewClient(ClientDTO clientDTO) throws MyEntityExistsException, MyConstraintViolationException {
         clientBean.create(clientDTO.getUsername(),
-                clientDTO.getPassword(),
+                clientDTO.getNewPassword(),
                 clientDTO.getName(),
                 clientDTO.getEmail(),
                 clientDTO.getContact(),
@@ -130,7 +130,7 @@ public class ClientService {
     //TODO put error
     @PUT
     @Path("{username}")
-    public Response updateClientDetails(@PathParam("username") String username, ClientDTO clientDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public Response updateClientDetails(@PathParam("username") String username, ClientDTO clientDTO) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
         Principal principal = securityContext.getUserPrincipal();
         if (!(securityContext.isUserInRole("Admin") ||
                 securityContext.isUserInRole("Designer") || //TODO ver
@@ -139,7 +139,8 @@ public class ClientService {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         clientBean.update(username,
-                clientDTO.getPassword(),
+                clientDTO.getNewPassword(),
+                clientDTO.getOldPassword(),
                 clientDTO.getName(),
                 clientDTO.getEmail(),
                 clientDTO.getContact(),

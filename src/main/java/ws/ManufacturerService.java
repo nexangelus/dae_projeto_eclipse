@@ -7,6 +7,7 @@ import entities.Manufacturer;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -36,7 +37,6 @@ public class ManufacturerService {
 	public static ManufacturerDTO toDTO(Manufacturer manufacturer) {
 		return new ManufacturerDTO(
 				manufacturer.getUsername(),
-				manufacturer.getPassword(),
 				manufacturer.getName(),
 				manufacturer.getEmail(),
 				manufacturer.getAddress(),
@@ -77,7 +77,7 @@ public class ManufacturerService {
 	@POST
 	@Path("/")
 	public Response create(ManufacturerDTO manufacturer) throws MyEntityExistsException, MyConstraintViolationException {
-		manufacturerBean.create(manufacturer.getUsername(), manufacturer.getPassword(),
+		manufacturerBean.create(manufacturer.getUsername(), manufacturer.getNewPassword(),
 				manufacturer.getName(), manufacturer.getEmail(), manufacturer.getAddress(),
 				manufacturer.getWebsite(), manufacturer.getContact());
 
@@ -92,9 +92,9 @@ public class ManufacturerService {
 
 	@PUT
 	@Path("{username}")
-	public Response update(@PathParam("username") String username, ManufacturerDTO manufacturer) throws MyEntityNotFoundException, MyConstraintViolationException {
+	public Response update(@PathParam("username") String username, ManufacturerDTO manufacturer) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
 
-		manufacturerBean.update(username, manufacturer.getPassword(), manufacturer.getName(),
+		manufacturerBean.update(username, manufacturer.getNewPassword(), manufacturer.getOldPassword(), manufacturer.getName(),
 				manufacturer.getEmail(), manufacturer.getAddress(), manufacturer.getContact(), manufacturer.getWebsite());
 
 		return Response.status(Response.Status.OK)

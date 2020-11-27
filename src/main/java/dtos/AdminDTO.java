@@ -5,14 +5,16 @@ import java.time.LocalDateTime;
 
 public class AdminDTO extends TimestampDTO implements Serializable  {
     private String username;
-    private String password;
+    private String newPassword;
+    private String oldPassword;
     private String name;
     private String email;
 
-    public AdminDTO(String username, String password, String name, String email, LocalDateTime created, LocalDateTime updated) {
+    public AdminDTO(String username, String newPassword, String oldPassword, String name, String email, LocalDateTime created, LocalDateTime updated) {
         super(created, updated);
         this.username = username;
-        this.password = password;
+        this.newPassword = newPassword;
+        this.oldPassword = oldPassword;
         this.name = name;
         this.email = email;
     }
@@ -36,12 +38,20 @@ public class AdminDTO extends TimestampDTO implements Serializable  {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     public String getName() {

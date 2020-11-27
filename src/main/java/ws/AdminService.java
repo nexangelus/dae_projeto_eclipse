@@ -8,6 +8,7 @@ import entities.Admin;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -37,7 +38,6 @@ public class AdminService {
     public static AdminDTO toDTO(Admin admin){
         return new AdminDTO(
                 admin.getUsername(),
-                admin.getPassword(),
                 admin.getName(),
                 admin.getEmail(),
                 admin.getCreated(),
@@ -78,7 +78,7 @@ public class AdminService {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         adminBean.create(adminDTO.getUsername(),
-                adminDTO.getPassword(),
+                adminDTO.getNewPassword(),
                 adminDTO.getName(),
                 adminDTO.getEmail());
         return Response.status(Response.Status.CREATED).entity(toDTO(adminBean.getAdmin(adminDTO.getUsername()))).build();
@@ -103,12 +103,14 @@ public class AdminService {
 
     @PUT
     @Path("{username}")
-    public Response updateAdminDetails(@PathParam("username") String username, AdminDTO adminDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public Response updateAdminDetails(@PathParam("username") String username, AdminDTO adminDTO) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
         if(!(securityContext.isUserInRole("Admin"))){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+
         adminBean.update(username,
-                adminDTO.getPassword(),
+                adminDTO.getNewPassword(),
+                adminDTO.getOldPassword(),
                 adminDTO.getName(),
                 adminDTO.getEmail());
         return Response.status(Response.Status.OK).entity(toDTO(adminBean.getAdmin(username))).build();

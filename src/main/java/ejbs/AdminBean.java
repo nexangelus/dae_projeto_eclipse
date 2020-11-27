@@ -2,9 +2,11 @@ package ejbs;
 
 import entities.Admin;
 import entities.Client;
+import entities.User;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.Stateless;
 import javax.validation.ConstraintViolationException;
@@ -34,19 +36,27 @@ public class AdminBean extends BaseBean {
 		}
 	}
 
-	public void update(String username, String password, String name, String email)
-			throws MyEntityNotFoundException, MyConstraintViolationException {
+	public void update(String username, String newPassword, String oldPassword, String name, String email)
+			throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
 
 		Admin admin = getAdmin(username);
 		if (admin == null)
 			throw new MyEntityNotFoundException("Admin with username: " + username + " doesn't exist");
 		try {
-			if (password!=null)
-				admin.setPassword(password);
+
+			if (!User.hashPassword(oldPassword).equals(admin.getPassword())) {
+				throw new MyIllegalArgumentException("Old Password is wrong");
+			}
+
+			if (newPassword != null)
+				admin.setPassword(newPassword);
+
 			admin.setName(name);
 			admin.setEmail(email);
 		} catch (ConstraintViolationException e) {
 			throw new MyConstraintViolationException(e);
+		} catch (MyIllegalArgumentException e) {
+			throw new MyIllegalArgumentException(e.getMessage());
 		}
 	}
 

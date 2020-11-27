@@ -2,9 +2,11 @@ package ejbs;
 
 import entities.Client;
 import entities.Manufacturer;
+import entities.User;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.Stateless;
 import javax.validation.ConstraintViolationException;
@@ -34,14 +36,21 @@ public class ManufacturerBean extends BaseBean {
         }
     }
 
-    public void update(String username, String password, String name, String email, String address, String contact, String website)
-            throws MyEntityNotFoundException, MyConstraintViolationException {
+    public void update(String username, String newPassword, String oldPassword, String name, String email, String address, String contact, String website)
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
 
         Manufacturer manufacturer = getManufacturer(username);
         if (manufacturer == null)
             throw new MyEntityNotFoundException("Manufacturer with username: " + username + " doesn't exist");
         try {
-            manufacturer.setPassword(password);
+
+            if (!User.hashPassword(oldPassword).equals(manufacturer.getPassword())) {
+                throw new MyIllegalArgumentException("Old Password is wrong");
+            }
+
+            if (newPassword != null)
+                manufacturer.setPassword(newPassword);
+
             manufacturer.setName(name);
             manufacturer.setEmail(email);
             manufacturer.setAddress(address);

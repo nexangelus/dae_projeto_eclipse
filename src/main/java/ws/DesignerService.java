@@ -9,6 +9,7 @@ import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -38,7 +39,11 @@ public class DesignerService {
     //region DTOS
     public static DesignerDTO toDTO(Designer designer) {
         return new DesignerDTO(
-                designer.getUsername(), designer.getPassword(), designer.getName(), designer.getEmail(), designer.getCreated(), designer.getUpdated()
+                designer.getUsername(),
+                designer.getName(),
+                designer.getEmail(),
+                designer.getCreated(),
+                designer.getUpdated()
         );
     }
 
@@ -82,7 +87,7 @@ public class DesignerService {
     @Path("/")
     public Response create(DesignerDTO designer) throws MyEntityExistsException, MyConstraintViolationException {
         //TODO novas regras
-        designerBean.create(designer.getUsername(), designer.getPassword(), designer.getName(), designer.getEmail());
+        designerBean.create(designer.getUsername(), designer.getNewPassword(), designer.getName(), designer.getEmail());
         Designer newDesigner = designerBean.getDesigner(designer.getUsername());
         if (newDesigner == null)
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -94,14 +99,14 @@ public class DesignerService {
 
     @PUT
     @Path("{username}")
-    public Response update(@PathParam("username") String username, DesignerDTO designer) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public Response update(@PathParam("username") String username, DesignerDTO designer) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
         Principal principal = securityContext.getUserPrincipal();
         if (!(securityContext.isUserInRole("Designer") &&
                 principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        designerBean.update(username, designer.getPassword(), designer.getName(), designer.getEmail());
+        designerBean.update(username, designer.getNewPassword(), designer.getOldPassword(), designer.getName(), designer.getEmail());
 
         return Response.status(Response.Status.OK)
                 .entity(toDTO(designerBean.getDesigner(username)))
