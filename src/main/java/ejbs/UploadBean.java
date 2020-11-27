@@ -19,6 +19,7 @@ public class UploadBean extends BaseBean {
         try {
             Upload upload = new Upload(filepath,filename,project);
             em.persist(upload);
+            project.addUpload(upload);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }

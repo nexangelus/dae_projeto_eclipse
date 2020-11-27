@@ -3,11 +3,13 @@ package ejbs;
 
 import entities.Profile;
 import entities.Project;
+import org.apache.commons.io.FileUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +46,13 @@ public class ConfigBean {
 	@PostConstruct
 	public void populateDB() {
 		try {
+
+			//region Clean Uploads Folder
+			File file = new File(System.getProperty("user.home") + File.separator + "uploads");
+			FileUtils.cleanDirectory(file);
+			//endregion
+
+
 			//region Admins
 			adminBean.create("admin", "admin", "Administrador", "admin@email.com");
 			//endregion
