@@ -7,10 +7,8 @@ import java.util.Set;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 @NamedQueries({
-		@NamedQuery(
-				name = "getAllFamilies",
-				query = "SELECT p FROM Family p ORDER BY p.name"
-		)
+		@NamedQuery(name = "getAllFamilies", query = "SELECT p FROM Family p ORDER BY p.name"),
+		@NamedQuery(name = "getAllFamiliesFromManufacturer", query = "SELECT f FROM Family f WHERE f.manufacturer.name = :manufacturer ORDER by f.name")
 })
 public class Family extends AbstractTimestampEntity {
 

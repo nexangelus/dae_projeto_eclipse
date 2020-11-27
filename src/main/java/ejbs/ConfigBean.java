@@ -41,8 +41,6 @@ public class ConfigBean {
 
 	private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
 
-	// TODO Perguntar se é muito mau aqui chamar o ExcelUtils e lá fazer materialBean.create(...)
-
 	@PostConstruct
 	public void populateDB() {
 		try {

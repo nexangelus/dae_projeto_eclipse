@@ -5,6 +5,7 @@ import entities.Manufacturer;
 import entities.Profile;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.Stateless;
 import javax.persistence.Entity;
@@ -38,31 +39,23 @@ public class FamilyBean extends BaseBean {
 		}
 	}
 
-	/*public void update(long id, String name, String description, String family, String manufacturerUsername, double height,
-	                   double thickness, double weight, double areaPainting, String steelGrade)
-			throws MyEntityNotFoundException, MyConstraintViolationException {
+	public void update(long id, String name, String manufacturerUsername, boolean isAdmin) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
 
-		Profile profile = getProfile(id);
-		if (profile == null)
-			throw new MyEntityNotFoundException("Profile with id: " + id + " doesn't exist");
-		Manufacturer manufacturer = em.find(Manufacturer.class, manufacturerUsername);
-		if (manufacturer == null)
-			throw new MyEntityNotFoundException("Manufacturer with username: " + manufacturerUsername + " doesn't exist");
+		Family family = getFamily(id);
+		if (family == null)
+			throw new MyEntityNotFoundException("Family with id: " + id + " doesn't exist");
+
+		if (!isAdmin && !family.getManufacturer().getUsername().equals(manufacturerUsername))
+			throw new MyIllegalArgumentException("No permission");
+
+
 		try {
-			profile.setName(name);
-			profile.setDescription(description);
-			profile.setFamily(family);
-			profile.setManufacturer(manufacturer);
-			profile.setHeight(height);
-			profile.setThickness(thickness);
-			profile.setWeight(weight);
-			profile.setAreaPainting(areaPainting);
-			profile.setSteelGrade(steelGrade);
+			family.setName(name);
 
 		} catch (ConstraintViolationException e) {
 			throw new MyConstraintViolationException(e);
 		}
-	}*/
+	}
 
 	public void delete(long id) throws MyEntityNotFoundException {
 		Family family = getFamily(id);
@@ -71,5 +64,9 @@ public class FamilyBean extends BaseBean {
 
 		family.getManufacturer().removeFamily(family);
 		em.remove(family);
+	}
+
+	public List<Family> getAllFromManufacturer(String name) {
+		return (List<Family>) em.createNamedQuery("getAllFamiliesFromManufacturer").getResultList();
 	}
 }
