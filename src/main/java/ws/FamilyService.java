@@ -38,6 +38,7 @@ public class FamilyService {
 				family.getId(),
 				family.getName(),
 				ManufacturerService.toDTO(family.getManufacturer()),
+				family.getMaterials().size(),
 				family.getCreated(),
 				family.getUpdated()
 		);
@@ -45,6 +46,21 @@ public class FamilyService {
 
 	public static List<FamilyDTO> toDTOs(List<Family> families){
 		return families.stream().map(FamilyService::toDTO).collect(Collectors.toList());
+	}
+
+	public static FamilyDTO toDTONoManufacturerMaterialsCount(Family family){
+		return new FamilyDTO(
+				family.getId(),
+				family.getName(),
+				family.getManufacturer().getUsername(),
+				family.getMaterials().size(),
+				family.getCreated(),
+				family.getUpdated()
+		);
+	}
+
+	public static List<FamilyDTO> toDTOsNoManufacturerMaterialsCount(List<Family> families){
+		return families.stream().map(FamilyService::toDTONoManufacturerMaterialsCount).collect(Collectors.toList());
 	}
 	//endregion
 
@@ -54,7 +70,7 @@ public class FamilyService {
 	@Path("/")
 	public Response getAllFamilies() {
 		// TODO SMART RULES
-		return Response.status(Response.Status.ACCEPTED).entity(FamilyService.toDTOs(familyBean.getAll())).build();
+		return Response.status(Response.Status.ACCEPTED).entity(FamilyService.toDTOsNoManufacturerMaterialsCount(familyBean.getAll())).build();
 	}
 
 	@POST
@@ -65,7 +81,7 @@ public class FamilyService {
 				familyDTO.getManufacturerUsername()
 		);
 		return Response.status(Response.Status.CREATED).entity(toDTO(familyBean.getFamily(id))).build();
-		// TODO SMART RULES
+		// TODO SMART RULES make sure that manufacturer name is the same as manufacturer if is not admin (admin can create for other manufacturers) and only admin and manufacturers can access this
 	}
 
 	@GET
@@ -75,7 +91,7 @@ public class FamilyService {
 		Family family = familyBean.getFamily(id);
 		if (family != null) {
 			return Response.status(Response.Status.OK)
-					.entity(toDTO(family))
+					.entity(toDTONoManufacturerMaterialsCount(family))
 					.build();
 		}
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

@@ -268,7 +268,13 @@ Content-Type: application/json
 //  |_|    |_|  \_\\____/ \____/|______\_____|  |_| |_____/
 
 
-// Families
+//   ______      __  __ _____ _      _____ ______  _____
+//  |  ____/\   |  \/  |_   _| |    |_   _|  ____|/ ____|
+//  | |__ /  \  | \  / | | | | |      | | | |__  | (___
+//  |  __/ /\ \ | |\/| | | | | |      | | |  __|  \___ \
+//  | | / ____ \| |  | |_| |_| |____ _| |_| |____ ____) |
+//  |_|/_/    \_\_|  |_|_____|______|_____|______|_____/
+
 
 ###
 GET http://localhost:8080/dae_project/api/families
@@ -298,7 +304,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "manufacturerUsername": "manufacturer",
+  "manufacturerUsername": "manu",
   "name": "Section AB"
 }
 > {%
