@@ -159,15 +159,20 @@ public class ProjectService {
 	}
 
 	@PUT
-	@Path("{username}")
-	public Response update(@PathParam("username") String username, ManufacturerDTO manufacturer) throws MyEntityNotFoundException, MyConstraintViolationException {
-/* // TODO
-		manufacturerBean.update(username, manufacturer.getPassword(), manufacturer.getName(),
-				manufacturer.getEmail(), manufacturer.getAddress(), manufacturer.getContact(), manufacturer.getWebsite());
-*/
-		return Response.status(Response.Status.OK)
-				/*.entity(toDTO(manufacturerBean.getManufacturer(username)))*/
-				.build();
+	@Path("{id}")
+	public Response update(@PathParam("id") long id, ProjectDTO project) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin") ||  securityContext.isUserInRole("Designer") &&
+				principal.getName().equals(project.getDesignerUsername()))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        projectBean.update(
+				id,
+				project.getTitle(),
+				project.getDescription(),
+				project.getObservations()
+		);
+        return Response.status(Response.Status.OK).build();
 	}
 
 	@DELETE

@@ -2,12 +2,14 @@ package ejbs;
 
 import entities.Client;
 import entities.Designer;
+import entities.Manufacturer;
 import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
@@ -37,21 +39,34 @@ public class ProjectBean extends BaseBean {
             );
             // TODO adicionar ao client e designer o projeto
             em.persist(project);
+            client.addProject(project);
+            designer.addProject(project);
             return project.getId();
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
     }
 
-    public void update(){
-        // TODO
+    public void update(long id, String title,String description, String observations)
+            throws MyEntityNotFoundException, MyConstraintViolationException {
+
+        Project project = getProject(id);
+        if (project == null)
+            throw new MyEntityNotFoundException("Project with id: " + id + " doesn't exist");
+        try {
+            project.setTitle(title);
+            project.setDescription(description);
+            project.setObservations(observations);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public void delete(long id) throws MyEntityNotFoundException {
         Project project = getProject(id);
         if (project == null)
             throw new MyEntityNotFoundException("Project with id: " + id + " doesn't exist");
-
+        //TODO to be finished
     }
 
 
