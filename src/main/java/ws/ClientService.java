@@ -2,7 +2,9 @@ package ws;
 
 import dtos.ClientDTO;
 import dtos.ErrorDTO;
+import ejbs.AccountBean;
 import ejbs.ClientBean;
+import entities.Account;
 import entities.Client;
 import entities.Project;
 import exceptions.MyConstraintViolationException;
@@ -28,6 +30,9 @@ public class ClientService {
     //region EJB
     @EJB
     private ClientBean clientBean;
+
+    @EJB
+    private AccountBean accountBean;
     //endregion
 
     //region Security
@@ -97,6 +102,9 @@ public class ClientService {
     @POST
     @Path("/")
     public Response createNewClient(ClientDTO clientDTO) throws MyEntityExistsException, MyConstraintViolationException {
+        Account account =accountBean.findAccount(clientDTO.getEmail());
+        if(account==null || account.getGroup()!="Client")
+            return Response.status(Response.Status.FORBIDDEN).build();
         clientBean.create(clientDTO.getUsername(),
                 clientDTO.getNewPassword(),
                 clientDTO.getName(),
