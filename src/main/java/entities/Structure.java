@@ -10,6 +10,10 @@ import java.util.Set;
 		@NamedQuery(
 				name = "getAllStructures",
 				query = "SELECT s FROM Structure s ORDER BY s.name" // JPQL
+		),
+		@NamedQuery(
+				name = "getAllStructuresFromProject",
+				query = "SELECT s FROM Structure s WHERE s.project.id=:idProject ORDER BY s.name " // JPQL
 		)
 })
 public class Structure extends AbstractTimestampEntity {

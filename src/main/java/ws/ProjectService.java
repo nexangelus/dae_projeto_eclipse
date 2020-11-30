@@ -1,7 +1,6 @@
 package ws;
 
 import dtos.ErrorDTO;
-import dtos.ManufacturerDTO;
 import dtos.ProjectDTO;
 import dtos.UploadDTO;
 import ejbs.ClientBean;
@@ -176,19 +175,16 @@ public class ProjectService {
 	}
 
 	@DELETE
-	@Path("{username}")
-	public Response delete(@PathParam("username") String username) throws MyEntityNotFoundException {
-		// TODO
-		/*manufacturerBean.delete(username);
-
-		if (manufacturerBean.getManufacturer(username) != null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(ErrorDTO.error("ERROR_WHILE_DELETING"))
-					.build();*/
-
-		return Response.status(Response.Status.OK)
-				.entity(ErrorDTO.error("SUCCESS"))
-				.build();
+	@Path("{id}")
+	public Response delete(@PathParam("id") long id) throws MyEntityNotFoundException {
+		Principal principal = securityContext.getUserPrincipal();
+		if (!(securityContext.isUserInRole("Admin"))) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+		projectBean.delete(
+				id
+		);
+		return Response.status(Response.Status.OK).build();
 
 	}
 

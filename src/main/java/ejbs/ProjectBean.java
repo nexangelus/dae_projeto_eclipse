@@ -37,7 +37,6 @@ public class ProjectBean extends BaseBean {
                     title,
                     description
             );
-            // TODO adicionar ao client e designer o projeto
             em.persist(project);
             client.addProject(project);
             designer.addProject(project);
@@ -47,9 +46,7 @@ public class ProjectBean extends BaseBean {
         }
     }
 
-    public void update(long id, String title,String description, String observations)
-            throws MyEntityNotFoundException, MyConstraintViolationException {
-
+    public void update(long id, String title,String description, String observations) throws MyEntityNotFoundException, MyConstraintViolationException {
         Project project = getProject(id);
         if (project == null)
             throw new MyEntityNotFoundException("Project with id: " + id + " doesn't exist");
@@ -66,8 +63,7 @@ public class ProjectBean extends BaseBean {
         Project project = getProject(id);
         if (project == null)
             throw new MyEntityNotFoundException("Project with id: " + id + " doesn't exist");
-        //TODO to be finished
+        em.remove(project);
     }
-
 
 }
