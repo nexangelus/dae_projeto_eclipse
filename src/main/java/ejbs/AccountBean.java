@@ -9,22 +9,28 @@ import exceptions.MyEntityExistsException;
 import javax.ejb.Stateless;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 public class AccountBean extends BaseBean {
 
-    public Account findAccount(String email) {
-        return (Account) em.createNamedQuery("findAccount").setParameter("email", email).getResultList();
+    public Account findAccount(String code) {
+        return (Account) em.createNamedQuery("findAccount").setParameter("code", code).getResultList();
     }
 
-    public void create(String email, String group)
+    public String create(String email, String group)
             throws MyEntityExistsException, MyConstraintViolationException {
         User user = em.find(User.class, email);
         if (user == null)
             throw new MyEntityExistsException("Account with email: " + email + " already exists");
         try {
-            Account account = new Account(email, group);
+            String code;
+            do {
+                code = UUID.randomUUID().toString();
+            }while (findAccount(code)!=null);
+            Account account = new Account(code,email, group);
             em.persist(account);
+            return account.getCode();
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
