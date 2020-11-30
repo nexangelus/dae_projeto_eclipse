@@ -70,20 +70,20 @@ public class ConfigBean {
 			//endregion
 
 			//region Manufacturer
-			manufacturerBean.create("manufacturer", "manufacturer", "Hélder Hélder Rodrigues Pinto", "bianca43@sapo.pt", "Lg. Isabel Ferreira 8245 Alcobaça", "http://helder.pt", "285899583");
+			manufacturerBean.create("manu", "manu", "Hélder Hélder Rodrigues Pinto", "bianca43@sapo.pt", "Lg. Isabel Ferreira 8245 Alcobaça", "http://helder.pt", "285899583");
 			manufacturerBean.create("fernando78", "EO8qP4ATEA", "Alice Tatiana Leite de Henriques", "hugo89@moura.pt", "Tv. Joaquim Soares, nº 61, 1º Dir. 7244-529 Ermesinde", "http://alice.pt", "281500760");
 			manufacturerBean.create("julia.lopes", "C6O99cQofz", "Ângelo Anjos de Leite", "mendes.sara@gmail.com", "Rua de Nogueira, 2, Bl. 9 7510-449 Rio Maior", "http://angelo.pt", "246839248");
 			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "Av. Pinho 5165 Espinho", "http://neto.pt", "913738624");
 			//endregion
 
 			//region Families
-			familyBean.create("Section C 220 BF", "manufacturer");
+			familyBean.create("Section C 220 BF", "manu");
 			familyBean.create("Section Z 220 BF", "fernando78");
 			//endregion
 
 			//region Materials
 			//region Profiles
-			profileBean.create(1, "manufacturer", "C 120/50/21 x 1.5", 13846, 13846, 375, 220000);
+			profileBean.create(1, "manu", "C 120/50/21 x 1.5", 13846, 13846, 375, 220000);
 			profileBean.create(2, "fernando78", "C 120/60/13 x 2.0", 18738, 18738, 500, 220000);
 
 			Profile profile1 = profileBean.getProfile(3);
