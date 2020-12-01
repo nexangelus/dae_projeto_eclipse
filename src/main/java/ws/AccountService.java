@@ -40,7 +40,7 @@ public class AccountService {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         String code = accountBean.create(accountDTO.getEmail(),accountDTO.getGroup());
-        emailBean.send(accountDTO.getEmail(), "Create account", "Go to link http://http://localhost:3000/registers/"+code);
+        emailBean.send(accountDTO.getEmail(), "Create account", "Go to link http://localhost:3000/registers/"+code);
         return Response.status(Response.Status.CREATED).build();
     }
 

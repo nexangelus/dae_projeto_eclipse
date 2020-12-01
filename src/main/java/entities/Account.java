@@ -1,26 +1,15 @@
 package entities;
 
-import org.eclipse.persistence.annotations.PrimaryKey;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.Random;
-import java.util.UUID;
 
 @Entity
-@NamedQueries({
-        @NamedQuery(
-                name = "findAccount",
-                query = "SELECT a FROM Account a WHERE a.code=:code ORDER BY a.email" // JPQL
-        )
-})
 public class Account {
     @Version
     private int version;
 
     @Id
-    @NotNull
     private String code;
 
     @NotNull
@@ -28,15 +17,19 @@ public class Account {
     private String email;
 
     @NotNull
-    private String group;
+    private String groupType;
 
-    public Account(@NotNull String code, @NotNull @Email String email, @NotNull String group) {
+    public Account(String code, @NotNull @Email String email, @NotNull String groupType) {
         this.code = code;
         this.email = email;
-        this.group = group;
+        this.groupType = groupType;
     }
 
     public Account() {
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public String getCode() {
@@ -55,11 +48,11 @@ public class Account {
         this.email = email;
     }
 
-    public String getGroup() {
-        return group;
+    public String getGroupType() {
+        return groupType;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
     }
 }

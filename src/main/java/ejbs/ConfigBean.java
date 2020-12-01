@@ -19,6 +19,9 @@ import java.util.logging.Logger;
 public class ConfigBean {
 
 	@EJB
+	AccountBean accountBean;
+
+	@EJB
 	AdminBean adminBean;
 
 	@EJB
@@ -44,7 +47,7 @@ public class ConfigBean {
 	@PostConstruct
 	public void populateDB() {
 		try {
-
+			accountBean.create("fasdasdffaewffwe.wdwadawd@aqui.pt", "Client");
 			//region Clean Uploads Folder
 			File file = new File(System.getProperty("user.home") + File.separator + "uploads");
 			FileUtils.cleanDirectory(file);

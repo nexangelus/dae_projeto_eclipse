@@ -103,7 +103,7 @@ public class ClientService {
     @Path("/")
     public Response createNewClient(ClientDTO clientDTO) throws MyEntityExistsException, MyConstraintViolationException {
         Account account =accountBean.findAccount(clientDTO.getEmail());
-        if(account==null || account.getGroup()!="Client")
+        if(account==null || account.getGroupType()!="Client")
             return Response.status(Response.Status.FORBIDDEN).build();
         clientBean.create(clientDTO.getUsername(),
                 clientDTO.getNewPassword(),
