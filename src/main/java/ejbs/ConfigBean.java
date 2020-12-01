@@ -37,6 +37,9 @@ public class ConfigBean {
 	ProfileBean profileBean;
 
 	@EJB
+	SheetBean sheetBean;
+
+	@EJB
 	ProjectBean projectBean;
 
 	private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
@@ -98,6 +101,8 @@ public class ConfigBean {
 			profile1.addMcr_p(11.0,30.84866055);
 			profile1.addMcr_p(12.0,27.59984422);
 			//endregion
+
+			sheetBean.create(1, "manu", "TESTE",0.1);
 
 			//region Sheets
 			/*sheetBean.create("P0-272-30", "Chapa Perfilada trapezoidal com 30 mm de altura, sem nervuras de rigidez.",

@@ -5,6 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@NamedQueries(
+		@NamedQuery(name = "getAllMaterials", query = "SELECT m FROM Material m")
+)
 public class Material extends AbstractTimestampEntity {
 
 	@Id

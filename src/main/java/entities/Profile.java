@@ -31,6 +31,17 @@ public class Profile extends Material{
 	@ManyToMany(mappedBy = "profilesAllowed")
 	private Set<Simulation> simulations;
 
+	public Profile(String name, Manufacturer manufacturer, Family family, double weff_p, double weff_n, double ar, double sigmaC, LinkedHashMap<Double, Double> mcr_p, LinkedHashMap<Double, Double> mcr_n) {
+		super(name, manufacturer, family);
+		this.weff_p = weff_p;
+		this.weff_n = weff_n;
+		this.ar = ar;
+		this.sigmaC = sigmaC;
+		this.pp = G * ar * Math.pow(10, -6);
+		this.mcr_p = mcr_p;
+		this.mcr_n = mcr_n;
+	}
+
 	public Profile(String name, Manufacturer manufacturer, Family family, double weff_p, double weff_n, double ar, double sigmaC) {
 		super(name, manufacturer, family);
 		this.weff_p = weff_p;
