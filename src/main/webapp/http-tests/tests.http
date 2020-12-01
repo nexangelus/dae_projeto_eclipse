@@ -251,7 +251,6 @@ Content-Type: application/json
 %}
 
 ###
-
 //   _____  ______  _____ _____ _____ _   _ ______ _____   _____
 //  |  __ \|  ____|/ ____|_   _/ ____| \ | |  ____|  __ \ / ____|
 //  | |  | | |__  | (___   | || |  __|  \| | |__  | |__) | (___
@@ -274,7 +273,6 @@ Content-Type: application/json
 //  |  __/ /\ \ | |\/| | | | | |      | | |  __|  \___ \
 //  | | / ____ \| |  | |_| |_| |____ _| |_| |____ ____) |
 //  |_|/_/    \_\_|  |_|_____|______|_____|______|_____/
-
 
 ###
 GET http://localhost:8080/dae_project/api/families
@@ -339,7 +337,147 @@ Authorization: Bearer {{token}}
 %}
 
 ###
+//   __  __       _______ ______ _____  _____          _       _____
+//  |  \/  |   /\|__   __|  ____|  __ \|_   _|   /\   | |     / ____|
+//  | \  / |  /  \  | |  | |__  | |__) | | |    /  \  | |    | (___
+//  | |\/| | / /\ \ | |  |  __| |  _  /  | |   / /\ \ | |     \___ \
+//  | |  | |/ ____ \| |  | |____| | \ \ _| |_ / ____ \| |____ ____) |
+//  |_|  |_/_/    \_\_|  |______|_|  \_\_____/_/    \_\______|_____/
 
+### Get Materials
+GET http://localhost:8080/dae_project/api/materials/
+Accept: application/json
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("GET ALL MATERIALS", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+### Get 1 Material
+GET http://localhost:8080/dae_project/api/materials/1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("GET ONE MATERIAL", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+### Create Profile
+POST http://localhost:8080/dae_project/api/materials/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "familyID": 1,
+  "manufacturerUsername": "manu",
+  "name": "C 120/50/21 x 1.123123",
+  "profile": {
+    "ar": 375.0,
+    "sigmaC": 220000.0,
+    "weff_n": 13846.0,
+    "weff_p": 13846.0,
+    "mcr_n": {"entry": []},
+    "mcr_p": {
+      "entry": [
+        {"key": 3.0,"value": 243.2123113},
+        {"key": 4.0,"value": 145.238784},
+        {"key": 5.0,"value": 99.15039028},
+        {"key": 6.0,"value": 73.71351699},
+        {"key": 7.0,"value": 58.07716688},
+        {"key": 8.0,"value": 47.68885195},
+        {"key": 9.0,"value": 40.37070843},
+        {"key": 10.0,"value": 34.9747033},
+        {"key": 11.0,"value": 30.84866055},
+        {"key": 12.0,"value": 27.59984422}
+      ]
+    }
+  }
+}
+> {%
+    client.test("CREATE PROFILE", function() {
+        client.assert(response.status === 201, "Response status is " + response.status + " (EXPECTED: 201)");
+    });
+%}
+
+### Create Sheet
+POST http://localhost:8080/dae_project/api/materials/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "familyID": 1,
+  "manufacturerUsername": "manu",
+  "name": "C 120/50/21 x 1.123123",
+  "sheet": {
+    "thickness": 0.6
+  }
+}
+> {%
+    client.test("CREATE SHEET", function() {
+        client.assert(response.status === 201, "Response status is " + response.status + " (EXPECTED: 201)");
+    });
+%}
+
+### Update Profile
+PUT http://localhost:8080/dae_project/api/materials/8
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "familyID": 1,
+  "name": "C 120/50/21 x 1",
+  "profile": {
+    "ar": 375.0,
+    "sigmaC": 220000.0,
+    "weff_n": 13846.0,
+    "weff_p": 13846.0,
+    "mcr_n": {"entry": []},
+    "mcr_p": {
+      "entry": [
+        {"key": 3.0,"value": 243.2123113},
+        {"key": 4.0,"value": 145.238784},
+        {"key": 5.0,"value": 99.15039028},
+        {"key": 6.0,"value": 73.71351699},
+        {"key": 7.0,"value": 58.07716688},
+        {"key": 8.0,"value": 47.68885195},
+        {"key": 9.0,"value": 40.37070843},
+        {"key": 10.0,"value": 34.9747033},
+        {"key": 11.0,"value": 30.84866055},
+        {"key": 12.0,"value": 27.59984422}
+      ]
+    }
+  }
+}
+> {%
+    client.test("UPDATE PROFILE", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+### Update Sheet
+PUT http://localhost:8080/dae_project/api/materials/9
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "familyID": 1,
+  "name": "C 120/50/21 x 5",
+  "sheet": {
+    "thickness": 0.6
+  }
+}
+> {%
+    client.test("UPDATE SHEET", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
+
+###
 //   _____  _____   ____  ______ _____ _      ______  _____
 //  |  __ \|  __ \ / __ \|  ____|_   _| |    |  ____|/ ____|
 //  | |__) | |__) | |  | | |__    | | | |    | |__  | (___
@@ -348,6 +486,8 @@ Authorization: Bearer {{token}}
 //  |_|    |_|  \_\\____/|_|    |_____|______|______|_____/
 
 
+
+###
 //    _____ _    _ ______ ______ _______ _____
 //   / ____| |  | |  ____|  ____|__   __/ ____|
 //  | (___ | |__| | |__  | |__     | | | (___
@@ -356,6 +496,8 @@ Authorization: Bearer {{token}}
 //  |_____/|_|  |_|______|______|  |_| |_____/
 
 
+
+###
 //   _____        _   _ ______ _       _____
 //  |  __ \ /\   | \ | |  ____| |     / ____|
 //  | |__) /  \  |  \| | |__  | |    | (___
@@ -364,6 +506,8 @@ Authorization: Bearer {{token}}
 //  |_| /_/    \_\_| \_|______|______|_____/
 
 
+
+###
 //    _____ _______ _____  _    _  _____ _______ _    _ _____  ______  _____
 //   / ____|__   __|  __ \| |  | |/ ____|__   __| |  | |  __ \|  ____|/ ____|
 //  | (___    | |  | |__) | |  | | |       | |  | |  | | |__) | |__  | (___
@@ -372,6 +516,8 @@ Authorization: Bearer {{token}}
 //  |_____/   |_|  |_|  \_\\____/ \_____|  |_|   \____/|_|  \_\______|_____/
 
 
+
+###
 //   _    _ _____  _      ____          _____   _____
 //  | |  | |  __ \| |    / __ \   /\   |  __ \ / ____|
 //  | |  | | |__) | |   | |  | | /  \  | |  | | (___
