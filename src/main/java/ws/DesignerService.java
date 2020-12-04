@@ -2,7 +2,9 @@ package ws;
 
 import dtos.DesignerDTO;
 import dtos.ErrorDTO;
+import ejbs.AccountBean;
 import ejbs.DesignerBean;
+import entities.Account;
 import entities.Client;
 import entities.Designer;
 import entities.Project;
@@ -29,6 +31,9 @@ public class DesignerService {
     //region EJB
     @EJB
     private DesignerBean designerBean;
+
+    @EJB
+    private AccountBean accountBean;
     //endregion
 
     //region Security
@@ -84,9 +89,11 @@ public class DesignerService {
     }
 
     @POST
-    @Path("/")
-    public Response create(DesignerDTO designer) throws MyEntityExistsException, MyConstraintViolationException {
-        //TODO novas regras
+    @Path("/{code}")
+    public Response create(@PathParam("code") String code, DesignerDTO designer) throws MyEntityExistsException, MyConstraintViolationException {
+        Account account =accountBean.getAccountEmail(designer.getEmail());
+        if(account==null || !(account.getCode().equals(code)) || !(account.getGroupType().equals("Designer")))
+            return Response.status(Response.Status.FORBIDDEN).build();
         designerBean.create(designer.getUsername(), designer.getNewPassword(), designer.getName(), designer.getEmail());
         Designer newDesigner = designerBean.getDesigner(designer.getUsername());
         if (newDesigner == null)

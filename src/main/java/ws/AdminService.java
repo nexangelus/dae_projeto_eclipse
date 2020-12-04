@@ -3,7 +3,9 @@ package ws;
 
 import dtos.AdminDTO;
 import dtos.ErrorDTO;
+import ejbs.AccountBean;
 import ejbs.AdminBean;
+import entities.Account;
 import entities.Admin;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
@@ -27,6 +29,9 @@ public class AdminService {
     //region EJB
     @EJB
     private AdminBean adminBean;
+
+    @EJB
+    private AccountBean accountBean;
     //endregion
 
     //region Security
@@ -72,11 +77,11 @@ public class AdminService {
     }
 
     @POST
-    @Path("/")
-    public Response createNewAdmin (AdminDTO adminDTO) throws MyEntityExistsException, MyConstraintViolationException {
-        if(!(securityContext.isUserInRole("Admin"))){
+    @Path("/{code}")
+    public Response createNewAdmin (@PathParam("code") String code, AdminDTO adminDTO) throws MyEntityExistsException, MyConstraintViolationException {
+        Account account =accountBean.getAccountEmail(adminDTO.getEmail());
+        if(account==null || !(account.getCode().equals(code)) || !(account.getGroupType().equals("Admin")))
             return Response.status(Response.Status.FORBIDDEN).build();
-        }
         adminBean.create(adminDTO.getUsername(),
                 adminDTO.getNewPassword(),
                 adminDTO.getName(),
