@@ -92,8 +92,8 @@ public class ProjectService {
 
 	public static ProjectDTO toDTOWithUploadStructure(Project project){
 		ProjectDTO projectDTO = toDTOWithUpload(project);
-		List<Structure> structures = (List<Structure>) project.getStructures();
-		projectDTO.setStructureDTOS(StructureService.toDTOs(structures));
+		Set<Structure> structures = project.getStructures();
+		projectDTO.setStructureDTOS(StructureService.toDTOs(new ArrayList<>(structures)));
 		return projectDTO;
 	}
 
