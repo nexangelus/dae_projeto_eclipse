@@ -36,7 +36,7 @@ public class AccountService {
     @POST
     @Path("/")
     public Response prepareAccount (AccountDTO accountDTO) throws MyEntityExistsException, MyConstraintViolationException {
-        if(!(securityContext.isUserInRole("Admin"))){
+        if(!(securityContext.isUserInRole("Admin")  || (securityContext.isUserInRole("Designer")))){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         String code = accountBean.create(accountDTO.getEmail(),accountDTO.getGroup());

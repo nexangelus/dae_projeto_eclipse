@@ -5,6 +5,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAccountEmail",
+                query = "SELECT a FROM Account a WHERE a.email= :email ORDER BY a.groupType" // JPQL
+        )
+})
 public class Account {
     @Version
     private int version;
