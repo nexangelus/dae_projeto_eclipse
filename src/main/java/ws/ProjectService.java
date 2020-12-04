@@ -2,12 +2,14 @@ package ws;
 
 import dtos.ErrorDTO;
 import dtos.ProjectDTO;
+import dtos.StructureDTO;
 import dtos.UploadDTO;
 import ejbs.ClientBean;
 import ejbs.DesignerBean;
 import ejbs.ProjectBean;
 import ejbs.UploadBean;
 import entities.Project;
+import entities.Structure;
 import entities.Upload;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
@@ -80,7 +82,6 @@ public class ProjectService {
 		return uploads.stream().map(ProjectService::toDTOUpload).collect(Collectors.toList());
 	}
 
-
 	public static ProjectDTO toDTOWithUpload(Project project){
 		ProjectDTO projectDTO = toDTO(project);
 		Set<Upload> uploads = project.getUploads();
@@ -89,7 +90,12 @@ public class ProjectService {
 		return projectDTO;
 	}
 
-
+	public static ProjectDTO toDTOWithUploadStructure(Project project){
+		ProjectDTO projectDTO = toDTOWithUpload(project);
+		List<Structure> structures = (List<Structure>) project.getStructures();
+		projectDTO.setStructureDTOS(StructureService.toDTOs(structures));
+		return projectDTO;
+	}
 
 	private String getFilename(MultivaluedMap<String, String> header) {
 		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
@@ -129,7 +135,7 @@ public class ProjectService {
 		Project project = projectBean.getProject(id);
 		if (project != null) {
 			return Response.status(Response.Status.OK)
-					.entity(toDTOWithUpload(project))
+					.entity(toDTOWithUploadStructure(project))
 					.build();
 		}
 

@@ -18,6 +18,7 @@ public class ProjectDTO extends TimestampDTO implements Serializable {
 	private String observations;
 	private LocalDateTime finished;
 	private List<UploadDTO> uploadDTOS;
+	private List<StructureDTO> structureDTOS;
 
 	public ProjectDTO(long id, String clientUsername, String designerUsername, String title, String description, String observations, LocalDateTime finished, LocalDateTime created, LocalDateTime updated) {
 		super(created, updated);
@@ -29,11 +30,13 @@ public class ProjectDTO extends TimestampDTO implements Serializable {
 		this.observations = observations;
 		this.finished = finished;
 		uploadDTOS = new LinkedList<>();
+		structureDTOS = new LinkedList<>();
 	}
 
 	public ProjectDTO() {
 		super();
 		uploadDTOS = new LinkedList<>();
+		structureDTOS = new LinkedList<>();
 	}
 
 	public long getId() {
@@ -114,5 +117,13 @@ public class ProjectDTO extends TimestampDTO implements Serializable {
 
 	public void setUploadDTOS(List<UploadDTO> uploadDTOS) {
 		this.uploadDTOS = uploadDTOS;
+	}
+
+	public List<StructureDTO> getStructureDTOS() {
+		return structureDTOS;
+	}
+
+	public void setStructureDTOS(List<StructureDTO> structureDTOS) {
+		this.structureDTOS = structureDTOS;
 	}
 }
