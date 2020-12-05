@@ -1,9 +1,7 @@
 package ejbs;
 
-import entities.Profile;
 import entities.Project;
 import entities.Structure;
-import entities.Upload;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;
 

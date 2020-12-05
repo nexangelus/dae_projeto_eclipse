@@ -2,18 +2,18 @@ package dtos;
 
 import java.io.Serializable;
 
-public class UploadDTO implements Serializable {
+public class DocumentDTO implements Serializable {
     private long id;
     private String filepath;
     private String filename;
 
-    public UploadDTO(long id, String filepath, String filename) {
+    public DocumentDTO(long id, String filepath, String filename) {
         this.id = id;
         this.filepath = filepath;
         this.filename = filename;
     }
 
-    public UploadDTO() {
+    public DocumentDTO() {
     }
 
     public long getId() {

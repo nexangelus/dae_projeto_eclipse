@@ -7,14 +7,14 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllUploads",
-                query = "SELECT u FROM Upload u ORDER BY u.id" // JPQL
+                query = "SELECT d FROM Document d ORDER BY d.id" // JPQL
         ),
         @NamedQuery(
                 name = "getAllProjectUploads",
-                query = "SELECT u FROM Upload u WHERE u.project.id =:idProject"
+                query = "SELECT d FROM Document d WHERE d.project.id =:idProject"
         )
 })
-public class Upload extends AbstractTimestampEntity {
+public class Document extends AbstractTimestampEntity {
     @Version
     private int version;
 
@@ -31,13 +31,13 @@ public class Upload extends AbstractTimestampEntity {
     @ManyToOne
     private Project project;
 
-    public Upload(String filepath, String filename, Project project) {
+    public Document(String filepath, String filename, Project project) {
         this.filepath = filepath;
         this.filename = filename;
         this.project = project;
     }
 
-    public Upload() {
+    public Document() {
     }
 
     public long getId() {

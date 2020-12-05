@@ -2,18 +2,18 @@ package ws;
 
 import dtos.ErrorDTO;
 import dtos.ProjectDTO;
-import dtos.StructureDTO;
-import dtos.UploadDTO;
+import dtos.DocumentDTO;
 import ejbs.ClientBean;
 import ejbs.DesignerBean;
 import ejbs.ProjectBean;
-import ejbs.UploadBean;
+import ejbs.DocumentBean;
+import entities.Document;
 import entities.Project;
 import entities.Structure;
-import entities.Upload;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -45,7 +45,7 @@ public class ProjectService {
 	@EJB
 	private DesignerBean designerBean;
 	@EJB
-	private UploadBean uploadBean;
+	private DocumentBean documentBean;
 	//endregion
 
 	//region Security
@@ -72,26 +72,26 @@ public class ProjectService {
 		return projects.stream().map(ProjectService::toDTO).collect(Collectors.toList());
 	}
 
-	public static UploadDTO toDTOUpload(Upload upload){
-		return new UploadDTO(
-				upload.getId(), upload.getFilepath(), upload.getFilename()
+	public static DocumentDTO toDTODocument(Document document){
+		return new DocumentDTO(
+				document.getId(), document.getFilepath(), document.getFilename()
 		);
 	}
 
-	public static List<UploadDTO> toDTOsUploads(List<Upload> uploads){
-		return uploads.stream().map(ProjectService::toDTOUpload).collect(Collectors.toList());
+	public static List<DocumentDTO> toDTOsUploads(List<Document> documents){
+		return documents.stream().map(ProjectService::toDTODocument).collect(Collectors.toList());
 	}
 
-	public static ProjectDTO toDTOWithUpload(Project project){
+	public static ProjectDTO toDTOWithDocument(Project project){
 		ProjectDTO projectDTO = toDTO(project);
-		Set<Upload> uploads = project.getUploads();
-		List<UploadDTO> uploadDTO = toDTOsUploads(new ArrayList<>(uploads));
+		Set<Document> documents = project.getDocuments();
+		List<DocumentDTO> uploadDTO = toDTOsUploads(new ArrayList<>(documents));
 		projectDTO.setUploadDTOS(uploadDTO);
 		return projectDTO;
 	}
 
 	public static ProjectDTO toDTOWithUploadStructure(Project project){
-		ProjectDTO projectDTO = toDTOWithUpload(project);
+		ProjectDTO projectDTO = toDTOWithDocument(project);
 		Set<Structure> structures = project.getStructures();
 		projectDTO.setStructureDTOS(StructureService.toDTOs(new ArrayList<>(structures)));
 		return projectDTO;
@@ -199,7 +199,7 @@ public class ProjectService {
 	@POST
 	@Path("{id}/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response upload(@PathParam("id") long projectID, MultipartFormDataInput input) throws MyEntityNotFoundException, IOException {
+	public Response uploadDocument(@PathParam("id") long projectID, MultipartFormDataInput input) throws MyEntityNotFoundException, IOException {
 		Principal principal = securityContext.getUserPrincipal();
 
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -224,12 +224,45 @@ public class ProjectService {
 				}
 				String filepath = customDir.getCanonicalPath() + File.separator + filename;
 				writeFile(bytes, filepath);
-				uploadBean.create(project.getId(), path, filename);
+				documentBean.create(project.getId(), path, filename);
 				return Response.status(200).entity("Uploaded file name : " + filename).build();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return null;
+	}
+
+	@GET
+	@Path("{idP}/download/{idD}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response downloadDocument(@PathParam("idP") Integer idP, @PathParam("idD") Integer idD) throws MyEntityNotFoundException
+	{
+		Document document = documentBean.findDocument(idD);
+		File fileDownload = new File(document.getFilepath() + File.separator +
+				document.getFilename());
+		Response.ResponseBuilder response = Response.ok((Object) fileDownload);
+		response.header("Content-Disposition", "attachment;filename=" +
+				document.getFilename());
+		return response.build();
+	}
+
+	@DELETE
+	@Path("{idP}/delete/{idD}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response deleteDocument(@PathParam("idP") Integer idP, @PathParam("idD") Integer idD) throws MyEntityNotFoundException, MyConstraintViolationException {
+		Project project = projectBean.getProject(idP);
+		Document document = documentBean.findDocument(idD);
+		File fileDelete = new File(document.getFilepath() + File.separator +
+				document.getFilename());
+		FileUtils.deleteQuietly(fileDelete);
+		File fileCheck = new File(document.getFilepath() + File.separator +
+				document.getFilename());
+		if (fileCheck==null){
+			project.removeDocument(document);
+			documentBean.delete(document.getId());
+			return Response.status(Response.Status.ACCEPTED).build();
+		}
+		return Response.status(Response.Status.CONFLICT).build();
 	}
 }

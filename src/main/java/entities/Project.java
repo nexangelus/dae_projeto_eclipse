@@ -32,7 +32,7 @@ public class Project extends AbstractTimestampEntity {
 	private Set<Structure> structures;
 
 	@OneToMany(mappedBy = "project")
-	private Set<Upload> uploads;
+	private Set<Document> documents;
 
 	@NotNull
 	private String title;
@@ -48,7 +48,7 @@ public class Project extends AbstractTimestampEntity {
 		this.client = client;
 		this.designer = designer;
 		this.structures = new LinkedHashSet<>();
-		this.uploads = new LinkedHashSet<>();
+		this.documents = new LinkedHashSet<>();
 		this.title = title;
 		this.description = description;
 		this.observations = observations;
@@ -59,14 +59,14 @@ public class Project extends AbstractTimestampEntity {
 		this.client = client;
 		this.designer = designer;
 		this.structures = new LinkedHashSet<>();
-		this.uploads = new LinkedHashSet<>();
+		this.documents = new LinkedHashSet<>();
 		this.title = title;
 		this.description = description;
 	}
 
 	public Project() {
 		this.structures = new LinkedHashSet<>();
-		this.uploads = new LinkedHashSet<>();
+		this.documents = new LinkedHashSet<>();
 	}
 
 	public long getId() {
@@ -129,12 +129,12 @@ public class Project extends AbstractTimestampEntity {
 		this.structures = structures;
 	}
 
-	public Set<Upload> getUploads() {
-		return uploads;
+	public Set<Document> getDocuments() {
+		return documents;
 	}
 
-	public void setUploads(Set<Upload> uploads) {
-		this.uploads = uploads;
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
 	}
 
 	public void addStructure(Structure structure) {
@@ -145,11 +145,11 @@ public class Project extends AbstractTimestampEntity {
 		this.structures.remove(structure);
 	}
 
-	public void addUpload(Upload upload) {
-		this.uploads.add(upload);
+	public void addDocument(Document document) {
+		this.documents.add(document);
 	}
 
-	public void removeUpload(Upload upload) {
-		this.uploads.remove(upload);
+	public void removeDocument(Document document) {
+		this.documents.remove(document);
 	}
 }
