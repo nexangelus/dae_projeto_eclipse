@@ -253,12 +253,10 @@ public class ProjectService {
 	public Response deleteDocument(@PathParam("idP") Integer idP, @PathParam("idD") Integer idD) throws MyEntityNotFoundException, MyConstraintViolationException {
 		Project project = projectBean.getProject(idP);
 		Document document = documentBean.findDocument(idD);
-		File fileDelete = new File(document.getFilepath() + File.separator +
-				document.getFilename());
+		File fileDelete = new File(document.getFilepath() + File.separator + document.getFilename());
 		FileUtils.deleteQuietly(fileDelete);
-		File fileCheck = new File(document.getFilepath() + File.separator +
-				document.getFilename());
-		if (fileCheck==null){
+		File fileCheck = new File(document.getFilepath() + File.separator +  document.getFilename());
+		if (!fileCheck.exists()){
 			project.removeDocument(document);
 			documentBean.delete(document.getId());
 			return Response.status(Response.Status.ACCEPTED).build();
