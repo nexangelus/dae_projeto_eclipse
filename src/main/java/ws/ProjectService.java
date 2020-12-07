@@ -125,14 +125,26 @@ public class ProjectService {
 	//region CRUD
 	@GET
 	@Path("/")
-	public List<ProjectDTO> getAll() {
-		return toDTOs(projectBean.getAllProjects());
+	public Response getAll() {
+		Principal principal = securityContext.getUserPrincipal();
+		if (!(securityContext.isUserInRole("Admin"))) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+		return Response.status(Response.Status.OK)
+				.entity(toDTOs(projectBean.getAllProjects()))
+				.build();
 	}
 
 	@GET
 	@Path("{id}")
 	public Response get(@PathParam("id") long id) {
 		Project project = projectBean.getProject(id);
+		Principal principal = securityContext.getUserPrincipal();
+		if (!(securityContext.isUserInRole("Admin") ||
+				(securityContext.isUserInRole("Designer") && principal.getName().equals(project.getDesigner().getUsername())) ||
+				(securityContext.isUserInRole("Client") && principal.getName().equals(project.getClient().getUsername())) )) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 		if (project != null) {
 			return Response.status(Response.Status.OK)
 					.entity(toDTOWithUploadStructure(project))
@@ -147,6 +159,9 @@ public class ProjectService {
 	@POST
 	@Path("/")
 	public Response create(ProjectDTO project) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+		if (!(securityContext.isUserInRole("Admin") ||  securityContext.isUserInRole("Designer"))) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 		long id = projectBean.create(
 				project.getClientUsername(),
 				project.getDesignerUsername(),
@@ -167,8 +182,9 @@ public class ProjectService {
 	@Path("{id}")
 	public Response update(@PathParam("id") long id, ProjectDTO project) throws MyEntityNotFoundException, MyConstraintViolationException {
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||  securityContext.isUserInRole("Designer") &&
-				principal.getName().equals(project.getDesignerUsername()))) {
+        if (!(securityContext.isUserInRole("Admin") ||
+				(securityContext.isUserInRole("Designer") && principal.getName().equals(project.getDesigner().getUsername()))
+		)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         projectBean.update(
@@ -183,7 +199,6 @@ public class ProjectService {
 	@DELETE
 	@Path("{id}")
 	public Response delete(@PathParam("id") long id) throws MyEntityNotFoundException {
-		Principal principal = securityContext.getUserPrincipal();
 		if (!(securityContext.isUserInRole("Admin"))) {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
@@ -201,14 +216,13 @@ public class ProjectService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadDocument(@PathParam("id") long projectID, MultipartFormDataInput input) throws MyEntityNotFoundException, IOException {
 		Principal principal = securityContext.getUserPrincipal();
-
-		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		Project project = projectBean.getProject(projectID);
 		if (!(securityContext.isUserInRole("Admin") ||
-				securityContext.isUserInRole("Client") &&
-						principal.getName().equals(project.getClient().getUsername()))) {
+				(securityContext.isUserInRole("Client") && principal.getName().equals(project.getClient().getUsername()))
+		)) {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
+		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("file");
 		for (InputPart inputPart : inputParts) {
 			try {
@@ -238,6 +252,13 @@ public class ProjectService {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response downloadDocument(@PathParam("idP") Integer idP, @PathParam("idD") Integer idD) throws MyEntityNotFoundException
 	{
+		Project project = projectBean.getProject(idP);
+		Principal principal = securityContext.getUserPrincipal();
+		if (!(securityContext.isUserInRole("Admin") ||
+				(securityContext.isUserInRole("Designer") && principal.getName().equals(project.getDesigner().getUsername())) ||
+				(securityContext.isUserInRole("Client") && principal.getName().equals(project.getClient().getUsername())) )) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 		Document document = documentBean.findDocument(idD);
 		File fileDownload = new File(document.getFilepath() + File.separator +
 				document.getFilename());
@@ -252,6 +273,12 @@ public class ProjectService {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response deleteDocument(@PathParam("idP") Integer idP, @PathParam("idD") Integer idD) throws MyEntityNotFoundException, MyConstraintViolationException {
 		Project project = projectBean.getProject(idP);
+		Principal principal = securityContext.getUserPrincipal();
+		if (!(securityContext.isUserInRole("Admin") ||
+				securityContext.isUserInRole("Client") &&
+						principal.getName().equals(project.getClient().getUsername()))) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 		Document document = documentBean.findDocument(idD);
 		File fileDelete = new File(document.getFilepath() + File.separator + document.getFilename());
 		FileUtils.deleteQuietly(fileDelete);
