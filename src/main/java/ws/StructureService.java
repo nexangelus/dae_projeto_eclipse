@@ -2,7 +2,10 @@ package ws;
 
 import dtos.ErrorDTO;
 import dtos.StructureDTO;
+import ejbs.EmailBean;
+import ejbs.ProjectBean;
 import ejbs.StructureBean;
+import entities.Project;
 import entities.Structure;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
@@ -25,7 +28,13 @@ public class StructureService {
 
     //region EJB
     @EJB
+    private ProjectBean projectBean;
+
+    @EJB
     private StructureBean structureBean;
+
+    @EJB
+    private EmailBean emailBean;
     //endregion
 
     //region Security
@@ -124,6 +133,39 @@ public class StructureService {
 
     }
 
+    @PATCH
+    @Path("{id}/visibletoclient")
+    public Response visibleToClient(@PathParam("id") long id) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin"))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        Project project = projectBean.getProject(id);
+        structureBean.visibleToClient(id);
+        emailBean.send(project.getClient().getEmail(), "Structure finished", "Structure has been finished");
+
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @PATCH
+    @Path("{id}/status/{status}")
+    public Response isAccepted(@PathParam("idP") long idP,@PathParam("id") long id, @PathParam("status") boolean status) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin"))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        Project project = projectBean.getProject(id);
+
+        structureBean.setStatus(id, status);
+        String message;
+        if(status){
+            message = "accepted";
+        }else{
+            message = "declined";
+        }
+        emailBean.send(project.getDesigner().getEmail(), "Structure Updated by client", "Structure of project: "+idP+" has been :" + message);
+        return Response.status(Response.Status.OK).build();
+    }
     //endregion
 
 }

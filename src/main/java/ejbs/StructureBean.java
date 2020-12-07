@@ -57,9 +57,31 @@ public class StructureBean extends BaseBean {
         Structure structure = findStructure(id);
         if (structure == null)
             throw new MyEntityNotFoundException("Structure with id: " + id + " doesn't exist");
-
         structure.getProject().removeStructure(structure);
         em.remove(structure);
     }
+
+    public void visibleToClient(long id) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Structure structure = findStructure(id);
+        if (structure == null)
+            throw new MyEntityNotFoundException("Structure with id: " + id + " doesn't exist");
+        try {
+            structure.setVisibleToClient(true);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
+    }
+
+    public void setStatus(long id, boolean status) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Structure structure = findStructure(id);
+        if (structure == null)
+            throw new MyEntityNotFoundException("Structure with id: " + id + " doesn't exist");
+        try {
+            structure.setClientAccepted(status);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
+    }
+
 
 }

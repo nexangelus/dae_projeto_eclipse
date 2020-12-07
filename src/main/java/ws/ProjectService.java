@@ -40,10 +40,7 @@ public class ProjectService {
 	//region EJB
 	@EJB
 	private ProjectBean projectBean;
-	@EJB
-	private ClientBean clientBean;
-	@EJB
-	private DesignerBean designerBean;
+
 	@EJB
 	private DocumentBean documentBean;
 	//endregion
@@ -138,6 +135,7 @@ public class ProjectService {
 	@GET
 	@Path("{id}")
 	public Response get(@PathParam("id") long id) {
+		//Todo struct visible to client
 		Project project = projectBean.getProject(id);
 		Principal principal = securityContext.getUserPrincipal();
 		if (!(securityContext.isUserInRole("Admin") ||
