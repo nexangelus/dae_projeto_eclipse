@@ -2,20 +2,28 @@ package ws;
 
 import dtos.ErrorDTO;
 import dtos.ManufacturerDTO;
+import ejbs.DocumentBean;
 import ejbs.ManufacturerBean;
 import entities.Manufacturer;
+import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
+import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("/manufacturers")
@@ -26,6 +34,9 @@ public class ManufacturerService {
 	//region EJB
 	@EJB
 	private ManufacturerBean manufacturerBean;
+
+	@EJB
+	private DocumentBean documentBean;
 	//endregion
 
 	//region Security
@@ -50,9 +61,67 @@ public class ManufacturerService {
 	public static List<ManufacturerDTO> toDTOs(List<Manufacturer> manufacturers) {
 		return manufacturers.stream().map(ManufacturerService::toDTO).collect(Collectors.toList());
 	}
+
+	private String getFilename(MultivaluedMap<String, String> header) {
+		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+		for (String filename : contentDisposition) {
+			if ((filename.trim().startsWith("filename"))) {
+				String[] name = filename.split("=");
+				String finalFileName = name[1].trim().replaceAll("\"", "");
+				return finalFileName;
+			}
+		}
+		return "unknown";
+	}
+
+	private void writeFile(byte[] content, String filename) throws IOException {
+		File file = new File(filename);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		FileOutputStream fop = new FileOutputStream(file);
+		fop.write(content);
+		fop.flush();
+		fop.close();
+		System.out.println("Written: " + filename);
+	}
 	//endregion
 
 	//region CRUD
+	@POST
+	@Path("{username}/upload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadDocument(@PathParam("username") String username, MultipartFormDataInput input) {
+		Principal principal = securityContext.getUserPrincipal();
+		if (!(securityContext.isUserInRole("Admin") ||
+				securityContext.isUserInRole("Manufacturer")
+		)) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+		List<InputPart> inputParts = uploadForm.get("file");
+		for (InputPart inputPart : inputParts) {
+			try {
+
+				MultivaluedMap<String, String> header = inputPart.getHeaders();
+				String filename = getFilename(header);
+				InputStream inputStream = inputPart.getBody(InputStream.class, null);
+				byte[] bytes = IOUtils.toByteArray(inputStream);
+				String path = System.getProperty("user.home") + File.separator + "uploads" + File.separator + "manufacturer";
+				File customDir = new File(path);
+				if (!customDir.exists()) {
+					customDir.mkdir();
+				}
+				String filepath = customDir.getCanonicalPath() + File.separator + filename;
+				writeFile(bytes, filepath);
+				return Response.status(200).build();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 	@GET
 	@Path("/")
 	public List<ManufacturerDTO> getAll() {
@@ -118,8 +187,14 @@ public class ManufacturerService {
 				.build();
 
 	}
-
 	//endregion
 
+
+
+
+
+	//TODO import files
+	//TODO check materials to be imported
+	//TODO add materials
 
 }

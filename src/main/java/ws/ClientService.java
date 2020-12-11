@@ -177,9 +177,6 @@ public class ClientService {
     }
     //endregion
 
-
-
-
     @GET
     @Path("{username}/projects")
     public Response getClientProjects(@PathParam("username") String username) {
