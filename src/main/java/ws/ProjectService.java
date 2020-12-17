@@ -229,7 +229,7 @@ public class ProjectService {
 				String filename = getFilename(header);
 				InputStream inputStream = inputPart.getBody(InputStream.class, null);
 				byte[] bytes = IOUtils.toByteArray(inputStream);
-				String path = System.getProperty("user.home") + File.separator + "uploads";
+				String path = System.getProperty("user.home") + File.separator + "uploads" + File.separator + "project";
 				File customDir = new File(path);
 				if (!customDir.exists()) {
 					customDir.mkdir();
@@ -288,4 +288,7 @@ public class ProjectService {
 		}
 		return Response.status(Response.Status.CONFLICT).build();
 	}
+
+
+
 }
