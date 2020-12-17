@@ -46,7 +46,6 @@ public class ConfigBean {
 	@EJB
 	ProjectBean projectBean;
 
-
 	@EJB
 	Excel excel;
 
@@ -86,11 +85,6 @@ public class ConfigBean {
 			manufacturerBean.create("julia.lopes", "C6O99cQofz", "Ângelo Anjos de Leite", "mendes.sara@gmail.com", "Rua de Nogueira, 2, Bl. 9 7510-449 Rio Maior", "http://angelo.pt", "246839248");
 			manufacturerBean.create("duarte.amaral", "5A7eNtHVKn", "Miguel Neto", "testeves@santos.com", "Av. Pinho 5165 Espinho", "http://neto.pt", "913738624");
 			//endregion
-
-			
-			//excel.readFromExcel("C:\\Users\\andre\\Documents\\ESCOLA\\3ano\\1semestre\\DESENVOLVIMENTO-APLICACOES-EMPRESARIAIS\\ProjetoEstruturas\\ExemplosProdutosVariantesExcel\\", "manu");
-
-
 
 			//region Families
 			familyBean.create("Section C 220 BF", "manu");

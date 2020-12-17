@@ -1,10 +1,11 @@
 package ws;
 
 import dtos.ErrorDTO;
+import dtos.SimulateDTO;
 import dtos.StructureDTO;
-import ejbs.EmailBean;
-import ejbs.ProjectBean;
-import ejbs.StructureBean;
+import dtos.materials.ProfileDTO;
+import ejbs.*;
+import entities.Profile;
 import entities.Project;
 import entities.Structure;
 import exceptions.MyConstraintViolationException;
@@ -35,6 +36,12 @@ public class StructureService {
 
     @EJB
     private EmailBean emailBean;
+
+    @EJB
+    private SimulationBean simulationBean;
+
+    @EJB
+    private ProfileBean profileBean;
     //endregion
 
     //region Security
@@ -164,6 +171,23 @@ public class StructureService {
             message = "declined";
         }
         emailBean.send(project.getDesigner().getEmail(), "Structure Updated by client", "Structure of project: "+idP+" has been :" + message);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @POST
+    @Path("{id}/simulate")
+    public Response isAccepted(@PathParam("idP") long idP, @PathParam("id") long id, SimulateDTO simulate, ProfileDTO profileDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Principal principal = securityContext.getUserPrincipal();
+        if (!(securityContext.isUserInRole("Admin"))) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        Project project = projectBean.getProject(id);
+        Structure structure = structureBean.findStructure(id);
+        /*Profile profile = profileBean.getProfile(profileDTO);
+        simulationBean.simulaVariante(
+                simulate.getNb(),simulate.getLVao(),simulate.getQ(),profileDTO
+        );*/
+
         return Response.status(Response.Status.OK).build();
     }
     //endregion

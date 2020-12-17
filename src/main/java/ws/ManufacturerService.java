@@ -5,14 +5,15 @@ import dtos.ManufacturerDTO;
 import ejbs.DocumentBean;
 import ejbs.ManufacturerBean;
 import entities.Manufacturer;
-import entities.Project;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import utils.Excel;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -36,7 +37,7 @@ public class ManufacturerService {
 	private ManufacturerBean manufacturerBean;
 
 	@EJB
-	private DocumentBean documentBean;
+	private Excel excel;
 	//endregion
 
 	//region Security
@@ -88,10 +89,11 @@ public class ManufacturerService {
 	//endregion
 
 	//region CRUD
+
 	@POST
-	@Path("{username}/upload")
+	@Path("upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadDocument(@PathParam("username") String username, MultipartFormDataInput input) {
+	public Response uploadExcel(MultipartFormDataInput input) {
 		Principal principal = securityContext.getUserPrincipal();
 		if (!(securityContext.isUserInRole("Admin") ||
 				securityContext.isUserInRole("Manufacturer")
@@ -114,6 +116,9 @@ public class ManufacturerService {
 				}
 				String filepath = customDir.getCanonicalPath() + File.separator + filename;
 				writeFile(bytes, filepath);
+				excel.readFromExcel(filepath, principal.getName());
+				File file = new File(System.getProperty("user.home") + File.separator + "uploads" + File.separator + "manufacturer");
+				FileUtils.cleanDirectory(file);
 				return Response.status(200).build();
 			} catch (Exception e) {
 				e.printStackTrace();

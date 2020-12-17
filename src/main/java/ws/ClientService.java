@@ -13,6 +13,7 @@ import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/clients")
+@RolesAllowed({"Admin", "Manufacturer", "Designer"})
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 public class ClientService {
@@ -93,10 +95,10 @@ public class ClientService {
     @GET
     @Path("/")
     public Response getAllClients() {
-        if (!(securityContext.isUserInRole("Admin") ||
-                securityContext.isUserInRole("Designer"))) {
+        /*
+        if ((securityContext.isUserInRole("Client"))) {
             return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        }*/
         return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOsNoPassword(clientBean.getAllClients())).build();
     }
 
@@ -120,12 +122,12 @@ public class ClientService {
     @Path("{username}")
     public Response getClientDetails(@PathParam("username") String username) {
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||
+        /*if (!(securityContext.isUserInRole("Admin") ||
                 securityContext.isUserInRole("Designer") ||
                 securityContext.isUserInRole("Client") &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        }*/
         Client client = clientBean.getClient(username);
         if (client != null) {
             return Response.status(Response.Status.OK)

@@ -15,6 +15,9 @@ public class CatchAllExceptionMapper implements ExceptionMapper<Exception> {
 	public Response toResponse(Exception e) {
 		String errorMsg = e.getMessage();
 		logger.warning("ERROR: " + errorMsg);
+		if (errorMsg.contains("403")){
+			return Response.status(Response.Status.FORBIDDEN).entity(ErrorDTO.error(errorMsg)).build();
+		}
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorDTO.error(errorMsg)).build();
 	}
 }
