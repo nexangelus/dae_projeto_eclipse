@@ -8,20 +8,28 @@ import java.time.LocalDateTime;
 public class StructureDTO extends TimestampDTO implements Serializable {
     private long id;
     private String name;
-    private String parameters;
+    private int nb;
+    private double LVao;
+    private int q;
     private String clientObservations;
     private Project project;
     private boolean visibleToClient;
     private boolean clientAccepted;
 
-    public StructureDTO(String name, String parameters, String clientObservations, Project project, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, Project project, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
         super(created, updated);
+        this.id = id;
         this.name = name;
-        this.parameters = parameters;
+        this.nb = nb;
+        this.LVao = LVao;
+        this.q = q;
         this.clientObservations = clientObservations;
         this.project = project;
         this.visibleToClient = visibleToClient;
         this.clientAccepted = clientAccepted;
+    }
+
+    public StructureDTO() {
     }
 
     public long getId() {
@@ -38,14 +46,6 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(String parameters) {
-        this.parameters = parameters;
     }
 
     public String getClientObservations() {
@@ -78,5 +78,29 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 
     public void setClientAccepted(boolean clientAccepted) {
         this.clientAccepted = clientAccepted;
+    }
+
+    public int getNb() {
+        return nb;
+    }
+
+    public void setNb(int nb) {
+        this.nb = nb;
+    }
+
+    public double getLVao() {
+        return LVao;
+    }
+
+    public void setLVao(double LVao) {
+        this.LVao = LVao;
+    }
+
+    public int getQ() {
+        return q;
+    }
+
+    public void setQ(int q) {
+        this.q = q;
     }
 }

@@ -54,8 +54,11 @@ public class StructureService {
     //region DTOS
     public static StructureDTO toDTO(Structure structure) {
         return new StructureDTO(
+                structure.getId(),
                 structure.getName(),
-                structure.getParameters(),
+                structure.getNb(),
+                structure.getLVao(),
+                structure.getQ(),
                 structure.getClientObservations(),
                 structure.getProject(),
                 structure.isVisibleToClient(),
@@ -105,7 +108,7 @@ public class StructureService {
     @POST
     @Path("/")
     @RolesAllowed({"Designer"})
-    public Response create(@PathParam("idP") long idP,StructureDTO structure) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+    public Response create(@PathParam("idP") long idP,StructureDTO structure) throws MyConstraintViolationException, MyEntityNotFoundException {
         Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
         if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
@@ -114,7 +117,9 @@ public class StructureService {
         long id = structureBean.create(
                 idP,
                 structure.getName(),
-                structure.getParameters()
+                structure.getNb(),
+                structure.getLVao(),
+                structure.getQ()
         );
         Structure newStructure = structureBean.findStructure(id);
         if (newStructure == null)
@@ -124,7 +129,7 @@ public class StructureService {
                 .entity(toDTO(newStructure))
                 .build();
     }
-
+    /*//TODO
     @PUT
     @Path("{id}")
     @RolesAllowed({"Designer"})
@@ -137,14 +142,14 @@ public class StructureService {
         structureBean.update(
                 id,
                 structure.getName(),
-                structure.getParameters(),
-                structure.isVisibleToClient(),
-                structure.isVisibleToClient(),
+                structure.getNb(),
+                structure.getLVao(),
+                structure.getQ(),
                 structure.getClientObservations()
         );
         return Response.status(Response.Status.OK).build();
     }
-
+    */
     @DELETE
     @Path("{id}")
     @RolesAllowed({"Designer"})

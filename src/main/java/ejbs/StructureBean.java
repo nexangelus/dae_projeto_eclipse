@@ -24,12 +24,12 @@ public class StructureBean extends BaseBean {
         return (List<Structure>) em.createNamedQuery("getAllStructuresFromProject").setParameter("idProject", idProject).getResultList();
     }
 
-    public long create(long project_id, String name, String parameters) throws MyConstraintViolationException, MyEntityNotFoundException {
+    public long create(long project_id, String name, int nb, double LVao, int q) throws MyConstraintViolationException, MyEntityNotFoundException {
         Project project = em.find(Project.class, project_id);
         if (project == null)
             throw new MyEntityNotFoundException("Project with id: " + project_id + " doesn't exists");
         try {
-            Structure structure = new Structure(project, name, parameters, false, false, null);
+            Structure structure = new Structure(project, name, nb, LVao, q, false, false, null,null);
             em.persist(structure);
             project.addStructure(structure);
             return structure.getId();
@@ -37,21 +37,21 @@ public class StructureBean extends BaseBean {
             throw new MyConstraintViolationException(e);
         }
     }
-
+    /*
     public void update(long idS, String name, String parameters, boolean clientAccepted, boolean visibleToClient, String observations) throws MyEntityNotFoundException, MyConstraintViolationException {
         Structure structure = findStructure(idS);
         if (structure == null)
             throw new MyEntityNotFoundException("Structure with id: " + idS + " doesn't exists");
         try {
             structure.setName(name);
-            structure.setParameters(parameters);
+            structure.setParameters(parameters);//TODO
             structure.setClientAccepted(clientAccepted);
             structure.setVisibleToClient(visibleToClient);
             structure.setClientObservations(observations);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
-    }
+    }*/
 
     public void delete(long id) throws MyEntityNotFoundException {
         Structure structure = findStructure(id);

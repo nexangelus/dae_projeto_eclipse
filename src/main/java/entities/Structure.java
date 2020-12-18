@@ -30,8 +30,11 @@ public class Structure extends AbstractTimestampEntity {
 	@NotNull
 	private String name;
 
-	@NotNull
-	private String parameters;
+	private int nb;
+
+	private double LVao;
+
+	private int q;
 
 	@NotNull
 	@Column(name = "VISIBLE_TO_CLIENT")
@@ -49,17 +52,16 @@ public class Structure extends AbstractTimestampEntity {
 			inverseJoinColumns = @JoinColumn(name = "MATERIAL_ID", referencedColumnName = "ID"))
 	private Set<Material> materials;
 
-	@OneToMany(mappedBy = "structure")
-	private Set<Simulation> simulations;
-    
     /*
     TODO Rever as estruturas e os contrutores verificar se estam bem feitos
     */
 
-	public Structure(Project project, String name, String parameters, boolean visibleToClient, boolean clientAccepted, String clientObservations) {
+	public Structure(Project project, @NotNull String name, int nb, double LVao, int q, @NotNull boolean visibleToClient, boolean clientAccepted, String clientObservations, Set<Material> materials) {
 		this.project = project;
 		this.name = name;
-		this.parameters = parameters;
+		this.nb = nb;
+		this.LVao = LVao;
+		this.q = q;
 		this.visibleToClient = visibleToClient;
 		this.clientAccepted = clientAccepted;
 		this.clientObservations = clientObservations;
@@ -88,14 +90,6 @@ public class Structure extends AbstractTimestampEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(String parameters) {
-		this.parameters = parameters;
 	}
 
 	public boolean isVisibleToClient() {
@@ -136,5 +130,29 @@ public class Structure extends AbstractTimestampEntity {
 
 	public void removeMaterial(Material material) {
 		this.materials.remove(material);
+	}
+
+	public int getNb() {
+		return nb;
+	}
+
+	public void setNb(int nb) {
+		this.nb = nb;
+	}
+
+	public double getLVao() {
+		return LVao;
+	}
+
+	public void setLVao(double LVao) {
+		this.LVao = LVao;
+	}
+
+	public int getQ() {
+		return q;
+	}
+
+	public void setQ(int q) {
+		this.q = q;
 	}
 }

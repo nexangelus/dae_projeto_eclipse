@@ -28,8 +28,6 @@ public class Profile extends Material{
 	@Lob
 	private LinkedHashMap<Double,Double> mcr_n;
 
-	@ManyToMany(mappedBy = "profilesAllowed")
-	private Set<Simulation> simulations;
 
 	public Profile(String name, Manufacturer manufacturer, Family family, double weff_p, double weff_n, double ar, double sigmaC, LinkedHashMap<Double, Double> mcr_p, LinkedHashMap<Double, Double> mcr_n) {
 		super(name, manufacturer, family);
