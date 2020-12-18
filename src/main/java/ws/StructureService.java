@@ -1,6 +1,7 @@
 package ws;
 
 import dtos.ErrorDTO;
+import dtos.MaterialDTO;
 import dtos.SimulateDTO;
 import dtos.StructureDTO;
 import dtos.materials.ProfileDTO;
@@ -174,22 +175,22 @@ public class StructureService {
         return Response.status(Response.Status.OK).build();
     }
 
+    //endregion
     @POST
     @Path("{id}/simulate")
-    public Response isAccepted(@PathParam("idP") long idP, @PathParam("id") long id, SimulateDTO simulate, ProfileDTO profileDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public Response isAccepted(@PathParam("idP") long idP, @PathParam("id") long id, SimulateDTO simulate, MaterialDTO materialDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
         Principal principal = securityContext.getUserPrincipal();
         if (!(securityContext.isUserInRole("Admin"))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         Project project = projectBean.getProject(id);
         Structure structure = structureBean.findStructure(id);
-        /*Profile profile = profileBean.getProfile(profileDTO);
+        Profile profile = profileBean.getProfile(materialDTO.getId());
         simulationBean.simulaVariante(
-                simulate.getNb(),simulate.getLVao(),simulate.getQ(),profileDTO
-        );*/
+                simulate.getNb(),simulate.getLVao(),simulate.getQ(),profile
+        );
 
         return Response.status(Response.Status.OK).build();
     }
-    //endregion
 
 }
