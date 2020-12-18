@@ -9,6 +9,7 @@ import entities.Account;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -33,12 +34,11 @@ public class AccountService {
     @Context
     private SecurityContext securityContext;
     //endregion
+
     @POST
     @Path("/")
+    @RolesAllowed({"Admin","Designer"})
     public Response prepareAccount (AccountDTO accountDTO) throws MyEntityExistsException, MyConstraintViolationException {
-        if(!(securityContext.isUserInRole("Admin")  || (securityContext.isUserInRole("Designer")))){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         String code = accountBean.create(accountDTO.getEmail(),accountDTO.getGroup());
         emailBean.send(accountDTO.getEmail(), "Create account", "Go to link http://localhost:3000/registers/"+code);
         return Response.status(Response.Status.CREATED).build();
