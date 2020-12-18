@@ -46,12 +46,13 @@ public class ClientBean extends BaseBean {
 			throw new MyEntityNotFoundException("Client with username: " + username + " doesn't exist");
 		try {
 
-			if(!User.hashPassword(oldPassword).equals(client.getPassword())){
-				throw new MyIllegalArgumentException("Old Password is wrong");
-			}
+			if (!newPassword.isEmpty() || !oldPassword.isEmpty()) {
+				if (!User.hashPassword(oldPassword).equals(client.getPassword())) {
+					throw new MyIllegalArgumentException("Old Password is wrong");
+				}
 
-			if(newPassword != null && !newPassword.equals(""))
 				client.setPassword(newPassword);
+			}
 
 			client.setName(name);
 			client.setEmail(email);

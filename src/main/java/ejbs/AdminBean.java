@@ -44,12 +44,13 @@ public class AdminBean extends BaseBean {
 			throw new MyEntityNotFoundException("Admin with username: " + username + " doesn't exist");
 		try {
 
-			if (!User.hashPassword(oldPassword).equals(admin.getPassword())) {
-				throw new MyIllegalArgumentException("Old Password is wrong");
-			}
+			if (!newPassword.isEmpty() || !oldPassword.isEmpty()) {
+				if (!User.hashPassword(oldPassword).equals(admin.getPassword())) {
+					throw new MyIllegalArgumentException("Old Password is wrong");
+				}
 
-			if (newPassword != null)
 				admin.setPassword(newPassword);
+			}
 
 			admin.setName(name);
 			admin.setEmail(email);

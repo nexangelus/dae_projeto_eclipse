@@ -44,12 +44,14 @@ public class ManufacturerBean extends BaseBean {
             throw new MyEntityNotFoundException("Manufacturer with username: " + username + " doesn't exist");
         try {
 
-            if (!User.hashPassword(oldPassword).equals(manufacturer.getPassword())) {
-                throw new MyIllegalArgumentException("Old Password is wrong");
+            if (!newPassword.isEmpty() || !oldPassword.isEmpty()) {
+                if (!User.hashPassword(oldPassword).equals(manufacturer.getPassword())) {
+                    throw new MyIllegalArgumentException("Old Password is wrong");
+                }
+
+                manufacturer.setPassword(newPassword);
             }
 
-            if (newPassword != null)
-                manufacturer.setPassword(newPassword);
 
             manufacturer.setName(name);
             manufacturer.setEmail(email);

@@ -45,12 +45,13 @@ public class DesignerBean extends BaseBean {
 			throw new MyEntityNotFoundException("Designer with username: " + username + " doesn't exist");
 		try {
 
-			if (!User.hashPassword(oldPassword).equals(designer.getPassword())) {
-				throw new MyIllegalArgumentException("Old Password is wrong");
-			}
+			if (!newPassword.isEmpty() || !oldPassword.isEmpty()) {
+				if (!User.hashPassword(oldPassword).equals(designer.getPassword())) {
+					throw new MyIllegalArgumentException("Old Password is wrong");
+				}
 
-			if (newPassword != null)
 				designer.setPassword(newPassword);
+			}
 
 			designer.setName(name);
 			designer.setEmail(email);
