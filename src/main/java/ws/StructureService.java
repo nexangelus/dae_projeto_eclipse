@@ -13,6 +13,7 @@ import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 public class StructureService {
-
+    //TODO Validar todo o ficheiro
     //region EJB
     @EJB
     private ProjectBean projectBean;
@@ -72,13 +73,23 @@ public class StructureService {
     //region CRUD
     @GET
     @Path("/")
+    //TODO manufacturer list of structs accepted by client
     public List<StructureDTO> getAll() {
         return toDTOs(structureBean.getAllStructures());
     }
 
     @GET
     @Path("{id}")
-    public Response get(@PathParam("id") long id) {
+    @RolesAllowed({"Designer", "Client"})
+    public Response get(@PathParam("idP") long idP, @PathParam("id") long id) {
+        Project project = projectBean.getProject(idP);
+        Principal principal = securityContext.getUserPrincipal();
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        if (securityContext.isUserInRole("Client") && !principal.getName().equals(project.getClient().getUsername())) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         Structure structure = structureBean.findStructure(id);
         if (structure != null) {
             return Response.status(Response.Status.OK)
@@ -93,7 +104,13 @@ public class StructureService {
 
     @POST
     @Path("/")
+    @RolesAllowed({"Designer"})
     public Response create(@PathParam("idP") long idP,StructureDTO structure) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+        Project project = projectBean.getProject(idP);
+        Principal principal = securityContext.getUserPrincipal();
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         long id = structureBean.create(
                 idP,
                 structure.getName(),
@@ -110,10 +127,11 @@ public class StructureService {
 
     @PUT
     @Path("{id}")
+    @RolesAllowed({"Designer"})
     public Response update(@PathParam("idP") long idP, @PathParam("id") long id, StructureDTO structure) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||  securityContext.isUserInRole("Designer") &&
-                principal.getName().equals(structure.getProject().getDesigner()))) {
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         structureBean.update(
@@ -129,9 +147,14 @@ public class StructureService {
 
     @DELETE
     @Path("{id}")
-    public Response delete(@PathParam("id") long id) throws MyEntityNotFoundException {
+    @RolesAllowed({"Designer"})
+    public Response delete(@PathParam("idP") long idP,@PathParam("id") long id) throws MyEntityNotFoundException {
+        Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin"))) {
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        if (securityContext.isUserInRole("Client") && !principal.getName().equals(project.getClient().getUsername())) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         structureBean.delete(
@@ -143,12 +166,13 @@ public class StructureService {
 
     @PATCH
     @Path("{id}/visibletoclient")
-    public Response visibleToClient(@PathParam("id") long id) throws MyEntityNotFoundException, MyConstraintViolationException {
+    @RolesAllowed({"Designer"})
+    public Response visibleToClient(@PathParam("idP") long idP,@PathParam("id") long id) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin"))) {
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        Project project = projectBean.getProject(id);
         structureBean.visibleToClient(id);
         emailBean.send(project.getClient().getEmail(), "Structure finished", "Structure has been finished");
 
@@ -157,13 +181,13 @@ public class StructureService {
 
     @PATCH
     @Path("{id}/status/{status}")
+    @RolesAllowed({"Client"})
     public Response isAccepted(@PathParam("idP") long idP,@PathParam("id") long id, @PathParam("status") boolean status) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin"))) {
+        if (securityContext.isUserInRole("Client") && !principal.getName().equals(project.getClient().getUsername())) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        Project project = projectBean.getProject(id);
-
         structureBean.setStatus(id, status);
         String message;
         if(status){
@@ -177,13 +201,14 @@ public class StructureService {
 
     //endregion
     @POST
+    @RolesAllowed({"Designer"})
     @Path("{id}/simulate")
     public Response isAccepted(@PathParam("idP") long idP, @PathParam("id") long id, SimulateDTO simulate, MaterialDTO materialDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin"))) {
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        Project project = projectBean.getProject(id);
         Structure structure = structureBean.findStructure(id);
         Profile profile = profileBean.getProfile(materialDTO.getId());
         simulationBean.simulaVariante(
