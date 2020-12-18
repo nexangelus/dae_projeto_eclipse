@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/clients")
-@RolesAllowed({"Admin", "Manufacturer", "Designer"})
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 public class ClientService {
@@ -94,11 +93,8 @@ public class ClientService {
 
     @GET
     @Path("/")
+    @RolesAllowed({"Admin", "Designer"})
     public Response getAllClients() {
-        /*
-        if ((securityContext.isUserInRole("Client"))) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }*/
         return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOsNoPassword(clientBean.getAllClients())).build();
     }
 
@@ -120,14 +116,13 @@ public class ClientService {
 
     @GET
     @Path("{username}")
+    @RolesAllowed({"Admin", "Client", "Designer"})
     public Response getClientDetails(@PathParam("username") String username) {
         Principal principal = securityContext.getUserPrincipal();
-        /*if (!(securityContext.isUserInRole("Admin") ||
-                securityContext.isUserInRole("Designer") ||
-                securityContext.isUserInRole("Client") &&
-                        principal.getName().equals(username))) {
+        if (securityContext.isUserInRole("Client") &&
+                !principal.getName().equals(username)) {
             return Response.status(Response.Status.FORBIDDEN).build();
-        }*/
+        }
         Client client = clientBean.getClient(username);
         if (client != null) {
             return Response.status(Response.Status.OK)
@@ -141,12 +136,10 @@ public class ClientService {
     //TODO put error
     @PUT
     @Path("{username}")
+    @RolesAllowed({"Admin", "Designer", "Client"})
     public Response updateClientDetails(@PathParam("username") String username, ClientDTO clientDTO) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||
-                securityContext.isUserInRole("Designer") || //TODO ver
-                securityContext.isUserInRole("Client") &&
-                        principal.getName().equals(username))) {
+        if (securityContext.isUserInRole("Client") && !principal.getName().equals(username)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         clientBean.update(username,
@@ -161,13 +154,8 @@ public class ClientService {
 
     @DELETE
     @Path("{username}")
+    @RolesAllowed({"Admin"})
     public Response deleteClient(@PathParam("username") String username) throws MyEntityNotFoundException {
-        Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||
-                securityContext.isUserInRole("Client") &&
-                        principal.getName().equals(username))) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         clientBean.delete(username);
         Client client = clientBean.getClient(username);
         if (client == null) {
@@ -181,12 +169,10 @@ public class ClientService {
 
     @GET
     @Path("{username}/projects")
+    @RolesAllowed({"Admin", "Designer", "Client"})
     public Response getClientProjects(@PathParam("username") String username) {
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||
-                securityContext.isUserInRole("Designer") ||
-                securityContext.isUserInRole("Client") &&
-                        principal.getName().equals(username))) {
+        if (securityContext.isUserInRole("Client") && !principal.getName().equals(username)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -203,6 +189,7 @@ public class ClientService {
 
     @GET
     @Path("search/{name}")
+    @RolesAllowed({"Admin", "Designer"})
     public Response searchClientsByName(@PathParam("name") String name) {
         return Response.status(Response.Status.ACCEPTED).entity(ClientService.toDTOsUsernameName(clientBean.searchClientsByName(name))).build();
     }
