@@ -12,6 +12,7 @@ import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/admins")
+@RolesAllowed({"Admin"})
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 public class AdminService {
@@ -70,9 +72,6 @@ public class AdminService {
     @GET
     @Path("/")
     public Response getAllAdmins() {
-        if(!(securityContext.isUserInRole("Admin"))){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         return Response.status(Response.Status.ACCEPTED).entity(AdminService.toDTOs(adminBean.getAllAdmins())).build();
     }
 
@@ -92,9 +91,6 @@ public class AdminService {
     @GET
     @Path("{username}")
     public Response getAdminDetails(@PathParam("username") String username) {
-        if(!(securityContext.isUserInRole("Admin"))){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         Admin admin = adminBean.getAdmin(username);
         if (admin != null) {
             return Response.status(Response.Status.OK)
@@ -109,10 +105,6 @@ public class AdminService {
     @PUT
     @Path("{username}")
     public Response updateAdminDetails(@PathParam("username") String username, AdminDTO adminDTO) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
-        if(!(securityContext.isUserInRole("Admin"))){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
         adminBean.update(username,
                 adminDTO.getNewPassword(),
                 adminDTO.getOldPassword(),
@@ -124,9 +116,6 @@ public class AdminService {
     @DELETE
     @Path("{username}")
     public Response deleteAdmin(@PathParam("username") String username) throws MyEntityNotFoundException {
-        if(!(securityContext.isUserInRole("Admin"))){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         adminBean.delete(username);
         Admin admin = adminBean.getAdmin(username);
         if (admin == null) {
