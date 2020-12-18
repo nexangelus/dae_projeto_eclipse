@@ -258,8 +258,10 @@ public class ProjectService {
 		if (securityContext.isUserInRole("Client") && !principal.getName().equals(project.getClient().getUsername())) {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
-
 		Document document = documentBean.findDocument(idD);
+
+		// TODO check if project contains document, so you can't download all the files with a valid project
+
 		File fileDownload = new File(document.getFilepath() + File.separator +
 				document.getFilename());
 		Response.ResponseBuilder response = Response.ok((Object) fileDownload);

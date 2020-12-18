@@ -133,7 +133,6 @@ public class ClientService {
                 .entity(ErrorDTO.error("ERROR_FINDING_CLIENT"))
                 .build();
     }
-    //TODO put error
     @PUT
     @Path("{username}")
     @RolesAllowed({"Admin", "Designer", "Client"})
