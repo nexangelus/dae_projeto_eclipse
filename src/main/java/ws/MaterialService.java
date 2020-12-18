@@ -14,6 +14,7 @@ import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Path("/materials")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
+@RolesAllowed({"Admin", "Manufacturer", "Designer"})
 public class MaterialService {
 
 	//region EJB
@@ -97,6 +99,7 @@ public class MaterialService {
 		List<Material> allMaterials = materialBean.getAllMaterials();
 		return Response.status(Response.Status.ACCEPTED).entity(toDTOs(allMaterials)).build();
 	}
+	// TODO Devolver apenas os meus materiais (manufacturer) e ver quais os materiais estão em projetos
 
 	@GET
 	@Path("{id}")
@@ -115,8 +118,8 @@ public class MaterialService {
 
 	@POST
 	@Path("/")
+	@RolesAllowed({"Admin", "Manufacturer"})
 	public Response create(MaterialDTO material) throws MyConstraintViolationException, MyIllegalArgumentException, MyEntityNotFoundException {
-		//TODO novas regras
 		Material created = null;
 		if(material.getProfile() != null) { // is creating a profile
 			created = materialBean.getMaterial(materialBean.createProfile(material
@@ -138,7 +141,12 @@ public class MaterialService {
 
 	@PUT
 	@Path("{id}")
+	@RolesAllowed({"Admin", "Manufacturer"})
 	public Response update(@PathParam("id") long id, MaterialDTO material) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
+		Principal principal = securityContext.getUserPrincipal();
+		if (securityContext.isUserInRole("Manufacturer") && !principal.getName().equals(material.getManufacturerUsername())) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 
 		if(material.getProfile() != null) { // is creating a profile
 			materialBean.updateProfile(id, material.getFamily().getId(), material.getName(), material.getProfile().getWeff_p(), material.getProfile().getWeff_n(), material.getProfile().getAr(), material.getProfile().getSigmaC(), material.getProfile().getMcr_p(), material.getProfile().getMcr_n());
@@ -155,6 +163,7 @@ public class MaterialService {
 
 	@DELETE
 	@Path("{id}")
+	@RolesAllowed({"Admin", "Manufacturer"})
 	public Response delete(@PathParam("id") long id) throws MyEntityNotFoundException {
 		materialBean.delete(id);
 		if (materialBean.getMaterial(id) != null)
