@@ -48,7 +48,6 @@ public class FamilyBean extends BaseBean {
 		if (!isAdmin && !family.getManufacturer().getUsername().equals(manufacturerUsername))
 			throw new MyIllegalArgumentException("No permission");
 
-
 		try {
 			family.setName(name);
 
@@ -69,4 +68,12 @@ public class FamilyBean extends BaseBean {
 	public List<Family> getAllFromManufacturer(String name) {
 		return (List<Family>) em.createNamedQuery("getAllFamiliesFromManufacturer").getResultList();
 	}
+
+	public Long getIdByName(String name) {
+		List<Family> family = em.createNamedQuery("getIdByName").setParameter("name", name).getResultList();
+		if(family.size()>=1)
+			return family.get(0).getId();
+		return -1L;
+	}
+
 }
