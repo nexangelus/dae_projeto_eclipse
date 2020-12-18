@@ -13,6 +13,7 @@ import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -60,20 +61,17 @@ public class DesignerService {
     //region CRUD
     @GET
     @Path("/")
+    @RolesAllowed({"Admin"})
     public Response getAll() {
-        if (!(securityContext.isUserInRole("Admin"))) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         return Response.status(Response.Status.ACCEPTED).entity(toDTOs(designerBean.getAllDesigners())).build();
     }
 
     @GET
     @Path("{username}")
+    @RolesAllowed({"Admin","Designer"})
     public Response get(@PathParam("username") String username) {
         Principal principal = securityContext.getUserPrincipal();
-        if (!(securityContext.isUserInRole("Admin") ||
-                securityContext.isUserInRole("Designer") &&
-                        principal.getName().equals(username))) {
+        if (!(securityContext.isUserInRole("Admin") || securityContext.isUserInRole("Designer") && principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         Designer designer = designerBean.getDesigner(username);
@@ -106,6 +104,7 @@ public class DesignerService {
 
     @PUT
     @Path("{username}")
+    @RolesAllowed({"Designer"})
     public Response update(@PathParam("username") String username, DesignerDTO designer) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
         Principal principal = securityContext.getUserPrincipal();
         if (!(securityContext.isUserInRole("Designer") &&
@@ -122,10 +121,8 @@ public class DesignerService {
 
     @DELETE
     @Path("{username}")
+    @RolesAllowed({"Admin"})
     public Response delete(@PathParam("username") String username) throws MyEntityNotFoundException {
-        if (!(securityContext.isUserInRole("Admin"))) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         designerBean.delete(username);
         if (designerBean.getDesigner(username) != null)
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -140,6 +137,7 @@ public class DesignerService {
 
     @GET
     @Path("{username}/projects")
+    @RolesAllowed({"Admin","Designer"})
     public Response getProjects(@PathParam("username") String username){
         Principal principal = securityContext.getUserPrincipal();
         if (!(securityContext.isUserInRole("Admin") ||
