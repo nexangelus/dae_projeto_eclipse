@@ -119,9 +119,10 @@ public class MaterialService {
 		//TODO novas regras
 		Material created = null;
 		if(material.getProfile() != null) { // is creating a profile
-			created = materialBean.getMaterial(materialBean.createProfile(material.getFamilyID(), material.getManufacturerUsername(), material.getName(), material.getProfile().getWeff_p(), material.getProfile().getWeff_n(), material.getProfile().getAr(), material.getProfile().getSigmaC(), material.getProfile().getMcr_p(), material.getProfile().getMcr_n()));
+			created = materialBean.getMaterial(materialBean.createProfile(material
+					.getFamily().getId(), material.getManufacturerUsername(), material.getName(), material.getProfile().getWeff_p(), material.getProfile().getWeff_n(), material.getProfile().getAr(), material.getProfile().getSigmaC(), material.getProfile().getMcr_p(), material.getProfile().getMcr_n()));
 		} else if (material.getSheet() != null) { // is creating a sheet
-			created = materialBean.getMaterial(materialBean.createSheet(material.getFamilyID(), material.getManufacturerUsername(), material.getName(), material.getSheet().getThickness()));
+			created = materialBean.getMaterial(materialBean.createSheet(material.getFamily().getId(), material.getManufacturerUsername(), material.getName(), material.getSheet().getThickness()));
 		} else {
 			throw new MyIllegalArgumentException("No material was selected.");
 		}
@@ -140,9 +141,9 @@ public class MaterialService {
 	public Response update(@PathParam("id") long id, MaterialDTO material) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
 
 		if(material.getProfile() != null) { // is creating a profile
-			materialBean.updateProfile(id, material.getFamilyID(), material.getName(), material.getProfile().getWeff_p(), material.getProfile().getWeff_n(), material.getProfile().getAr(), material.getProfile().getSigmaC(), material.getProfile().getMcr_p(), material.getProfile().getMcr_n());
+			materialBean.updateProfile(id, material.getFamily().getId(), material.getName(), material.getProfile().getWeff_p(), material.getProfile().getWeff_n(), material.getProfile().getAr(), material.getProfile().getSigmaC(), material.getProfile().getMcr_p(), material.getProfile().getMcr_n());
 		} else if (material.getSheet() != null) { // is creating a sheet
-			materialBean.updateSheet(id, material.getFamilyID(), material.getName(), material.getSheet().getThickness());
+			materialBean.updateSheet(id, material.getFamily().getId(), material.getName(), material.getSheet().getThickness());
 		} else {
 			throw new MyIllegalArgumentException("No material was selected.");
 		}

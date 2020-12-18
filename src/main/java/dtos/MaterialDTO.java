@@ -13,7 +13,6 @@ public class MaterialDTO extends TimestampDTO {
 	private String manufacturerName;
 	private String manufacturerUsername;
 	private FamilyDTO family;
-	private Long familyID = null;
 
 	private ProfileDTO profile;
 	private SheetDTO sheet;
@@ -80,14 +79,6 @@ public class MaterialDTO extends TimestampDTO {
 
 	public void setFamily(FamilyDTO family) {
 		this.family = family;
-	}
-
-	public Long getFamilyID() {
-		return familyID;
-	}
-
-	public void setFamilyID(Long familyID) {
-		this.familyID = familyID;
 	}
 
 	public ProfileDTO getProfile() {
