@@ -8,18 +8,21 @@ import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/families")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
+@RolesAllowed({"Admin", "Manufacturer"})
 public class FamilyService {
 
 	//region EJB
@@ -68,26 +71,29 @@ public class FamilyService {
 
 	@GET
 	@Path("/")
+	@RolesAllowed({"Admin", "Manufacturer", "Designer"})
 	public Response getAllFamilies() {
-		// TODO SMART RULES
 		return Response.status(Response.Status.ACCEPTED).entity(FamilyService.toDTOsNoManufacturerMaterialsCount(familyBean.getAll())).build();
 	}
 
 	@POST
 	@Path("/")
 	public Response createNewFamily (FamilyDTO familyDTO) throws MyConstraintViolationException, MyEntityNotFoundException {
+		Principal principal = securityContext.getUserPrincipal();
+		if (securityContext.isUserInRole("Manufacturer") && !principal.getName().equals(familyDTO.getManufacturerUsername())) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+
 		long id = familyBean.create(
 				familyDTO.getName(),
 				familyDTO.getManufacturerUsername()
 		);
 		return Response.status(Response.Status.CREATED).entity(toDTO(familyBean.getFamily(id))).build();
-		// TODO SMART RULES make sure that manufacturer name is the same as manufacturer if is not admin (admin can create for other manufacturers) and only admin and manufacturers can access this
 	}
 
 	@GET
 	@Path("{id}")
 	public Response getFamilyDetails(@PathParam("id") long id) {
-		// TODO return materials from family that manufacturer owns
 		Family family = familyBean.getFamily(id);
 		if (family != null) {
 			return Response.status(Response.Status.OK)
@@ -102,7 +108,6 @@ public class FamilyService {
 	@PUT
 	@Path("{id}")
 	public Response updateFamily(@PathParam("id") long id, FamilyDTO family) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
-		// TODO Smart rule only admin/manufacturer can access this
 		String name = securityContext.getUserPrincipal().getName();
 		boolean admin = securityContext.isUserInRole("Admin");
 		familyBean.update(id, family.getName(), name, admin);
@@ -111,8 +116,8 @@ public class FamilyService {
 
 	@DELETE
 	@Path("{id}")
+	@RolesAllowed({"Admin"})
 	public Response deleteAdmin(@PathParam("id") long id) throws MyEntityNotFoundException {
-		// TODO Smart rule only admin/manufacturer can access this
 		familyBean.delete(id);
 		Family family = familyBean.getFamily(id);
 		if (family == null) {
@@ -122,7 +127,6 @@ public class FamilyService {
 				.entity(ErrorDTO.error("ERROR_DELETING_FAMILY"))
 				.build();
 	}
-
 	//endregion
 
 }

@@ -15,6 +15,7 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import utils.Excel;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @Path("/manufacturers")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
+@RolesAllowed({"Admin", "Manufacturer"})
 public class ManufacturerService {
 
 	//region EJB
@@ -93,13 +95,9 @@ public class ManufacturerService {
 	@POST
 	@Path("upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@RolesAllowed({"Manufacturer"})
 	public Response uploadExcel(MultipartFormDataInput input) {
 		Principal principal = securityContext.getUserPrincipal();
-		if (!(securityContext.isUserInRole("Admin") ||
-				securityContext.isUserInRole("Manufacturer")
-		)) {
-			return Response.status(Response.Status.FORBIDDEN).build();
-		}
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("file");
 		for (InputPart inputPart : inputParts) {
@@ -129,6 +127,7 @@ public class ManufacturerService {
 
 	@GET
 	@Path("/")
+	@RolesAllowed({"Admin"})
 	public List<ManufacturerDTO> getAll() {
 		return toDTOs(manufacturerBean.getAllManufactures());
 	}
@@ -136,6 +135,11 @@ public class ManufacturerService {
 	@GET
 	@Path("{username}")
 	public Response get(@PathParam("username") String username) {
+		Principal principal = securityContext.getUserPrincipal();
+		if (securityContext.isUserInRole("Manufacturer") && !principal.getName().equals(username)) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+
 		Manufacturer manufacturer = manufacturerBean.getManufacturer(username);
 		if (manufacturer != null) {
 			return Response.status(Response.Status.OK)
@@ -150,6 +154,7 @@ public class ManufacturerService {
 
 	@POST
 	@Path("/")
+	@RolesAllowed({"Admin"})
 	public Response create(ManufacturerDTO manufacturer) throws MyEntityExistsException, MyConstraintViolationException {
 		manufacturerBean.create(manufacturer.getUsername(), manufacturer.getNewPassword(),
 				manufacturer.getName(), manufacturer.getEmail(), manufacturer.getAddress(),
@@ -167,6 +172,10 @@ public class ManufacturerService {
 	@PUT
 	@Path("{username}")
 	public Response update(@PathParam("username") String username, ManufacturerDTO manufacturer) throws MyEntityNotFoundException, MyConstraintViolationException, MyIllegalArgumentException {
+		Principal principal = securityContext.getUserPrincipal();
+		if (securityContext.isUserInRole("Manufacturer") && !principal.getName().equals(username)) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 
 		manufacturerBean.update(username, manufacturer.getNewPassword(), manufacturer.getOldPassword(), manufacturer.getName(),
 				manufacturer.getEmail(), manufacturer.getAddress(), manufacturer.getContact(), manufacturer.getWebsite());
@@ -178,6 +187,7 @@ public class ManufacturerService {
 
 	@DELETE
 	@Path("{username}")
+	@RolesAllowed({"Admin"})
 	public Response delete(@PathParam("username") String username) throws MyEntityNotFoundException {
 
 		manufacturerBean.delete(username);
@@ -193,13 +203,5 @@ public class ManufacturerService {
 
 	}
 	//endregion
-
-
-
-
-
-	//TODO import files
-	//TODO check materials to be imported
-	//TODO add materials
 
 }
