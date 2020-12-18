@@ -60,7 +60,7 @@ public class StructureService {
                 structure.getLVao(),
                 structure.getQ(),
                 structure.getClientObservations(),
-                structure.getProject(),
+                ProjectService.toDTO(structure.getProject()),
                 structure.isVisibleToClient(),
                 structure.isClientAccepted(),
                 structure.getCreated(),
@@ -70,6 +70,25 @@ public class StructureService {
 
     public static List<StructureDTO> toDTOs(List<Structure> structures) {
         return structures.stream().map(StructureService::toDTO).collect(Collectors.toList());
+    }
+
+    public static StructureDTO toDTOWithoutProject(Structure structure) {
+        return new StructureDTO(
+                structure.getId(),
+                structure.getName(),
+                structure.getNb(),
+                structure.getLVao(),
+                structure.getQ(),
+                structure.getClientObservations(),
+                structure.isVisibleToClient(),
+                structure.isClientAccepted(),
+                structure.getCreated(),
+                structure.getUpdated()
+        );
+    }
+
+    public static List<StructureDTO> toDTOsWithoutProject(List<Structure> structures) {
+        return structures.stream().map(StructureService::toDTOWithoutProject).collect(Collectors.toList());
     }
     //endregion
 
@@ -125,9 +144,15 @@ public class StructureService {
         if (newStructure == null)
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 
-        return Response.status(Response.Status.CREATED)
-                .entity(toDTO(newStructure))
-                .build();
+        try {
+
+            return Response.status(Response.Status.CREATED)
+                    .entity(toDTO(newStructure))
+                    .build();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
     }
     /*//TODO
     @PUT

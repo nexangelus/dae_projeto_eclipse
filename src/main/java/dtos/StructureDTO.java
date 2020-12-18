@@ -12,11 +12,11 @@ public class StructureDTO extends TimestampDTO implements Serializable {
     private double LVao;
     private int q;
     private String clientObservations;
-    private Project project;
+    private ProjectDTO project;
     private boolean visibleToClient;
     private boolean clientAccepted;
 
-    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, Project project, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
         super(created, updated);
         this.id = id;
         this.name = name;
@@ -25,6 +25,18 @@ public class StructureDTO extends TimestampDTO implements Serializable {
         this.q = q;
         this.clientObservations = clientObservations;
         this.project = project;
+        this.visibleToClient = visibleToClient;
+        this.clientAccepted = clientAccepted;
+    }
+
+    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+        super(created, updated);
+        this.id = id;
+        this.name = name;
+        this.nb = nb;
+        this.LVao = LVao;
+        this.q = q;
+        this.clientObservations = clientObservations;
         this.visibleToClient = visibleToClient;
         this.clientAccepted = clientAccepted;
     }
@@ -56,11 +68,11 @@ public class StructureDTO extends TimestampDTO implements Serializable {
         this.clientObservations = clientObservations;
     }
 
-    public Project getProject() {
+    public ProjectDTO getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectDTO project) {
         this.project = project;
     }
 
