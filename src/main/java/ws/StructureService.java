@@ -275,14 +275,27 @@ public class StructureService {
 
     @POST
     @RolesAllowed({"Designer"})
-    @Path("{id}/material")
-    public Response postMaterial(@PathParam("idP") long idP, @PathParam("id") long id, List<MaterialDTO> materialDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+    @Path("{id}/material/{idM}")
+    public Response postMaterial(@PathParam("idP") long idP, @PathParam("id") long id, @PathParam("idM")long idM) throws MyEntityNotFoundException, MyConstraintViolationException {
         Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
         if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        structureBean.addMaterial(id,materialDTO);
+        structureBean.addMaterial(id,idM);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @DELETE
+    @RolesAllowed({"Designer"})
+    @Path("{id}/material/{idM}")
+    public Response deleteMaterial(@PathParam("idP") long idP, @PathParam("id") long id, @PathParam("idM") long idM) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = projectBean.getProject(idP);
+        Principal principal = securityContext.getUserPrincipal();
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        structureBean.removeMaterial(id,idM);
         return Response.status(Response.Status.OK).build();
     }
 

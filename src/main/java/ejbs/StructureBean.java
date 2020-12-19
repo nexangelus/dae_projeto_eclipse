@@ -84,24 +84,34 @@ public class StructureBean extends BaseBean {
         }
     }
 
-
-    public void addMaterial(long id, List<MaterialDTO> materials) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public void addMaterial(long id, long idM) throws MyEntityNotFoundException, MyConstraintViolationException {
         Structure structure = findStructure(id);
         if (structure == null)
             throw new MyEntityNotFoundException("Structure with id: " + id + " doesn't exist");
-        for (MaterialDTO materialDTO : materials) {
-            Material material = em.find(Material.class, materialDTO.getId());
-            if (material == null)
-                throw new MyEntityNotFoundException("Material with id: " + id + " doesn't exist");
-            try {
-                structure.addMaterial(material);
-                material.addStructure(structure);
-            } catch (ConstraintViolationException e) {
-                throw new MyConstraintViolationException(e);
-            }
+        Material material = em.find(Material.class, idM);
+        if (material == null)
+            throw new MyEntityNotFoundException("Material with id: " + id + " doesn't exist");
+        try {
+            structure.addMaterial(material);
+            material.addStructure(structure);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
         }
+    }
 
-
+    public void removeMaterial(long id, long idM) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Structure structure = findStructure(id);
+        if (structure == null)
+            throw new MyEntityNotFoundException("Structure with id: " + id + " doesn't exist");
+        Material material = em.find(Material.class, idM);
+        if (material == null)
+            throw new MyEntityNotFoundException("Material with id: " + id + " doesn't exist");
+        try {
+            structure.removeMaterial(material);
+            material.removeStructure(structure);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public List<Structure> getStructuresFromManufacturerMaterials(String manufacturerUsername) {
