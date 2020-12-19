@@ -22,9 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("/projects/{idP}/structures")
@@ -107,11 +105,10 @@ public class StructureService {
                 structure.getClientObservations(),
                 structure.isVisibleToClient(),
                 structure.isClientAccepted(),
+                MaterialService.toDTOs(new ArrayList<>(structure.getMaterials())),
                 structure.getCreated(),
                 structure.getUpdated()
         );
-        Set<Material> materialSet =  structure.getMaterials();
-        // TODO
 
         return structureDTO;
     }

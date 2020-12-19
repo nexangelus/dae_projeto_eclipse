@@ -90,6 +90,7 @@ public class MaterialService {
 	public static List<MaterialDTO> toDTOs(List<Material> materials) {
 		return materials.stream().map(MaterialService::toDTO).collect(Collectors.toList());
 	}
+
 	//endregion
 
 	//region CRUD

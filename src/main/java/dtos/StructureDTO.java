@@ -6,6 +6,8 @@ import entities.Project;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class StructureDTO extends TimestampDTO implements Serializable {
@@ -18,9 +20,9 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 	private ProjectDTO project;
 	private boolean visibleToClient;
 	private Boolean clientAccepted;
-	private Set<MaterialDTO> materials;
+	private List<MaterialDTO> materials;
 
-	public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, Set<MaterialDTO> materials, LocalDateTime created, LocalDateTime updated) {
+	public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, Boolean clientAccepted, List<MaterialDTO> materials, LocalDateTime created, LocalDateTime updated) {
 		super(created, updated);
 		this.id = id;
 		this.name = name;
@@ -28,7 +30,6 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 		this.LVao = LVao;
 		this.q = q;
 		this.clientObservations = clientObservations;
-		this.project = project;
 		this.visibleToClient = visibleToClient;
 		this.clientAccepted = clientAccepted;
 		this.materials = materials;
@@ -45,6 +46,7 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 		this.project = project;
 		this.visibleToClient = visibleToClient;
 		this.clientAccepted = clientAccepted;
+		this.materials = new LinkedList<>();
 	}
 
 	public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
@@ -57,13 +59,14 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 		this.clientObservations = clientObservations;
 		this.visibleToClient = visibleToClient;
 		this.clientAccepted = clientAccepted;
+		this.materials = new LinkedList<>();
 	}
 
 	public StructureDTO(long id, String name, MaterialDTO material, LocalDateTime created, LocalDateTime updated) {
 		super(created, updated);
 		this.id = id;
 		this.name = name;
-		this.materials = new LinkedHashSet<>();
+		this.materials = new LinkedList<>();
 
 		materials.add(material);
 	}
@@ -143,11 +146,11 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 		this.q = q;
 	}
 
-	public Set<MaterialDTO> getMaterials() {
+	public List<MaterialDTO> getMaterials() {
 		return materials;
 	}
 
-	public void setMaterials(Set<MaterialDTO> materials) {
+	public void setMaterials(List<MaterialDTO> materials) {
 		this.materials = materials;
 	}
 }
