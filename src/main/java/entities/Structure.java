@@ -41,7 +41,7 @@ public class Structure extends AbstractTimestampEntity {
 	private boolean visibleToClient;
 
 	@Column(name = "CLIENT_ACCEPTED")
-	private boolean clientAccepted;
+	private Boolean clientAccepted;
 
 	@Column(name = "CLIENT_OBSERVATIONS")
 	private String clientObservations;
@@ -56,7 +56,7 @@ public class Structure extends AbstractTimestampEntity {
     TODO Rever as estruturas e os contrutores verificar se estam bem feitos
     */
 
-	public Structure(Project project, @NotNull String name, int nb, double LVao, int q, @NotNull boolean visibleToClient, boolean clientAccepted, String clientObservations, Set<Material> materials) {
+	public Structure(Project project, @NotNull String name, int nb, double LVao, int q, @NotNull boolean visibleToClient, Boolean clientAccepted, String clientObservations, Set<Material> materials) {
 		this.project = project;
 		this.name = name;
 		this.nb = nb;
@@ -100,11 +100,11 @@ public class Structure extends AbstractTimestampEntity {
 		this.visibleToClient = visibleToClient;
 	}
 
-	public boolean isClientAccepted() {
+	public Boolean isClientAccepted() {
 		return clientAccepted;
 	}
 
-	public void setClientAccepted(boolean clientAccepted) {
+	public void setClientAccepted(Boolean clientAccepted) {
 		this.clientAccepted = clientAccepted;
 	}
 

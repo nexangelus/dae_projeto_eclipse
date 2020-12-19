@@ -29,7 +29,7 @@ public class StructureBean extends BaseBean {
         if (project == null)
             throw new MyEntityNotFoundException("Project with id: " + project_id + " doesn't exists");
         try {
-            Structure structure = new Structure(project, name, nb, LVao, q, false, false, null,null);
+            Structure structure = new Structure(project, name, nb, LVao, q, false, null, null,null);
             em.persist(structure);
             project.addStructure(structure);
             return structure.getId();

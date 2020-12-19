@@ -14,9 +14,9 @@ public class StructureDTO extends TimestampDTO implements Serializable {
     private String clientObservations;
     private ProjectDTO project;
     private boolean visibleToClient;
-    private boolean clientAccepted;
+    private Boolean clientAccepted;
 
-    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
         super(created, updated);
         this.id = id;
         this.name = name;
@@ -29,7 +29,7 @@ public class StructureDTO extends TimestampDTO implements Serializable {
         this.clientAccepted = clientAccepted;
     }
 
-    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
         super(created, updated);
         this.id = id;
         this.name = name;
@@ -84,11 +84,11 @@ public class StructureDTO extends TimestampDTO implements Serializable {
         this.visibleToClient = visibleToClient;
     }
 
-    public boolean isClientAccepted() {
+    public Boolean isClientAccepted() {
         return clientAccepted;
     }
 
-    public void setClientAccepted(boolean clientAccepted) {
+    public void setClientAccepted(Boolean clientAccepted) {
         this.clientAccepted = clientAccepted;
     }
 
