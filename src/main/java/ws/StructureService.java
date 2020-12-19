@@ -47,6 +47,9 @@ public class StructureService {
 
     @EJB
     private ProfileBean profileBean;
+
+    @EJB
+    private MaterialBean materialBean;
     //endregion
 
     //region Security
@@ -257,7 +260,7 @@ public class StructureService {
     @POST
     @RolesAllowed({"Designer"})
     @Path("{id}/simulate")
-    public Response isAccepted(@PathParam("idP") long idP, @PathParam("id") long id, SimulateDTO simulate, MaterialDTO materialDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public Response isAccepted(@PathParam("idP") long idP, @PathParam("id") long id, MaterialDTO materialDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
         Project project = projectBean.getProject(idP);
         Principal principal = securityContext.getUserPrincipal();
         if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
@@ -265,10 +268,23 @@ public class StructureService {
         }
         Structure structure = structureBean.findStructure(id);
         Profile profile = profileBean.getProfile(materialDTO.getId());
-        simulationBean.simulaVariante(
-                simulate.getNb(),simulate.getLVao(),simulate.getQ(),profile
+        boolean works = simulationBean.simulaVariante(
+                structure.getNb(),structure.getLVao(),structure.getQ(),profile
         );
+        return Response.status(Response.Status.OK).entity(works).build();
 
+    }
+
+    @POST
+    @RolesAllowed({"Designer"})
+    @Path("{id}/material")
+    public Response postMaterial(@PathParam("idP") long idP, @PathParam("id") long id, List<MaterialDTO> materialDTO) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = projectBean.getProject(idP);
+        Principal principal = securityContext.getUserPrincipal();
+        if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        structureBean.addMaterial(id,materialDTO);
         return Response.status(Response.Status.OK).build();
     }
 

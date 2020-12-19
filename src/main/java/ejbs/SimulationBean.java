@@ -13,7 +13,7 @@ public class SimulationBean {
 
     public boolean simulaVariante(int nb, double LVao, int q, Profile profile) {
         boolean seguro = true;
-
+        /*
         double[] msd = momentosFletoresAtuantes(nb, LVao, q, profile);
 
         double lambda1 = Math.PI * Math.sqrt(EE / profile.getSigmaC());
@@ -33,7 +33,7 @@ public class SimulationBean {
                 System.out.println("Não verifica segurança na secção " + i + " da variante " + profile.getName() + " do produto " + profile.getFamily().getName());
                 seguro = false;
             }
-        }
+        }*/
         return seguro;
     }
 
