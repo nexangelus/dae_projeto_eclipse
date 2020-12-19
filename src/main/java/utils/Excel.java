@@ -25,7 +25,7 @@ import javax.ejb.Stateless;
 
 @Stateless
 public class Excel {
-	
+
 	// variant => profile
 	// product => family
 	@EJB
@@ -37,7 +37,7 @@ public class Excel {
 	public void readFromExcel(String folder, String manufacturer) throws MyEntityNotFoundException, MyConstraintViolationException {
 
 		File f = new File(folder);
-		if(f.isDirectory()) {
+		if (f.isDirectory()) {
 			String[] files = f.list();
 			for (String fileName : files) {
 				String familyName = fileName.replace(".xlsx", "");
@@ -56,7 +56,7 @@ public class Excel {
 
 	private long getOrCreateFamily(String name, String manufacturer) throws MyEntityNotFoundException, MyConstraintViolationException {
 		long familyID = familyBean.getIdByName(name);
-		if(familyID == -1) {
+		if (familyID == -1) {
 			return familyBean.create(name, manufacturer);
 		}
 		return familyID;
@@ -73,7 +73,7 @@ public class Excel {
 			XSSFSheet sheet1 = workbook.getSheetAt(1);
 			XSSFSheet sheet2 = workbook.getSheetAt(2);
 
-			int sigmaC = (int)Math.round(sheet0.getRow(10).getCell(1).getNumericCellValue() * 1000);
+			int sigmaC = (int) Math.round(sheet0.getRow(10).getCell(1).getNumericCellValue() * 1000);
 
 			int numberRowsSheet1 = sheet1.getPhysicalNumberOfRows();
 
@@ -100,6 +100,11 @@ public class Excel {
 				XSSFSheet sheet3 = workbook.getSheetAt(3);
 				int numberRowsSheet3 = sheet3.getPhysicalNumberOfRows();
 
+				int columnLengthIndex = 1;
+				if (sheet3.getRow(0).getCell(2).getStringCellValue().equals("L (mm)")) {
+					columnLengthIndex = 2;
+				}
+
 				Profile variant = null;
 				XSSFRow row;
 				XSSFCell nameCell;
@@ -112,16 +117,16 @@ public class Excel {
 						variant = profileBean.getProfileByNameAndFamily(nameCell.getStringCellValue(), familyID);
 					}
 
-					if(variant != null) {
-						if(row.getCell(1) == null) {
+					if (variant != null) {
+						if (row.getCell(columnLengthIndex) == null) {
 							break;
 						}
 
-						double l = row.getCell(1).getNumericCellValue();
-						double mcr = row.getCell(2).getNumericCellValue();
+						double l = row.getCell(columnLengthIndex).getNumericCellValue();
+						double mcr = row.getCell(columnLengthIndex + 1).getNumericCellValue();
 
-						variant.addMcr_p(Math.round(l /1000 * 100.0) / 100.0, mcr);
-						variant.addMcr_n(Math.round(l /1000 * 100.0) / 100.0, mcr);
+						variant.addMcr_p(Math.round(l / 1000 * 100.0) / 100.0, mcr);
+						variant.addMcr_n(Math.round(l / 1000 * 100.0) / 100.0, mcr);
 
 					} else {
 						System.err.println(nameCell.getStringCellValue() + " AVISO!!");
