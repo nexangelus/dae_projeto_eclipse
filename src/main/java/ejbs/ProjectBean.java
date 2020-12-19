@@ -59,6 +59,18 @@ public class ProjectBean extends BaseBean {
         }
     }
 
+    public void update(long id, String title,String description) throws MyEntityNotFoundException, MyConstraintViolationException {
+        Project project = getProject(id);
+        if (project == null)
+            throw new MyEntityNotFoundException("Project with id: " + id + " doesn't exist");
+        try {
+            project.setTitle(title);
+            project.setDescription(description);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
+    }
+
     public void delete(long id) throws MyEntityNotFoundException {
         Project project = getProject(id);
         if (project == null)

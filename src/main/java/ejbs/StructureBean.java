@@ -37,21 +37,20 @@ public class StructureBean extends BaseBean {
             throw new MyConstraintViolationException(e);
         }
     }
-    /*
-    public void update(long idS, String name, String parameters, boolean clientAccepted, boolean visibleToClient, String observations) throws MyEntityNotFoundException, MyConstraintViolationException {
+
+    public void update(long idS, String name, int nb, double LVao, int q) throws MyEntityNotFoundException, MyConstraintViolationException {
         Structure structure = findStructure(idS);
         if (structure == null)
             throw new MyEntityNotFoundException("Structure with id: " + idS + " doesn't exists");
         try {
             structure.setName(name);
-            structure.setParameters(parameters);//TODO
-            structure.setClientAccepted(clientAccepted);
-            structure.setVisibleToClient(visibleToClient);
-            structure.setClientObservations(observations);
+            structure.setNb(nb);
+            structure.setLVao(LVao);
+            structure.setQ(q);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
-    }*/
+    }
 
     public void delete(long id) throws MyEntityNotFoundException {
         Structure structure = findStructure(id);

@@ -179,7 +179,7 @@ public class StructureService {
         }
         return null;
     }
-    /*//TODO
+
     @PUT
     @Path("{id}")
     @RolesAllowed({"Designer"})
@@ -194,12 +194,11 @@ public class StructureService {
                 structure.getName(),
                 structure.getNb(),
                 structure.getLVao(),
-                structure.getQ(),
-                structure.getClientObservations()
+                structure.getQ()
         );
         return Response.status(Response.Status.OK).build();
     }
-    */
+
     @DELETE
     @Path("{id}")
     @RolesAllowed({"Designer"})

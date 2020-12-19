@@ -2,7 +2,6 @@ package ws;
 
 import dtos.ErrorDTO;
 import dtos.ManufacturerDTO;
-import ejbs.DocumentBean;
 import ejbs.ManufacturerBean;
 import entities.Manufacturer;
 import exceptions.MyConstraintViolationException;
