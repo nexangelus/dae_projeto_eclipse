@@ -120,7 +120,8 @@ public class Excel {
 						double l = row.getCell(1).getNumericCellValue();
 						double mcr = row.getCell(2).getNumericCellValue();
 
-						variant.addMcr_p(l /1000, mcr);
+						variant.addMcr_p(Math.round(l /1000 * 100.0) / 100.0, mcr);
+						variant.addMcr_n(Math.round(l /1000 * 100.0) / 100.0, mcr);
 
 					} else {
 						System.err.println(nameCell.getStringCellValue() + " AVISO!!");
