@@ -141,7 +141,7 @@ public class ProjectService {
 					.build();
 		}
 		Principal principal = securityContext.getUserPrincipal();
-		if(securityContext.isUserInRole("Designer") && principal.getName().equals(project.getDesigner().getUsername())){
+		if (securityContext.isUserInRole("Designer") && principal.getName().equals(project.getDesigner().getUsername())) {
 			return Response.status(Response.Status.OK)
 					.entity(toDTOWithUploadStructure(project))
 					.build();
@@ -269,15 +269,19 @@ public class ProjectService {
 		if (securityContext.isUserInRole("Client") && !principal.getName().equals(project.getClient().getUsername())) {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
+
 		Document document = documentBean.findDocument(idD);
 
-		// TODO check if project contains document, so you can't download all the files with a valid project
+		if (document.getProject().getId() == project.getId()) {
+			File fileDownload = new File(document.getFilepath() + File.separator +
+					document.getFilename());
+			Response.ResponseBuilder response = Response.ok((Object) fileDownload);
+			response.header("Content-Disposition", "attachment;filename=" +
+					document.getFilename());
+			return response.build();
+		} else {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
 
-		File fileDownload = new File(document.getFilepath() + File.separator +
-				document.getFilename());
-		Response.ResponseBuilder response = Response.ok((Object) fileDownload);
-		response.header("Content-Disposition", "attachment;filename=" +
-				document.getFilename());
-		return response.build();
 	}
 }
