@@ -6,6 +6,7 @@ import dtos.SimulateDTO;
 import dtos.StructureDTO;
 import dtos.materials.ProfileDTO;
 import ejbs.*;
+import entities.Material;
 import entities.Profile;
 import entities.Project;
 import entities.Structure;
@@ -21,7 +22,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/projects/{idP}/structures")
@@ -90,6 +93,28 @@ public class StructureService {
     public static List<StructureDTO> toDTOsWithoutProject(List<Structure> structures) {
         return structures.stream().map(StructureService::toDTOWithoutProject).collect(Collectors.toList());
     }
+
+    public static StructureDTO toDTOWithoutProjectWithMaterials(Structure structure) {
+        StructureDTO structureDTO =  new StructureDTO(
+                structure.getId(),
+                structure.getName(),
+                structure.getNb(),
+                structure.getLVao(),
+                structure.getQ(),
+                structure.getClientObservations(),
+                structure.isVisibleToClient(),
+                structure.isClientAccepted(),
+                structure.getCreated(),
+                structure.getUpdated()
+        );
+        Set<Material> materialSet =  structure.getMaterials();
+
+        return structureDTO;
+    }
+
+    public static List<StructureDTO> toDTOsWithoutProjectWithMaterials(List<Structure> structures) {
+        return structures.stream().map(StructureService::toDTOWithoutProject).collect(Collectors.toList());
+    }
     //endregion
 
     //region CRUD
@@ -115,7 +140,7 @@ public class StructureService {
         Structure structure = structureBean.findStructure(id);
         if (structure != null) {
             return Response.status(Response.Status.OK)
-                    .entity(toDTO(structure))
+                    .entity(toDTOWithoutProjectWithMaterials(structure))
                     .build();
         }
 

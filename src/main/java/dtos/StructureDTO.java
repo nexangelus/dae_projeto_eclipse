@@ -1,9 +1,12 @@
 package dtos;
 
+import entities.Material;
 import entities.Project;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class StructureDTO extends TimestampDTO implements Serializable {
     private long id;
@@ -15,6 +18,21 @@ public class StructureDTO extends TimestampDTO implements Serializable {
     private ProjectDTO project;
     private boolean visibleToClient;
     private Boolean clientAccepted;
+    private MaterialDTO materials;
+
+    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, MaterialDTO materials,LocalDateTime created, LocalDateTime updated) {
+        super(created, updated);
+        this.id = id;
+        this.name = name;
+        this.nb = nb;
+        this.LVao = LVao;
+        this.q = q;
+        this.clientObservations = clientObservations;
+        this.project = project;
+        this.visibleToClient = visibleToClient;
+        this.clientAccepted = clientAccepted;
+        this.materials = materials;
+    }
 
     public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
         super(created, updated);
@@ -114,5 +132,13 @@ public class StructureDTO extends TimestampDTO implements Serializable {
 
     public void setQ(int q) {
         this.q = q;
+    }
+
+    public MaterialDTO getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(MaterialDTO materials) {
+        this.materials = materials;
     }
 }
