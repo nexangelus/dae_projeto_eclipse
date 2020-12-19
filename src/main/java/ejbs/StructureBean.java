@@ -103,4 +103,9 @@ public class StructureBean extends BaseBean {
 
 
     }
+
+    public List<Structure> getStructuresFromManufacturerMaterials(String manufacturerUsername) {
+        return (List<Structure>) em.createNamedQuery("getStructuresWithMaterialsFromManufacturer").setParameter("manufacturerUsername", manufacturerUsername).getResultList();
+    }
+
 }

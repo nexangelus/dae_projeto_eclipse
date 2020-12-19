@@ -107,6 +107,18 @@ Content-Type: application/json
     });
 %}
 
+
+###
+GET http://localhost:8080/dae_project/api/manufacturers/structures
+Accept: application/json
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("GET STRUCTURES WITH MANUFACTURER MATERIALS", function() {
+        client.assert(response.status === 200, "Response status is " + response.status + " (EXPECTED: 200)");
+    });
+%}
+
 ###
 //            _____  __  __ _____ _   _  _____
 //      /\   |  __ \|  \/  |_   _| \ | |/ ____|

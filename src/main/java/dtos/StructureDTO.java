@@ -9,136 +9,145 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class StructureDTO extends TimestampDTO implements Serializable {
-    private long id;
-    private String name;
-    private int nb;
-    private double LVao;
-    private int q;
-    private String clientObservations;
-    private ProjectDTO project;
-    private boolean visibleToClient;
-    private Boolean clientAccepted;
-    private MaterialDTO materials;
+	private long id;
+	private String name;
+	private int nb;
+	private double LVao;
+	private int q;
+	private String clientObservations;
+	private ProjectDTO project;
+	private boolean visibleToClient;
+	private Boolean clientAccepted;
+	private Set<MaterialDTO> materials;
 
-    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, MaterialDTO materials,LocalDateTime created, LocalDateTime updated) {
-        super(created, updated);
-        this.id = id;
-        this.name = name;
-        this.nb = nb;
-        this.LVao = LVao;
-        this.q = q;
-        this.clientObservations = clientObservations;
-        this.project = project;
-        this.visibleToClient = visibleToClient;
-        this.clientAccepted = clientAccepted;
-        this.materials = materials;
-    }
+	public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, Set<MaterialDTO> materials, LocalDateTime created, LocalDateTime updated) {
+		super(created, updated);
+		this.id = id;
+		this.name = name;
+		this.nb = nb;
+		this.LVao = LVao;
+		this.q = q;
+		this.clientObservations = clientObservations;
+		this.project = project;
+		this.visibleToClient = visibleToClient;
+		this.clientAccepted = clientAccepted;
+		this.materials = materials;
+	}
 
-    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
-        super(created, updated);
-        this.id = id;
-        this.name = name;
-        this.nb = nb;
-        this.LVao = LVao;
-        this.q = q;
-        this.clientObservations = clientObservations;
-        this.project = project;
-        this.visibleToClient = visibleToClient;
-        this.clientAccepted = clientAccepted;
-    }
+	public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, ProjectDTO project, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+		super(created, updated);
+		this.id = id;
+		this.name = name;
+		this.nb = nb;
+		this.LVao = LVao;
+		this.q = q;
+		this.clientObservations = clientObservations;
+		this.project = project;
+		this.visibleToClient = visibleToClient;
+		this.clientAccepted = clientAccepted;
+	}
 
-    public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
-        super(created, updated);
-        this.id = id;
-        this.name = name;
-        this.nb = nb;
-        this.LVao = LVao;
-        this.q = q;
-        this.clientObservations = clientObservations;
-        this.visibleToClient = visibleToClient;
-        this.clientAccepted = clientAccepted;
-    }
+	public StructureDTO(long id, String name, int nb, double LVao, int q, String clientObservations, boolean visibleToClient, Boolean clientAccepted, LocalDateTime created, LocalDateTime updated) {
+		super(created, updated);
+		this.id = id;
+		this.name = name;
+		this.nb = nb;
+		this.LVao = LVao;
+		this.q = q;
+		this.clientObservations = clientObservations;
+		this.visibleToClient = visibleToClient;
+		this.clientAccepted = clientAccepted;
+	}
 
-    public StructureDTO() {
-    }
+	public StructureDTO(long id, String name, MaterialDTO material, LocalDateTime created, LocalDateTime updated) {
+		super(created, updated);
+		this.id = id;
+		this.name = name;
+		this.materials = new LinkedHashSet<>();
 
-    public long getId() {
-        return id;
-    }
+		materials.add(material);
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public StructureDTO() {
+	}
 
-    public String getName() {
-        return name;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public String getClientObservations() {
-        return clientObservations;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setClientObservations(String clientObservations) {
-        this.clientObservations = clientObservations;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public ProjectDTO getProject() {
-        return project;
-    }
+	public String getClientObservations() {
+		return clientObservations;
+	}
 
-    public void setProject(ProjectDTO project) {
-        this.project = project;
-    }
+	public void setClientObservations(String clientObservations) {
+		this.clientObservations = clientObservations;
+	}
 
-    public boolean isVisibleToClient() {
-        return visibleToClient;
-    }
+	public ProjectDTO getProject() {
+		return project;
+	}
 
-    public void setVisibleToClient(boolean visibleToClient) {
-        this.visibleToClient = visibleToClient;
-    }
+	public void setProject(ProjectDTO project) {
+		this.project = project;
+	}
 
-    public Boolean isClientAccepted() {
-        return clientAccepted;
-    }
+	public boolean isVisibleToClient() {
+		return visibleToClient;
+	}
 
-    public void setClientAccepted(Boolean clientAccepted) {
-        this.clientAccepted = clientAccepted;
-    }
+	public void setVisibleToClient(boolean visibleToClient) {
+		this.visibleToClient = visibleToClient;
+	}
 
-    public int getNb() {
-        return nb;
-    }
+	public Boolean isClientAccepted() {
+		return clientAccepted;
+	}
 
-    public void setNb(int nb) {
-        this.nb = nb;
-    }
+	public void setClientAccepted(Boolean clientAccepted) {
+		this.clientAccepted = clientAccepted;
+	}
 
-    public double getLVao() {
-        return LVao;
-    }
+	public int getNb() {
+		return nb;
+	}
 
-    public void setLVao(double LVao) {
-        this.LVao = LVao;
-    }
+	public void setNb(int nb) {
+		this.nb = nb;
+	}
 
-    public int getQ() {
-        return q;
-    }
+	public double getLVao() {
+		return LVao;
+	}
 
-    public void setQ(int q) {
-        this.q = q;
-    }
+	public void setLVao(double LVao) {
+		this.LVao = LVao;
+	}
 
-    public MaterialDTO getMaterials() {
-        return materials;
-    }
+	public int getQ() {
+		return q;
+	}
 
-    public void setMaterials(MaterialDTO materials) {
-        this.materials = materials;
-    }
+	public void setQ(int q) {
+		this.q = q;
+	}
+
+	public Set<MaterialDTO> getMaterials() {
+		return materials;
+	}
+
+	public void setMaterials(Set<MaterialDTO> materials) {
+		this.materials = materials;
+	}
 }

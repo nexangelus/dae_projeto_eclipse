@@ -42,7 +42,7 @@ public class MaterialService {
 	//endregion
 
 	//region DTOS
-	private static MaterialDTO toDTO(Material material) {
+	public static MaterialDTO toDTO(Material material) {
 		if(material.getClass() == Profile.class) {
 			return toDTO((Profile)material);
 		} else if (material.getClass() == Sheet.class) {

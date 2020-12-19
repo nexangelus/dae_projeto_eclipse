@@ -13,12 +13,15 @@ public class SimulationBean {
 
     public boolean simulaVariante(int nb, double LVao, int q, Profile profile) {
         boolean seguro = true;
-        /*
+
         double[] msd = momentosFletoresAtuantes(nb, LVao, q, profile);
 
         double lambda1 = Math.PI * Math.sqrt(EE / profile.getSigmaC());
 
-
+        if(profile.getMcr_p() == null || profile.getMcr_n() == null) {
+            return false;
+        }
+        
         double mrd_p = momentoResistenteProduto(lambda1, profile.getWeff_p(), profile.getMcr_p().get(LVao));
         double mrd_n = momentoResistenteProduto(lambda1, profile.getWeff_n(), profile.getMcr_n().get(LVao));
 
@@ -33,7 +36,7 @@ public class SimulationBean {
                 System.out.println("Não verifica segurança na secção " + i + " da variante " + profile.getName() + " do produto " + profile.getFamily().getName());
                 seguro = false;
             }
-        }*/
+        }
         return seguro;
     }
 

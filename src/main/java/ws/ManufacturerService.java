@@ -2,8 +2,12 @@ package ws;
 
 import dtos.ErrorDTO;
 import dtos.ManufacturerDTO;
+import dtos.StructureDTO;
 import ejbs.ManufacturerBean;
+import ejbs.StructureBean;
 import entities.Manufacturer;
+import entities.Material;
+import entities.Structure;
 import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -23,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +41,9 @@ public class ManufacturerService {
 	//region EJB
 	@EJB
 	private ManufacturerBean manufacturerBean;
+
+	@EJB
+	private StructureBean structureBean;
 
 	@EJB
 	private Excel excel;
@@ -202,5 +210,35 @@ public class ManufacturerService {
 
 	}
 	//endregion
+
+
+	@GET
+	@Path("structures")
+	@RolesAllowed({"Manufacturer"})
+	public Response getStructuresUsedWithMaterials() {
+		String manufacturer = securityContext.getUserPrincipal().getName();
+		List<Structure> structures = structureBean.getStructuresFromManufacturerMaterials(manufacturer);
+
+		List<Long> alreadyInList = new ArrayList<>();
+		List<StructureDTO> response = new ArrayList<>();
+		for (Structure structure : structures) {
+
+			if(alreadyInList.contains(structure.getId()))
+				continue;
+
+			alreadyInList.add(structure.getId());
+
+			for (Material material : structure.getMaterials()) {
+				if (material.getManufacturer().getUsername().equals(manufacturer)) {
+					response.add(new StructureDTO(structure.getId(), structure.getName(), MaterialService.toDTO(material), structure.getCreated(), structure.getUpdated()));
+				}
+			}
+		}
+
+
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();
+	}
 
 }

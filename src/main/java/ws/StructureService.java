@@ -111,6 +111,7 @@ public class StructureService {
                 structure.getUpdated()
         );
         Set<Material> materialSet =  structure.getMaterials();
+        // TODO
 
         return structureDTO;
     }
