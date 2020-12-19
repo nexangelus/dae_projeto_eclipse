@@ -134,24 +134,26 @@ public class ProjectService {
 	@Path("{id}")
 	@RolesAllowed({"Admin", "Client" , "Designer"})
 	public Response get(@PathParam("id") long id) {
-		//Todo struct visible to client
 		Project project = projectBean.getProject(id);
+		if (project == null) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(ErrorDTO.error("ERROR FINDING PROJECT"))
+					.build();
+		}
 		Principal principal = securityContext.getUserPrincipal();
-		if(securityContext.isUserInRole("Designer") && !principal.getName().equals(project.getDesigner().getUsername())){
-			return Response.status(Response.Status.FORBIDDEN).build();
-		}
-		if (securityContext.isUserInRole("Client") && !principal.getName().equals(project.getClient().getUsername())) {
-			return Response.status(Response.Status.FORBIDDEN).build();
-		}
-		if (project != null) {
+		if(securityContext.isUserInRole("Designer") && principal.getName().equals(project.getDesigner().getUsername())){
 			return Response.status(Response.Status.OK)
 					.entity(toDTOWithUploadStructure(project))
 					.build();
 		}
+		if (securityContext.isUserInRole("Client") && principal.getName().equals(project.getClient().getUsername())) {
+			return Response.status(Response.Status.OK)
+					.entity(toDTOWithUploadStructure(project))
+					.build();
+		}
+		return Response.status(Response.Status.FORBIDDEN).build();
 
-		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity(ErrorDTO.error("ERROR FINDING PROJECT"))
-				.build();
+
 	}
 
 	@POST
